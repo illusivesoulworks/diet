@@ -24,7 +24,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
-import top.theillusivec4.diet.client.DietClientEventsListener;
 import top.theillusivec4.diet.client.DietScreen;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 

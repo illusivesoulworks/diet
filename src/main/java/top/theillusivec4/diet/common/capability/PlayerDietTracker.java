@@ -66,9 +66,9 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void tick() {
 
-    if (active && player instanceof ServerPlayerEntity) {
+    if (player instanceof ServerPlayerEntity) {
 
-      if (!player.isCreative()) {
+      if (!player.isCreative() && active) {
         int currentFood = player.getFoodStats().getFoodLevel();
 
         if (currentFood < prevFood) {
@@ -78,7 +78,22 @@ public class PlayerDietTracker implements IDietTracker {
       }
 
       if (player.ticksExisted % 80 == 0) {
-        applyEffects();
+        for (Map.Entry<Attribute, Set<UUID>> entry : activeModifiers.entrySet()) {
+          Set<UUID> uuids = entry.getValue();
+          ModifiableAttributeInstance att = player.getAttribute(entry.getKey());
+
+          if (att != null) {
+
+            for (UUID uuid : uuids) {
+              att.removeModifier(uuid);
+            }
+          }
+        }
+        activeModifiers.clear();
+
+        if (active) {
+          applyEffects();
+        }
       }
     }
   }
@@ -156,19 +171,6 @@ public class PlayerDietTracker implements IDietTracker {
 
   private void applyEffects() {
     List<DietEffect> effects = DietEffects.get();
-
-    for (Map.Entry<Attribute, Set<UUID>> entry : activeModifiers.entrySet()) {
-      Set<UUID> uuids = entry.getValue();
-      ModifiableAttributeInstance att = player.getAttribute(entry.getKey());
-
-      if (att != null) {
-
-        for (UUID uuid : uuids) {
-          att.removeModifier(uuid);
-        }
-      }
-    }
-    activeModifiers.clear();
     DietEffectsInfo info = new DietEffectsInfo();
 
     for (DietEffect effect : effects) {

@@ -2,7 +2,7 @@
   "gui.diet.title": "Diet",
   "tooltip.diet.eaten": "When eaten:",
   "tooltip.diet.group": "+%s%% %s",
-  "tooltip.diet.effects": "Active Diet Effects",
+  "tooltip.diet.effects": "Dietary Effects",
   "groups.diet.grains.name": "Grains",
   "groups.diet.proteins.name": "Proteins",
   "groups.diet.fruits.name": "Fruits",
@@ -15,6 +15,7 @@
   "commands.diet.reset.success": "Reset diet values for %s",
   "commands.diet.pause.success": "Paused diet tracking for %s",
   "commands.diet.resume.success": "Resumed diet tracking for %s",
+  "commands.diet.clear.success": "Cleared dietary effects for %s",
   "key.diet.category": "Diet",
   "key.diet.open.desc": "Open Diet Screen"
 }

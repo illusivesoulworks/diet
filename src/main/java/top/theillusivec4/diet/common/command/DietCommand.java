@@ -29,14 +29,14 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
-import top.theillusivec4.diet.common.network.DietNetwork;
 
 public class DietCommand {
 
@@ -100,6 +100,10 @@ public class DietCommand {
             .executes(
                 ctx -> active(ctx.getSource(), EntityArgument.getPlayer(ctx, "player"), true))));
 
+    dietCommand.then(Commands.literal("clear")
+        .then(Commands.argument("player", EntityArgument.player())
+            .executes(ctx -> clear(ctx.getSource(), EntityArgument.getPlayer(ctx, "player")))));
+
     dispatcher.register(dietCommand);
   }
 
@@ -114,7 +118,8 @@ public class DietCommand {
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int set(CommandSource sender, ServerPlayerEntity player, float value, String group) {
+  private static int set(CommandSource sender, ServerPlayerEntity player, float value,
+                         String group) {
     DietCapability.get(player).ifPresent(diet -> {
       diet.setValue(group, value);
       diet.sync();
@@ -126,7 +131,8 @@ public class DietCommand {
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int modify(CommandSource sender, ServerPlayerEntity player, float amount, String group) {
+  private static int modify(CommandSource sender, ServerPlayerEntity player, float amount,
+                            String group) {
 
     if (amount != 0) {
       DietCapability.get(player).ifPresent(diet -> {
@@ -164,6 +170,23 @@ public class DietCommand {
           new TranslationTextComponent("commands." + DietMod.MOD_ID + "." + arg + ".success",
               player.getName()), true);
     });
+    return Command.SINGLE_SUCCESS;
+  }
+
+  private static int clear(CommandSource sender, ServerPlayerEntity player) {
+
+    for (ModifiableAttributeInstance instance : player.getAttributeManager().getInstances()) {
+
+      for (AttributeModifier attributeModifier : instance.getModifierListCopy()) {
+
+        if (attributeModifier.getName().equals("Diet group effect")) {
+          instance.removeModifier(attributeModifier.getID());
+        }
+      }
+    }
+    sender.sendFeedback(
+        new TranslationTextComponent("commands." + DietMod.MOD_ID + ".clear.success",
+            player.getName()), true);
     return Command.SINGLE_SUCCESS;
   }
 }
