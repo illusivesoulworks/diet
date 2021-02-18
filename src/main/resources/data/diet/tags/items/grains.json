@@ -402,6 +402,11 @@
     "vanillafoodpantry:spam_egg_sandwich",
     "vanillafoodpantry:sunbutter_appleslices_sandwich",
     "vanillafoodpantry:uglifruit_muffin",
-    "vanillafoodpantry:veggie_stew_combo"
+    "vanillafoodpantry:veggie_stew_combo",
+    "jellyfishing:jellyfish_jelly_sandwich",
+    "jellyfishing:blue_jellyfish_jelly_sandwich",
+    "jellyfishing:seanut_butter_jellyfish_jelly_sandwich",
+    "jellyfishing:seanut_butter_blue_jellyfish_jelly_sandwich",
+    "jellyfishing:krabby_patty"
   ]
 }
