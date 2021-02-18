@@ -317,6 +317,13 @@
     "vanillafoodpantry:snocone_chorusfruit",
     "vanillafoodpantry:snocone_chorusfruit_plain",
     "vanillafoodpantry:snocone_melon",
-    "vanillafoodpantry:taffy_blob"
+    "vanillafoodpantry:taffy_blob",
+    "jellyfishing:jellyfish_jelly",
+    "jellyfishing:blue_jellyfish_jelly",
+    "jellyfishing:triple_gooberberry_sunrise",
+    "jellyfishing:jellyfish_jelly_sandwich",
+    "jellyfishing:blue_jellyfish_jelly_sandwich",
+    "jellyfishing:seanut_butter_jellyfish_jelly_sandwich",
+    "jellyfishing:seanut_butter_blue_jellyfish_jelly_sandwich",
   ]
 }
