@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
   - Eidolon  
   - Enhanced Mushrooms
   - Extra Foods  
+  - Jellyfishing
   - The Endergetic Expansion
   - The Outer End
   - Peculiars  
