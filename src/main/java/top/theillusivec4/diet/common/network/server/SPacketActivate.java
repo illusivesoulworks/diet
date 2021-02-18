@@ -18,18 +18,14 @@
 
 package top.theillusivec4.diet.common.network.server;
 
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.Supplier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
-import top.theillusivec4.diet.api.DietCapability;
+import top.theillusivec4.diet.client.DietClientPacketReceiver;
 
 public class SPacketActivate {
 
-  private final boolean flag;
+  public final boolean flag;
 
   public SPacketActivate(boolean flag) {
     this.flag = flag;
@@ -44,13 +40,7 @@ public class SPacketActivate {
   }
 
   public static void handle(SPacketActivate msg, Supplier<NetworkEvent.Context> ctx) {
-    ctx.get().enqueueWork(() -> {
-      ClientPlayerEntity player = Minecraft.getInstance().player;
-
-      if (player != null) {
-        DietCapability.get(player).ifPresent(diet -> diet.setActive(msg.flag));
-      }
-    });
+    ctx.get().enqueueWork(() -> DietClientPacketReceiver.handleActivate(msg));
     ctx.get().setPacketHandled(true);
   }
 }

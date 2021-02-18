@@ -21,15 +21,13 @@ package top.theillusivec4.diet.common.network.server;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
-import top.theillusivec4.diet.api.DietCapability;
+import top.theillusivec4.diet.client.DietClientPacketReceiver;
 
 public class SPacketDiet {
 
-  private final Map<String, Float> groups;
+  public final Map<String, Float> groups;
 
   public SPacketDiet(Map<String, Float> groups) {
     this.groups = groups;
@@ -55,17 +53,7 @@ public class SPacketDiet {
   }
 
   public static void handle(SPacketDiet msg, Supplier<NetworkEvent.Context> ctx) {
-    ctx.get().enqueueWork(() -> {
-      ClientPlayerEntity player = Minecraft.getInstance().player;
-
-      if (player != null) {
-        DietCapability.get(player).ifPresent(diet -> {
-          for (Map.Entry<String, Float> entry : msg.groups.entrySet()) {
-            diet.setValue(entry.getKey(), entry.getValue());
-          }
-        });
-      }
-    });
+    ctx.get().enqueueWork(() -> DietClientPacketReceiver.handleDiet(msg));
     ctx.get().setPacketHandled(true);
   }
 }

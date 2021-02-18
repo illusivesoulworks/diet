@@ -40,6 +40,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
+import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietTracker;
 import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;

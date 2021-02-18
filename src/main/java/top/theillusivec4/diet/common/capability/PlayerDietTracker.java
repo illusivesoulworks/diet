@@ -58,9 +58,16 @@ public class PlayerDietTracker implements IDietTracker {
   private boolean active = true;
   private int prevFood;
 
-  public PlayerDietTracker(PlayerEntity player) {
-    this.player = player;
-    this.prevFood = player.getFoodStats().getFoodLevel();
+  public PlayerDietTracker(PlayerEntity playerIn) {
+    player = playerIn;
+    prevFood = playerIn.getFoodStats().getFoodLevel();
+    values.clear();
+
+    for (DietGroup group : DietGroups.get()) {
+      String name = group.getName();
+      float amount = group.getDefaultValue();
+      values.put(name, MathHelper.clamp(amount, 0.0f, 1.0f));
+    }
   }
 
   @Override

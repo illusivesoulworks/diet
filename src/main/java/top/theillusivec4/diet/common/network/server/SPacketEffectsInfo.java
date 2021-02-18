@@ -20,8 +20,6 @@ package top.theillusivec4.diet.common.network.server;
 
 import java.util.Objects;
 import java.util.function.Supplier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import top.theillusivec4.diet.client.DietScreen;
@@ -45,13 +43,7 @@ public class SPacketEffectsInfo {
   }
 
   public static void handle(SPacketEffectsInfo msg, Supplier<NetworkEvent.Context> ctx) {
-    ctx.get().enqueueWork(() -> {
-      ClientPlayerEntity player = Minecraft.getInstance().player;
-
-      if (player != null) {
-        DietScreen.tooltip = msg.info;
-      }
-    });
+    ctx.get().enqueueWork(() -> DietScreen.tooltip = msg.info);
     ctx.get().setPacketHandled(true);
   }
 }

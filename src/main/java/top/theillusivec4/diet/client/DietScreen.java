@@ -54,7 +54,7 @@ public class DietScreen extends Screen {
   private final int xSize;
   private final int ySize;
 
-  protected DietScreen() {
+  public DietScreen() {
     super(new TranslationTextComponent("gui." + DietMod.MOD_ID + ".title"));
     this.xSize = 248;
     this.ySize = 166;

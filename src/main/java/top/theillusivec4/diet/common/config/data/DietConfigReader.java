@@ -215,7 +215,7 @@ public class DietConfigReader {
     }
   }
 
-  private static void load(final ModConfig config) {
+  private static synchronized void load(final ModConfig config) {
 
     if (config.getModId().equals(DietMod.MOD_ID)) {
       DietCalculator.invalidate();
