@@ -174,13 +174,13 @@ public class DietConfigReader {
     load(evt.getConfig());
   }
 
-  public static void readGroups(CommentedConfig configData) {
+  public static synchronized void readGroups(CommentedConfig configData) {
     DietConfigReader.GROUPS.instance = CONVERTER.toObject(configData, GroupConfigList::new);
     DietServerConfig.groups = DietConfigReader.GROUPS.instance.groups;
     DietGroups.build(DietServerConfig.groups);
   }
 
-  public static void readEffects(CommentedConfig configData) {
+  public static synchronized void readEffects(CommentedConfig configData) {
     DietConfigReader.EFFECTS.instance = CONVERTER.toObject(configData, EffectConfigList::new);
     DietServerConfig.effects = DietConfigReader.EFFECTS.instance.effects;
     DietEffects.build(DietServerConfig.effects);
