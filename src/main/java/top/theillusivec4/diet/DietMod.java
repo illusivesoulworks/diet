@@ -55,7 +55,6 @@ public class DietMod {
     eventBus.addListener(this::enqueue);
     eventBus.addListener(this::process);
     MinecraftForge.EVENT_BUS.addListener(this::setupCommands);
-    MinecraftForge.EVENT_BUS.addListener(this::reload);
     DietConfigReader.setup();
   }
 
@@ -78,23 +77,5 @@ public class DietMod {
 
   private void setupCommands(final RegisterCommandsEvent evt) {
     DietCommand.register(evt.getDispatcher());
-  }
-
-  private void reload(final AddReloadListenerEvent evt) {
-    evt.addListener(new ReloadListener<Void>() {
-
-      @Nonnull
-      @Override
-      protected Void prepare(@Nonnull IResourceManager resourceManagerIn,
-                             @Nonnull IProfiler profilerIn) {
-        return null;
-      }
-
-      @Override
-      protected void apply(@Nonnull Void objectIn, @Nonnull IResourceManager resourceManagerIn,
-                           @Nonnull IProfiler profilerIn) {
-        DietCalculator.invalidate();
-      }
-    });
   }
 }

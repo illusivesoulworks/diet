@@ -37,9 +37,10 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.MinecraftForge;
+import top.theillusivec4.diet.api.DietEvent;
 import top.theillusivec4.diet.api.IDietTracker;
 import top.theillusivec4.diet.common.config.DietServerConfig;
-import top.theillusivec4.diet.common.config.data.DietConfigReader;
 import top.theillusivec4.diet.common.effect.DietEffect;
 import top.theillusivec4.diet.common.effect.DietEffects;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
@@ -78,7 +79,8 @@ public class PlayerDietTracker implements IDietTracker {
       if (!player.isCreative() && active) {
         int currentFood = player.getFoodStats().getFoodLevel();
 
-        if (currentFood < prevFood) {
+        if (currentFood < prevFood &&
+            !MinecraftForge.EVENT_BUS.post(new DietEvent.ApplyDecay(player))) {
           decay(prevFood - currentFood);
         }
         prevFood = currentFood;
@@ -108,7 +110,8 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void consume(BlockPos pos, Hand hand, Direction direction) {
 
-    if (active) {
+    if (active &&
+        !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeBlock(pos, hand, direction, player))) {
       DietResult result = DietCalculator.get(pos, player, hand, direction);
 
       if (result != DietResult.EMPTY) {
@@ -120,8 +123,9 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void consume(ItemStack stack) {
 
-    if (active) {
-      DietResult result = DietCalculator.get(stack);
+    if (active && !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItem(stack, player))) {
+
+      DietResult result = DietCalculator.get(player, stack);
 
       if (result != DietResult.EMPTY) {
         apply(result);

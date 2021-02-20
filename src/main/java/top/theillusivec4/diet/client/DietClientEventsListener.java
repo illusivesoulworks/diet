@@ -91,7 +91,7 @@ public class DietClientEventsListener {
     List<ITextComponent> tooltips = evt.getToolTip();
 
     if (player != null) {
-      DietResult result = DietCalculator.get(evt.getItemStack());
+      DietResult result = DietCalculator.get(player, evt.getItemStack());
 
       if (result != DietResult.EMPTY) {
         Map<DietGroup, Float> groups = result.get();

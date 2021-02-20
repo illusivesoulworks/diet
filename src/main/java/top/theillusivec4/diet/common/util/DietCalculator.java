@@ -18,19 +18,14 @@
 
 package top.theillusivec4.diet.common.util;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -38,43 +33,25 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.common.config.DietServerConfig;
-import top.theillusivec4.diet.common.config.data.DietConfigReader;
 import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
 
 public class DietCalculator {
 
-  static final Map<Item, Function<ItemStack, List<ItemStack>>> composites = new HashMap<>();
-  static final Map<Item, Function<ItemStack, Tuple<Integer, Float>>> items = new HashMap<>();
+  static final Map<Item, Function<PlayerEntity, Function<ItemStack, List<ItemStack>>>> composites =
+      new HashMap<>();
+  static final Map<Item, Function<PlayerEntity, Function<ItemStack, Tuple<Integer, Float>>>> items =
+      new HashMap<>();
   static final Map<Block, Function<BlockPos, Function<PlayerEntity, Function<Hand, Function<Direction, Tuple<Integer, Float>>>>>>
       blocks = new HashMap<>();
 
-  private static final Cache<CacheKey, DietResult> cache =
-      CacheBuilder.newBuilder().maximumSize(100).expireAfterAccess(10L, TimeUnit.MINUTES).build();
-
-  public static DietResult get(ItemStack input) {
-    try {
-      return cache.get(new CacheKey(input), () -> load(input));
-    } catch (ExecutionException e) {
-      DietMod.LOGGER.error("Unknown error in diet result cache!");
-      e.printStackTrace();
-    }
-    return DietResult.EMPTY;
-  }
-
-  public static void invalidate() {
-    cache.invalidateAll();
-  }
-
-  private static DietResult load(ItemStack input) {
-    Set<DietGroup> groups = getGroups(input);
+  public static DietResult get(PlayerEntity player, ItemStack input) {
+    Set<DietGroup> groups = getGroups(player, input);
 
     if (groups.isEmpty()) {
       return DietResult.EMPTY;
@@ -83,10 +60,10 @@ public class DietCalculator {
     float saturation = 0.0f;
     Item item = input.getItem();
     Food food = item.getFood();
-    Function<ItemStack, Tuple<Integer, Float>> func = items.get(item);
+    Function<PlayerEntity, Function<ItemStack, Tuple<Integer, Float>>> func = items.get(item);
 
     if (func != null) {
-      Tuple<Integer, Float> values = func.apply(input);
+      Tuple<Integer, Float> values = func.apply(player).apply(input);
       healing = values.getA();
       saturation = values.getB();
     } else if (food != null) {
@@ -99,7 +76,7 @@ public class DietCalculator {
   public static DietResult get(BlockPos pos, PlayerEntity player, Hand hand, Direction direction) {
     BlockState state = player.world.getBlockState(pos);
     Block block = state.getBlock();
-    Set<DietGroup> groups = getGroups(new ItemStack(block));
+    Set<DietGroup> groups = getGroups(player, new ItemStack(block));
 
     if (groups.isEmpty()) {
       return DietResult.EMPTY;
@@ -137,7 +114,7 @@ public class DietCalculator {
     return result;
   }
 
-  private static Set<DietGroup> getGroups(ItemStack input) {
+  private static Set<DietGroup> getGroups(PlayerEntity player, ItemStack input) {
     Set<DietGroup> groups = new HashSet<>();
     List<ItemStack> stacks = new ArrayList<>();
     Queue<ItemStack> queue = new ArrayDeque<>();
@@ -145,10 +122,11 @@ public class DietCalculator {
 
     while (!queue.isEmpty()) {
       ItemStack next = queue.poll();
-      Function<ItemStack, List<ItemStack>> func = composites.get(next.getItem());
+      Function<PlayerEntity, Function<ItemStack, List<ItemStack>>> func =
+          composites.get(next.getItem());
 
       if (func != null) {
-        queue.addAll(func.apply(next));
+        queue.addAll(func.apply(player).apply(next));
       } else {
         stacks.add(next);
       }
@@ -164,33 +142,5 @@ public class DietCalculator {
       }
     }
     return groups;
-  }
-
-  private static class CacheKey {
-
-    final Item item;
-    final CompoundNBT tag;
-
-    CacheKey(ItemStack stack) {
-      this.item = stack.getItem();
-      this.tag = stack.getTag();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-      CacheKey cacheKey = (CacheKey) o;
-      return item.equals(cacheKey.item) && Objects.equals(tag, cacheKey.tag);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(item, tag);
-    }
   }
 }

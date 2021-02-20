@@ -218,7 +218,6 @@ public class DietConfigReader {
   private static synchronized void load(final ModConfig config) {
 
     if (config.getModId().equals(DietMod.MOD_ID)) {
-      DietCalculator.invalidate();
 
       if (config.getType() == ModConfig.Type.SERVER) {
         ForgeConfigSpec spec = config.getSpec();

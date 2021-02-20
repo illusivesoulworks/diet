@@ -56,12 +56,12 @@ public class DietMessage {
       Object object = message.getMessageSupplier().get();
 
       if (method.equals(Type.COMPOSITE.id)) {
-        Tuple<Item, Function<ItemStack, List<ItemStack>>> value =
-            (Tuple<Item, Function<ItemStack, List<ItemStack>>>) object;
+        Tuple<Item, Function<PlayerEntity, Function<ItemStack, List<ItemStack>>>> value =
+            (Tuple<Item, Function<PlayerEntity, Function<ItemStack, List<ItemStack>>>>) object;
         DietCalculator.composites.put(value.getA(), value.getB());
       } else if (method.equals(Type.ITEM.id)) {
-        Tuple<Item, Function<ItemStack, Tuple<Integer, Float>>> value =
-            (Tuple<Item, Function<ItemStack, Tuple<Integer, Float>>>) object;
+        Tuple<Item, Function<PlayerEntity, Function<ItemStack, Tuple<Integer, Float>>>> value =
+            (Tuple<Item, Function<PlayerEntity, Function<ItemStack, Tuple<Integer, Float>>>>) object;
         DietCalculator.items.put(value.getA(), value.getB());
       } else if (method.equals(Type.BLOCK.id)) {
         Tuple<Block, Function<BlockPos, Function<PlayerEntity, Function<Hand, Function<Direction, Tuple<Integer, Float>>>>>>
