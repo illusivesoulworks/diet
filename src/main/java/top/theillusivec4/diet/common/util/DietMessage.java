@@ -38,11 +38,11 @@ public class DietMessage {
 
   public static void enqueue() {
     InterModComms.sendTo(DietMod.MOD_ID, Type.ITEM.id,
-        () -> new Tuple<Item, Function<ItemStack, Tuple<Integer, Float>>>(Items.CAKE,
-            (stack) -> new Tuple<>(14, 0.2f)));
+        () -> new Tuple<Item, Function<PlayerEntity, Function<ItemStack, Tuple<Integer, Float>>>>(
+            Items.CAKE, (player) -> (stack) -> new Tuple<>(14, 0.2f)));
     InterModComms.sendTo(DietMod.MOD_ID, Type.ITEM.id,
-        () -> new Tuple<Item, Function<ItemStack, Tuple<Integer, Float>>>(
-            Items.ENCHANTED_GOLDEN_APPLE, (stack) -> new Tuple<>(100, 0.0f)));
+        () -> new Tuple<Item, Function<PlayerEntity, Function<ItemStack, Tuple<Integer, Float>>>>(
+            Items.ENCHANTED_GOLDEN_APPLE, (player) -> (stack) -> new Tuple<>(100, 0.0f)));
     InterModComms.sendTo(DietMod.MOD_ID, Type.BLOCK.id,
         () -> new Tuple<Block, Function<BlockPos, Function<PlayerEntity, Function<Hand, Function<Direction, Tuple<Integer, Float>>>>>>(
             Blocks.CAKE, (pos) -> (player) -> (hand) -> (direction) -> player.canEat(false) ?
