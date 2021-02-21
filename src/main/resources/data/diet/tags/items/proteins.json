@@ -712,6 +712,15 @@
     "vanillafoodpantry:stuffed_potato_spam",
     "vanillafoodpantry:wolf_cooked",
     "vanillafoodpantry:wolf_raw",
-    "vanillafoodpantry:wrapped_egg"
+    "vanillafoodpantry:wrapped_egg",
+    "wyrmroost:cooked_apex_meat",
+    "wyrmroost:cooked_behemoth_meat",
+    "wyrmroost:cooked_common_meat",
+    "wyrmroost:cooked_desertwyrm",
+    "wyrmroost:cooked_lowtier_meat",
+    "wyrmroost:raw_apex_meat",
+    "wyrmroost:raw_behemoth_meat",
+    "wyrmroost:raw_common_meat",
+    "wyrmroost:raw_lowtier_meat"
   ]
 }
