@@ -31,6 +31,7 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
@@ -89,9 +90,10 @@ public class DietClientEventsListener {
   public static void tooltip(final ItemTooltipEvent evt) {
     PlayerEntity player = evt.getPlayer();
     List<ITextComponent> tooltips = evt.getToolTip();
+    ItemStack stack = evt.getItemStack();
 
     if (player != null) {
-      DietResult result = DietCalculator.get(player, evt.getItemStack());
+      DietResult result = DietCalculator.get(player, stack);
 
       if (result != DietResult.EMPTY) {
         Map<DietGroup, Float> groups = result.get();
@@ -102,10 +104,19 @@ public class DietClientEventsListener {
               .mergeStyle(TextFormatting.GRAY));
 
           for (Map.Entry<DietGroup, Float> entry : groups.entrySet()) {
-            tooltips.add((new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group",
-                DECIMALFORMAT.format(entry.getValue() * 100), new TranslationTextComponent(
-                "groups." + DietMod.MOD_ID + "." + entry.getKey().getName() + ".name")))
-                .mergeStyle(TextFormatting.GREEN));
+            float value = entry.getValue();
+            TranslationTextComponent groupName = new TranslationTextComponent(
+                "groups." + DietMod.MOD_ID + "." + entry.getKey().getName() + ".name");
+
+            if (value > 0.0f) {
+              tooltips.add((new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group",
+                  DECIMALFORMAT.format(entry.getValue() * 100), groupName))
+                  .mergeStyle(TextFormatting.GREEN));
+            } else {
+              tooltips.add(
+                  (new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName))
+                      .mergeStyle(TextFormatting.GREEN));
+            }
           }
         }
       }

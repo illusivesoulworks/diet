@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,17 +37,16 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import org.apache.commons.lang3.tuple.Triple;
 import top.theillusivec4.diet.common.config.DietServerConfig;
 import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
 
 public class DietCalculator {
 
-  static final Map<Item, Function<PlayerEntity, Function<ItemStack, List<ItemStack>>>> composites =
-      new HashMap<>();
-  static final Map<Item, Function<PlayerEntity, Function<ItemStack, Tuple<Integer, Float>>>> items =
-      new HashMap<>();
-  static final Map<Block, Function<BlockPos, Function<PlayerEntity, Function<Hand, Function<Direction, Tuple<Integer, Float>>>>>>
+  static final Map<Item, BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>>>
+      items = new HashMap<>();
+  static final Map<Block, BiFunction<BlockPos, PlayerEntity, BiFunction<Hand, Direction, Tuple<Integer, Float>>>>
       blocks = new HashMap<>();
 
   public static DietResult get(PlayerEntity player, ItemStack input) {
@@ -56,19 +55,27 @@ public class DietCalculator {
     if (groups.isEmpty()) {
       return DietResult.EMPTY;
     }
-    int healing = 0;
-    float saturation = 0.0f;
+    int healing;
+    float saturation;
     Item item = input.getItem();
     Food food = item.getFood();
-    Function<PlayerEntity, Function<ItemStack, Tuple<Integer, Float>>> func = items.get(item);
+    BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>> func =
+        items.get(item);
 
     if (func != null) {
-      Tuple<Integer, Float> values = func.apply(player).apply(input);
-      healing = values.getA();
-      saturation = values.getB();
+      Triple<List<ItemStack>, Integer, Float> apply = func.apply(player, input);
+      healing = apply.getMiddle();
+      saturation = apply.getRight();
     } else if (food != null) {
       healing = food.getHealing();
       saturation = food.getSaturation();
+    } else {
+      Map<DietGroup, Float> result = new HashMap<>();
+
+      for (DietGroup group : groups) {
+        result.put(group, 0.0f);
+      }
+      return new DietResult(result);
     }
     return new DietResult(calculate(healing, saturation, groups));
   }
@@ -81,16 +88,18 @@ public class DietCalculator {
     if (groups.isEmpty()) {
       return DietResult.EMPTY;
     }
-    int healing;
-    float saturation;
-    Function<BlockPos, Function<PlayerEntity, Function<Hand, Function<Direction, Tuple<Integer, Float>>>>>
-        func = blocks.get(block);
+    int healing = 0;
+    float saturation = 0.0f;
+    BiFunction<BlockPos, PlayerEntity, BiFunction<Hand, Direction, Tuple<Integer, Float>>> func =
+        blocks.get(block);
 
     if (func != null) {
-      Tuple<Integer, Float> values = func.apply(pos).apply(player).apply(hand).apply(direction);
+      Tuple<Integer, Float> values = func.apply(pos, player).apply(hand, direction);
       healing = values.getA();
       saturation = values.getB();
-    } else {
+    }
+
+    if (healing == 0) {
       return DietResult.EMPTY;
     }
     return new DietResult(calculate(healing, saturation, groups));
@@ -105,11 +114,8 @@ public class DietCalculator {
 
     for (DietGroup group : groups) {
       float value = (float) (gain * group.getGainMultiplier());
-
-      if (value > 0.0f) {
-        value = Math.max(0.005f, Math.round(value * 200) / 200.0f);
-        result.put(group, value);
-      }
+      value = Math.max(0.005f, Math.round(value * 200) / 200.0f);
+      result.put(group, value);
     }
     return result;
   }
@@ -122,11 +128,11 @@ public class DietCalculator {
 
     while (!queue.isEmpty()) {
       ItemStack next = queue.poll();
-      Function<PlayerEntity, Function<ItemStack, List<ItemStack>>> func =
-          composites.get(next.getItem());
+      BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>> func =
+          items.get(next.getItem());
 
       if (func != null) {
-        queue.addAll(func.apply(player).apply(next));
+        queue.addAll(func.apply(player, next).getLeft());
       } else {
         stacks.add(next);
       }

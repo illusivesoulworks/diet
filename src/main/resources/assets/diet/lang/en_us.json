@@ -2,6 +2,7 @@
   "gui.diet.title": "Diet",
   "tooltip.diet.eaten": "When eaten:",
   "tooltip.diet.group": "+%s%% %s",
+  "tooltip.diet.group_": "+%s",
   "tooltip.diet.effects": "Dietary Effects",
   "groups.diet.grains.name": "Grains",
   "groups.diet.proteins.name": "Proteins",

@@ -2,8 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:bread",
-    "minecraft:cookie",
-    "minecraft:enchanted_golden_apple"
+    "minecraft:cookie"
   ],
   "optional": [
     "aquaculture:sushi",
