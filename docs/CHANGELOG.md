@@ -3,6 +3,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.8] - 2021.02.27
+### Added
+- Added five-food-group support for:
+  - Ars Nouveau
+  - Better End (Forge)
+  - Integrated Dynamics
+  - Meet Your Fight
+  - PneumaticCraft: Repressurized
+  - Resourceful Bees
+  - Oh The Biomes You'll Go
+  - Undergarden
+### Fixed
+- Fixed diet values not syncing when changing dimensions [#9](https://github.com/TheIllusiveC4/Diet/issues/9)
+
 ## [1.16.5-0.7] - 2021.02.21
 ### Changed
 - [API] Streamlined items/blocks API
