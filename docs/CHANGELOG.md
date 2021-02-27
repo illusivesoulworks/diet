@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.10] - 2021.02.27
+### Added
+- Added five-food-group support for:
+  - Bettas
+  - Fins and Tails 
+  - Frozen Up
+  - Omni
+
 ## [1.16.5-0.9] - 2021.02.27
 ### Fixed
 - Categorized missing item from Resourceful Bees
