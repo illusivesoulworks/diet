@@ -97,6 +97,15 @@ public class DietCapabilityEventsListener {
   }
 
   @SubscribeEvent
+  public static void playerDimensionTravel(final PlayerEvent.PlayerChangedDimensionEvent evt) {
+
+    if (evt.getPlayer() instanceof ServerPlayerEntity) {
+      ServerPlayerEntity player = (ServerPlayerEntity) evt.getPlayer();
+      DietCapability.get(player).ifPresent(IDietTracker::sync);
+    }
+  }
+
+  @SubscribeEvent
   @SuppressWarnings("unused")
   public static void playerTick(final TickEvent.PlayerTickEvent evt) {
 
