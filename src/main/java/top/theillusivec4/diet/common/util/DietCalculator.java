@@ -108,7 +108,7 @@ public class DietCalculator {
   private static Map<DietGroup, Float> calculate(int healing, float saturation,
                                                  Set<DietGroup> groups) {
     float quality = (healing + (healing * saturation)) / groups.size();
-    float gain = (quality * 0.1f) / (quality + 15.0f);
+    float gain = (quality * 0.2f) / (quality + 15.0f);
     gain *= Math.pow(1.0f - DietServerConfig.gainPenaltyPerGroup, groups.size() - 1);
     Map<DietGroup, Float> result = new HashMap<>();
 

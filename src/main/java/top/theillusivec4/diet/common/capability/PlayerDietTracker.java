@@ -124,7 +124,6 @@ public class PlayerDietTracker implements IDietTracker {
   public void consume(ItemStack stack) {
 
     if (active && !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItem(stack, player))) {
-
       DietResult result = DietCalculator.get(player, stack);
 
       if (result != DietResult.EMPTY) {
