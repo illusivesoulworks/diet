@@ -19,7 +19,11 @@
 package top.theillusivec4.diet.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
@@ -42,53 +46,91 @@ public class DietTooltip {
     List<ITextComponent> tooltips = new ArrayList<>();
     tooltips.add(new TranslationTextComponent("tooltip.diet.effects"));
     tooltips.add(StringTextComponent.EMPTY);
+    Map<Attribute, AttributeTooltip> mergedAttributes = new HashMap<>();
 
     for (DietEffectsInfo.AttributeModifier modifier : modifiers) {
-      double amount = modifier.getAmount();
-
-      double formattedAmount;
-      if (modifier.getOperation() !=
-          net.minecraft.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_BASE &&
-          modifier.getOperation() !=
-              net.minecraft.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_TOTAL) {
-
-        if (modifier.getAttribute().equals(Attributes.KNOCKBACK_RESISTANCE)) {
-          formattedAmount = amount * 10.0D;
-        } else {
-          formattedAmount = amount;
-        }
-      } else {
-        formattedAmount = amount * 100.0D;
-      }
-
-      if (amount > 0.0D) {
-        tooltips.add((new TranslationTextComponent(
-            "attribute.modifier.plus." + modifier.getOperation().getId(),
-            ItemStack.DECIMALFORMAT.format(formattedAmount),
-            new TranslationTextComponent(modifier.getAttribute().getAttributeName())))
-            .mergeStyle(TextFormatting.BLUE));
-      } else if (amount < 0.0D) {
-        formattedAmount = formattedAmount * -1.0D;
-        tooltips.add((new TranslationTextComponent(
-            "attribute.modifier.take." + modifier.getOperation().getId(),
-            ItemStack.DECIMALFORMAT.format(formattedAmount),
-            new TranslationTextComponent(modifier.getAttribute().getAttributeName())))
-            .mergeStyle(TextFormatting.RED));
-      }
+      mergedAttributes.computeIfAbsent(modifier.getAttribute(), (k) -> new AttributeTooltip())
+          .merge(modifier);
     }
 
+    for (Map.Entry<Attribute, AttributeTooltip> attribute : mergedAttributes.entrySet()) {
+      AttributeTooltip info = attribute.getValue();
+      Attribute key = attribute.getKey();
+      addAttributeTooltip(tooltips, info.added, AttributeModifier.Operation.ADDITION, key);
+      addAttributeTooltip(tooltips, info.baseMultiplier, AttributeModifier.Operation.MULTIPLY_BASE,
+          key);
+      addAttributeTooltip(tooltips, info.totalMultiplier - 1.0f,
+          AttributeModifier.Operation.MULTIPLY_TOTAL, key);
+    }
+    Map<Effect, Integer> mergedEffects = new HashMap<>();
+
     for (DietEffectsInfo.StatusEffect effect : effects) {
-      Effect effect1 = effect.getEffect();
+      mergedEffects.compute(effect.getEffect(),
+          (k, v) -> v == null ? effect.getAmplifier() : Math.max(v, effect.getAmplifier()));
+    }
+
+    for (Map.Entry<Effect, Integer> effect : mergedEffects.entrySet()) {
+      Effect effect1 = effect.getKey();
       IFormattableTextComponent iformattabletextcomponent =
           new TranslationTextComponent(effect1.getName());
 
-      if (effect.getAmplifier() > 0) {
+      if (effect.getValue() > 0) {
         iformattabletextcomponent =
             new TranslationTextComponent("potion.withAmplifier", iformattabletextcomponent,
-                new TranslationTextComponent("potion.potency." + effect.getAmplifier()));
+                new TranslationTextComponent("potion.potency." + effect.getValue()));
       }
       tooltips.add(iformattabletextcomponent.mergeStyle(effect1.getEffectType().getColor()));
     }
     return tooltips;
+  }
+
+  private static void addAttributeTooltip(List<ITextComponent> tooltips, float amount,
+                                          AttributeModifier.Operation operation,
+                                          Attribute attribute) {
+    double formattedAmount;
+
+    if (operation != AttributeModifier.Operation.MULTIPLY_BASE &&
+        operation != AttributeModifier.Operation.MULTIPLY_TOTAL) {
+
+      if (attribute.equals(Attributes.KNOCKBACK_RESISTANCE)) {
+        formattedAmount = amount * 10.0D;
+      } else {
+        formattedAmount = amount;
+      }
+    } else {
+      formattedAmount = amount * 100.0D;
+    }
+
+    if (amount > 0.0D) {
+      tooltips.add((new TranslationTextComponent("attribute.modifier.plus." + operation.getId(),
+          ItemStack.DECIMALFORMAT.format(formattedAmount),
+          new TranslationTextComponent(attribute.getAttributeName())))
+          .mergeStyle(TextFormatting.BLUE));
+    } else if (amount < 0.0D) {
+      formattedAmount = formattedAmount * -1.0D;
+      tooltips.add((new TranslationTextComponent("attribute.modifier.take." + operation.getId(),
+          ItemStack.DECIMALFORMAT.format(formattedAmount),
+          new TranslationTextComponent(attribute.getAttributeName())))
+          .mergeStyle(TextFormatting.RED));
+    }
+  }
+
+  private static class AttributeTooltip {
+
+    int added = 0;
+    float baseMultiplier = 0.0f;
+    float totalMultiplier = 1.0f;
+
+    void merge(DietEffectsInfo.AttributeModifier modifier) {
+      float amount = modifier.getAmount();
+
+      if (modifier.getOperation() == AttributeModifier.Operation.MULTIPLY_BASE) {
+        baseMultiplier += amount;
+      } else if (modifier.getOperation() == AttributeModifier.Operation.MULTIPLY_TOTAL) {
+        totalMultiplier *= 1.0f + amount;
+      } else {
+        added += amount;
+      }
+    }
   }
 }
