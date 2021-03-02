@@ -122,6 +122,7 @@ public class DietCalculator {
 
   private static Set<DietGroup> getGroups(PlayerEntity player, ItemStack input) {
     Set<DietGroup> groups = new HashSet<>();
+    Set<ItemStack> processed = new HashSet<>();
     List<ItemStack> stacks = new ArrayList<>();
     Queue<ItemStack> queue = new ArrayDeque<>();
     queue.add(input);
@@ -132,7 +133,21 @@ public class DietCalculator {
           items.get(next.getItem());
 
       if (func != null) {
-        queue.addAll(func.apply(player, next).getLeft());
+        List<ItemStack> candidates = func.apply(player, next).getLeft();
+
+        if (candidates.isEmpty()) {
+          stacks.add(next);
+        } else {
+
+          for (ItemStack candidate : candidates) {
+
+            if (processed.add(candidate)) {
+              queue.add(candidate);
+            } else {
+              stacks.add(candidate);
+            }
+          }
+        }
       } else {
         stacks.add(next);
       }
