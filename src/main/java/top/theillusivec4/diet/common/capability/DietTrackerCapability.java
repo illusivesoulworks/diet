@@ -32,15 +32,12 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
-import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietTracker;
 import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
@@ -127,8 +124,8 @@ public class DietTrackerCapability {
     }
 
     @Override
-    public void consume(BlockPos pos, Hand hand, Direction direction) {
-      // NO-OP
+    public void consume(ItemStack stack, int healing, float saturationModifier) {
+
     }
 
     @Override
@@ -179,6 +176,16 @@ public class DietTrackerCapability {
     @Override
     public void sync() {
       // NO-OP
+    }
+
+    @Override
+    public void captureStack(ItemStack stack) {
+
+    }
+
+    @Override
+    public ItemStack getCapturedStack() {
+      return null;
     }
   }
 }

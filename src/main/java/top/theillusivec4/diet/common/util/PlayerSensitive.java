@@ -16,44 +16,11 @@
  *
  */
 
-package top.theillusivec4.diet.api;
+package top.theillusivec4.diet.common.util;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 
-public interface IDietTracker {
+public interface PlayerSensitive {
 
-  void tick();
-
-  void consume(ItemStack stack);
-
-  void consume(ItemStack stack, int healing, float saturationModifier);
-
-  float getValue(String group);
-
-  void setValue(String group, float amount);
-
-  Map<String, Float> getValues();
-
-  void setValues(Map<String, Float> groups);
-
-  Map<Attribute, Set<UUID>> getModifiers();
-
-  void setModifiers(Map<Attribute, Set<UUID>> modifiers);
-
-  boolean isActive();
-
-  void setActive(boolean active);
-
-  PlayerEntity getPlayer();
-
-  void sync();
-
-  void captureStack(ItemStack stack);
-
-  ItemStack getCapturedStack();
+  void setPlayer(PlayerEntity player);
 }

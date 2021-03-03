@@ -27,16 +27,10 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.BiFunction;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
 import org.apache.commons.lang3.tuple.Triple;
 import top.theillusivec4.diet.common.config.DietServerConfig;
 import top.theillusivec4.diet.common.group.DietGroup;
@@ -46,8 +40,6 @@ public class DietCalculator {
 
   static final Map<Item, BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>>>
       items = new HashMap<>();
-  static final Map<Block, BiFunction<BlockPos, PlayerEntity, BiFunction<Hand, Direction, Tuple<Integer, Float>>>>
-      blocks = new HashMap<>();
 
   public static DietResult get(PlayerEntity player, ItemStack input) {
     Set<DietGroup> groups = getGroups(player, input);
@@ -80,26 +72,11 @@ public class DietCalculator {
     return new DietResult(calculate(healing, saturation, groups));
   }
 
-  public static DietResult get(BlockPos pos, PlayerEntity player, Hand hand, Direction direction) {
-    BlockState state = player.world.getBlockState(pos);
-    Block block = state.getBlock();
-    Set<DietGroup> groups = getGroups(player, new ItemStack(block));
+  public static DietResult get(PlayerEntity player, ItemStack input, int healing,
+                               float saturation) {
+    Set<DietGroup> groups = getGroups(player, input);
 
     if (groups.isEmpty()) {
-      return DietResult.EMPTY;
-    }
-    int healing = 0;
-    float saturation = 0.0f;
-    BiFunction<BlockPos, PlayerEntity, BiFunction<Hand, Direction, Tuple<Integer, Float>>> func =
-        blocks.get(block);
-
-    if (func != null) {
-      Tuple<Integer, Float> values = func.apply(pos, player).apply(hand, direction);
-      healing = values.getA();
-      saturation = values.getB();
-    }
-
-    if (healing == 0) {
       return DietResult.EMPTY;
     }
     return new DietResult(calculate(healing, saturation, groups));

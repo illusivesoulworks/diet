@@ -35,7 +35,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -61,6 +60,7 @@ public class DietCapabilityEventsListener {
   }
 
   @SubscribeEvent
+  @SuppressWarnings("unused")
   public static void playerClone(final PlayerEvent.Clone evt) {
 
     if (evt.getPlayer() instanceof ServerPlayerEntity) {
@@ -97,6 +97,7 @@ public class DietCapabilityEventsListener {
   }
 
   @SubscribeEvent
+  @SuppressWarnings("unused")
   public static void playerDimensionTravel(final PlayerEvent.PlayerChangedDimensionEvent evt) {
 
     if (evt.getPlayer() instanceof ServerPlayerEntity) {
@@ -123,17 +124,6 @@ public class DietCapabilityEventsListener {
     if (stack.getItem().isFood() && !livingEntity.world.isRemote &&
         livingEntity instanceof PlayerEntity) {
       DietCapability.get((PlayerEntity) livingEntity).ifPresent(diet -> diet.consume(stack));
-    }
-  }
-
-  @SubscribeEvent(priority = EventPriority.LOW)
-  @SuppressWarnings("unused")
-  public static void useBlock(final PlayerInteractEvent.RightClickBlock evt) {
-    PlayerEntity player = evt.getPlayer();
-
-    if (!player.world.isRemote) {
-      DietCapability.get(player)
-          .ifPresent(diet -> diet.consume(evt.getPos(), evt.getHand(), evt.getFace()));
     }
   }
 

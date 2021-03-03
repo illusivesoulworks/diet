@@ -33,9 +33,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import top.theillusivec4.diet.api.DietEvent;
@@ -58,6 +55,7 @@ public class PlayerDietTracker implements IDietTracker {
 
   private boolean active = true;
   private int prevFood;
+  private ItemStack captured = ItemStack.EMPTY;
 
   public PlayerDietTracker(PlayerEntity playerIn) {
     player = playerIn;
@@ -108,11 +106,11 @@ public class PlayerDietTracker implements IDietTracker {
   }
 
   @Override
-  public void consume(BlockPos pos, Hand hand, Direction direction) {
+  public void consume(ItemStack stack, int healing, float saturationModifier) {
 
     if (active &&
-        !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeBlock(pos, hand, direction, player))) {
-      DietResult result = DietCalculator.get(pos, player, hand, direction);
+        !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItemStack(stack, player))) {
+      DietResult result = DietCalculator.get(player, stack, healing, saturationModifier);
 
       if (result != DietResult.EMPTY) {
         apply(result);
@@ -123,7 +121,7 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void consume(ItemStack stack) {
 
-    if (active && !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItem(stack, player))) {
+    if (active && !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItemStack(stack, player))) {
       DietResult result = DietCalculator.get(player, stack);
 
       if (result != DietResult.EMPTY) {
@@ -294,5 +292,15 @@ public class PlayerDietTracker implements IDietTracker {
     if (player instanceof ServerPlayerEntity) {
       DietNetwork.sendActivationS2C((ServerPlayerEntity) player, flag);
     }
+  }
+
+  @Override
+  public void captureStack(ItemStack stack) {
+    captured = stack;
+  }
+
+  @Override
+  public ItemStack getCapturedStack() {
+    return captured;
   }
 }
