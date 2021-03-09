@@ -37,7 +37,6 @@ import top.theillusivec4.diet.common.config.DietClientConfig;
 import top.theillusivec4.diet.common.config.DietServerConfig;
 import top.theillusivec4.diet.common.effect.DietEffects;
 import top.theillusivec4.diet.common.group.DietGroups;
-import top.theillusivec4.diet.common.util.DietCalculator;
 
 @Mod.EventBusSubscriber(modid = DietMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DietConfigReader {
@@ -107,6 +106,7 @@ public class DietConfigReader {
 
     public final ForgeConfigSpec.DoubleValue deathPenaltyMin;
     public final ForgeConfigSpec.DoubleValue deathPenaltyLoss;
+    public final ForgeConfigSpec.EnumValue<DietServerConfig.DeathPenaltyMethod> deathPenaltyMethod;
 
     public final ForgeConfigSpec.DoubleValue gainPenaltyPerGroup;
     public final ForgeConfigSpec.DoubleValue decayPenaltyPerGroup;
@@ -123,6 +123,13 @@ public class DietConfigReader {
           builder.comment("The reduction in percentage applied to all diet groups upon death.")
               .translation(CONFIG_PREFIX + "deathPenaltyLoss")
               .defineInRange("deathPenaltyLoss", 1.0f, 0.0f, 1.0f);
+
+      deathPenaltyMethod = builder
+          .comment("The method to apply for losses due to death penalties" +
+              "\nAMOUNT = Reduce by a flat percentage amount" +
+              "\nPERCENT = Reduce by a percent of the current value")
+          .translation(CONFIG_PREFIX + "deathPenaltyMethod")
+          .defineEnum("deathPenaltyMethod", DietServerConfig.DeathPenaltyMethod.AMOUNT);
 
       builder.pop();
 

@@ -71,8 +71,14 @@ public class DietCapabilityEventsListener {
               float value = entry.getValue();
 
               if (evt.isWasDeath()) {
-                value = Math.max(DietServerConfig.deathPenaltyMin,
-                    value - DietServerConfig.deathPenaltyLoss);
+
+                if (DietServerConfig.deathPenaltyMethod ==
+                    DietServerConfig.DeathPenaltyMethod.AMOUNT) {
+                  value = value - DietServerConfig.deathPenaltyLoss;
+                } else {
+                  value = value * (1 - DietServerConfig.deathPenaltyLoss);
+                }
+                value = Math.max(DietServerConfig.deathPenaltyMin, value);
               }
               diet.setValue(entry.getKey(), value);
             }
@@ -81,8 +87,17 @@ public class DietCapabilityEventsListener {
             if (!evt.isWasDeath()) {
               diet.setModifiers(originalDiet.getModifiers());
             }
-            diet.sync();
           }));
+    }
+  }
+
+  @SubscribeEvent
+  @SuppressWarnings("unused")
+  public static void playerRespawned(final PlayerEvent.PlayerRespawnEvent evt) {
+
+    if (evt.getPlayer() instanceof ServerPlayerEntity) {
+      ServerPlayerEntity player = (ServerPlayerEntity) evt.getPlayer();
+      DietCapability.get(player).ifPresent(IDietTracker::sync);
     }
   }
 

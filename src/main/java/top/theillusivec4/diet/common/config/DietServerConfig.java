@@ -29,6 +29,12 @@ public class DietServerConfig {
 
   public static float deathPenaltyMin;
   public static float deathPenaltyLoss;
+  public static DeathPenaltyMethod deathPenaltyMethod;
   public static float decayPenaltyPerGroup;
   public static float gainPenaltyPerGroup;
+
+  public enum DeathPenaltyMethod {
+    AMOUNT,
+    PERCENT
+  }
 }
