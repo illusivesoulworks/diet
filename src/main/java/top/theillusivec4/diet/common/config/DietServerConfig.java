@@ -19,6 +19,8 @@
 package top.theillusivec4.diet.common.config;
 
 import java.util.List;
+import java.util.Map;
+import net.minecraft.item.Item;
 import top.theillusivec4.diet.common.config.data.EffectConfig;
 import top.theillusivec4.diet.common.config.data.GroupConfig;
 
@@ -32,6 +34,7 @@ public class DietServerConfig {
   public static DeathPenaltyMethod deathPenaltyMethod;
   public static float decayPenaltyPerGroup;
   public static float gainPenaltyPerGroup;
+  public static Map<Item, Float> foodOverrides;
 
   public enum DeathPenaltyMethod {
     AMOUNT,

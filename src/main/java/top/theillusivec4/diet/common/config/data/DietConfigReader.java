@@ -23,13 +23,18 @@ import com.electronwill.nightconfig.core.conversion.ObjectConverter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import top.theillusivec4.diet.DietMod;
@@ -110,6 +115,7 @@ public class DietConfigReader {
 
     public final ForgeConfigSpec.DoubleValue gainPenaltyPerGroup;
     public final ForgeConfigSpec.DoubleValue decayPenaltyPerGroup;
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> foodOverrides;
 
     public General(ForgeConfigSpec.Builder builder) {
       builder.push("death_penalty");
@@ -125,7 +131,7 @@ public class DietConfigReader {
               .defineInRange("deathPenaltyLoss", 1.0f, 0.0f, 1.0f);
 
       deathPenaltyMethod = builder
-          .comment("The method to apply for losses due to death penalties" +
+          .comment("The method to apply for losses due to death penalties." +
               "\nAMOUNT = Reduce by a flat percentage amount" +
               "\nPERCENT = Reduce by a percent of the current value")
           .translation(CONFIG_PREFIX + "deathPenaltyMethod")
@@ -144,6 +150,12 @@ public class DietConfigReader {
           .comment("The percent reduction in total decay for each diet group decayed at once.")
           .translation(CONFIG_PREFIX + "decayPenaltyPerGroup")
           .defineInRange("decayPenaltyPerGroup", 0.15f, 0.0f, 1.0f);
+
+      foodOverrides = builder.comment(
+          "List of food quality overrides for diet gain values." +
+              "\nFormat: \"modid:name;quality\"")
+          .translation(CONFIG_PREFIX + "foodOverrides")
+          .defineList("foodOverrides", new ArrayList<>(), s -> s instanceof String);
 
       builder.pop();
     }
@@ -196,8 +208,36 @@ public class DietConfigReader {
   public static void readServer() {
     DietServerConfig.deathPenaltyMin = GENERAL.deathPenaltyMin.get().floatValue();
     DietServerConfig.deathPenaltyLoss = GENERAL.deathPenaltyLoss.get().floatValue();
+    DietServerConfig.deathPenaltyMethod = GENERAL.deathPenaltyMethod.get();
     DietServerConfig.decayPenaltyPerGroup = GENERAL.decayPenaltyPerGroup.get().floatValue();
     DietServerConfig.gainPenaltyPerGroup = GENERAL.gainPenaltyPerGroup.get().floatValue();
+    DietServerConfig.foodOverrides = new HashMap<>();
+
+    for (String s : GENERAL.foodOverrides.get()) {
+      String[] parsed = s.split(";");
+
+      if (parsed.length == 2) {
+        String name = parsed[0];
+        float quality;
+
+        try {
+          quality = Float.parseFloat(parsed[1]);
+        } catch (NumberFormatException e) {
+          DietMod.LOGGER.error("Expected float for quality, instead got " + parsed[1]);
+          continue;
+        }
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
+
+        if (item != null) {
+          DietServerConfig.foodOverrides.put(item, Math.max(0.0f, quality));
+        } else {
+          DietMod.LOGGER.error("Could not find item " + name + " in food override");
+        }
+      } else {
+        DietMod.LOGGER.error(
+            "Expected two arguments in food override " + s + ", instead found " + parsed.length);
+      }
+    }
   }
 
   public static void readClient() {

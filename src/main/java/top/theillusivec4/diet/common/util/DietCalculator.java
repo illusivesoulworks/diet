@@ -47,17 +47,21 @@ public class DietCalculator {
     if (groups.isEmpty()) {
       return DietResult.EMPTY;
     }
-    int healing;
+    float healing;
     float saturation;
     Item item = input.getItem();
     Food food = item.getFood();
     BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>> func =
         items.get(item);
+    Float override = DietServerConfig.foodOverrides.get(item);
 
     if (func != null) {
       Triple<List<ItemStack>, Integer, Float> apply = func.apply(player, input);
       healing = apply.getMiddle();
       saturation = apply.getRight();
+    } else if (override != null) {
+      healing = override;
+      saturation = 0.0f;
     } else if (food != null) {
       healing = food.getHealing();
       saturation = food.getSaturation();
@@ -82,7 +86,7 @@ public class DietCalculator {
     return new DietResult(calculate(healing, saturation, groups));
   }
 
-  private static Map<DietGroup, Float> calculate(int healing, float saturation,
+  private static Map<DietGroup, Float> calculate(float healing, float saturation,
                                                  Set<DietGroup> groups) {
     float quality = (healing + (healing * saturation)) / groups.size();
     float gain = (quality * 0.2f) / (quality + 15.0f);
