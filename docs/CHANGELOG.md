@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.14] - 2021.03.08
+### Added
+- Added five-food-group support for:
+  - Abundance
+  - Bayou Blues
+  - Blueberry
+  - Drop the Meat
+  - Golden Beetroot Mod
+- Added percentage-based death penalty config option [#17](https://github.com/TheIllusiveC4/Diet/issues/17)
+- Added food quality overrides list config option
+### Changed
+- Increased overall gain rate of all foods for every food group by 20%
+
 ## [1.16.5-0.13] - 2021.03.03
 ### Fixed
 - Fixed GUI cross-mod compatibility issues [#16](https://github.com/TheIllusiveC4/Diet/issues/16)
