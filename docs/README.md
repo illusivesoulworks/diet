@@ -142,6 +142,7 @@ Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4
 - [Pam's HarvestCraft 2: Food Core](https://www.curseforge.com/minecraft/mc-mods/pams-harvestcraft-2-food-core)
 - [Pam's HarvestCraft 2: Food Extended](https://www.curseforge.com/minecraft/mc-mods/pams-harvestcraft-2-food-extended)
 - [Pam's HarvestCraft 2: Trees](https://www.curseforge.com/minecraft/mc-mods/pams-harvestcraft-2-trees)
+- [Pandoras Creatures](https://www.curseforge.com/minecraft/mc-mods/pandoras-creatures)
 - [Peculiars](https://www.curseforge.com/minecraft/mc-mods/peculiars)
 - [Pickle Tweaks](https://www.curseforge.com/minecraft/mc-mods/pickle-tweaks)
 - [PneumaticCraft: Repressurized](https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized)  
