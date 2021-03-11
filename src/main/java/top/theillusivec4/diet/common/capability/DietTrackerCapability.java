@@ -52,23 +52,31 @@ public class DietTrackerCapability {
           public INBT writeNBT(Capability<IDietTracker> capability, IDietTracker instance,
                                Direction side) {
             CompoundNBT tag = new CompoundNBT();
+            Map<String, Float> values = instance.getValues();
 
-            for (Map.Entry<String, Float> group : instance.getValues().entrySet()) {
-              tag.putFloat(group.getKey(), group.getValue());
+            if (values != null) {
+
+              for (Map.Entry<String, Float> group : values.entrySet()) {
+                tag.putFloat(group.getKey(), group.getValue());
+              }
             }
             ListNBT list = new ListNBT();
+            Map<Attribute, Set<UUID>> modifiers = instance.getModifiers();
 
-            for (Map.Entry<Attribute, Set<UUID>> modifier : instance.getModifiers().entrySet()) {
-              CompoundNBT attributeTag = new CompoundNBT();
-              attributeTag.put("AttributeName", StringNBT.valueOf(
-                  Objects.requireNonNull(modifier.getKey().getRegistryName()).toString()));
-              ListNBT uuids = new ListNBT();
+            if (modifiers != null) {
 
-              for (UUID uuid : modifier.getValue()) {
-                uuids.add(StringNBT.valueOf(uuid.toString()));
+              for (Map.Entry<Attribute, Set<UUID>> modifier : modifiers.entrySet()) {
+                CompoundNBT attributeTag = new CompoundNBT();
+                attributeTag.put("AttributeName", StringNBT.valueOf(
+                    Objects.requireNonNull(modifier.getKey().getRegistryName()).toString()));
+                ListNBT uuids = new ListNBT();
+
+                for (UUID uuid : modifier.getValue()) {
+                  uuids.add(StringNBT.valueOf(uuid.toString()));
+                }
+                attributeTag.put("UUIDs", uuids);
+                list.add(attributeTag);
               }
-              attributeTag.put("UUIDs", uuids);
-              list.add(attributeTag);
             }
             tag.put("Modifiers", list);
             tag.putBoolean("Active", instance.isActive());
@@ -140,7 +148,7 @@ public class DietTrackerCapability {
 
     @Override
     public Map<String, Float> getValues() {
-      return null;
+      return new HashMap<>();
     }
 
     @Override
@@ -150,7 +158,7 @@ public class DietTrackerCapability {
 
     @Override
     public Map<Attribute, Set<UUID>> getModifiers() {
-      return null;
+      return new HashMap<>();
     }
 
     @Override
