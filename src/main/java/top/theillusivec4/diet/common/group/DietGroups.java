@@ -42,21 +42,25 @@ public class DietGroups {
   public static void build(List<GroupConfig> configs) {
     groups.clear();
 
-    for (GroupConfig config : configs) {
-      Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(config.icon));
+    if (configs != null) {
 
-      if (item != null) {
-        String name = config.name;
-        float defaultValue = (float) (config.default_value != null ? config.default_value : 0);
-        int order = config.order != null ? config.order : 0;
-        DietGroup group = new DietGroup(name, item, Color.decode(config.color), defaultValue, order,
-            config.gain_multiplier, config.decay_multiplier);
+      for (GroupConfig config : configs) {
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(config.icon));
 
-        if (!groups.add(group)) {
-          DietMod.LOGGER.error("Found duplicate id in diet groups config: " + name);
+        if (item != null) {
+          String name = config.name;
+          float defaultValue = (float) (config.default_value != null ? config.default_value : 0);
+          int order = config.order != null ? config.order : 0;
+          DietGroup group =
+              new DietGroup(name, item, Color.decode(config.color), defaultValue, order,
+                  config.gain_multiplier, config.decay_multiplier);
+
+          if (!groups.add(group)) {
+            DietMod.LOGGER.error("Found duplicate id in diet groups config: " + name);
+          }
+        } else {
+          DietMod.LOGGER.error("Found unknown item in diet groups config: " + config.icon);
         }
-      } else {
-        DietMod.LOGGER.error("Found unknown item in diet groups config: " + config.icon);
       }
     }
   }

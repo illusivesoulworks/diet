@@ -39,88 +39,91 @@ public class DietEffects {
 
   public static void build(List<EffectConfig> configs) {
     effects.clear();
-    int uuidSuffix = 0;
 
-    for (EffectConfig config : configs) {
+    if (configs != null) {
+      int uuidSuffix = 0;
 
-      if (config.conditions == null) {
-        DietMod.LOGGER.error("Found empty condition in diet effect, skipping...");
-        continue;
-      }
+      for (EffectConfig config : configs) {
 
-      if (config.status_effects == null && config.attributes == null) {
-        DietMod.LOGGER.error("Found empty effect in diet effect, skipping...");
-        continue;
-      }
-      List<EffectConfig.ConditionConfig> conditionConfigs = config.conditions;
-      List<EffectConfig.AttributeConfig> attributeConfigs = new ArrayList<>();
-      List<EffectConfig.StatusEffectConfig> statusEffectConfigs = new ArrayList<>();
-
-      if (config.attributes != null) {
-        attributeConfigs.addAll(config.attributes);
-      }
-
-      if (config.status_effects != null) {
-        statusEffectConfigs.addAll(config.status_effects);
-      }
-      List<DietEffect.Condition> conditions = new ArrayList<>();
-
-      for (EffectConfig.ConditionConfig conditionConfig : conditionConfigs) {
-        double above = conditionConfig.above != null ? conditionConfig.above : 0.0d;
-        double below = conditionConfig.below != null ? conditionConfig.below : 1.0d;
-
-        if (conditionConfig.groups == null || conditionConfig.groups.isEmpty()) {
-          DietMod.LOGGER.error("Found empty groups in conditions config, skipping...");
+        if (config.conditions == null) {
+          DietMod.LOGGER.error("Found empty condition in diet effect, skipping...");
           continue;
         }
-        Set<String> groups = new HashSet<>(conditionConfig.groups);
-        DietEffect.MatchMethod match = conditionConfig.match != null ? DietEffect.MatchMethod
-            .findOrDefault(conditionConfig.match, DietEffect.MatchMethod.AVERAGE) :
-            DietEffect.MatchMethod.AVERAGE;
-        conditions.add(new DietEffect.Condition(groups, match, above, below));
+
+        if (config.status_effects == null && config.attributes == null) {
+          DietMod.LOGGER.error("Found empty effect in diet effect, skipping...");
+          continue;
+        }
+        List<EffectConfig.ConditionConfig> conditionConfigs = config.conditions;
+        List<EffectConfig.AttributeConfig> attributeConfigs = new ArrayList<>();
+        List<EffectConfig.StatusEffectConfig> statusEffectConfigs = new ArrayList<>();
+
+        if (config.attributes != null) {
+          attributeConfigs.addAll(config.attributes);
+        }
+
+        if (config.status_effects != null) {
+          statusEffectConfigs.addAll(config.status_effects);
+        }
+        List<DietEffect.Condition> conditions = new ArrayList<>();
+
+        for (EffectConfig.ConditionConfig conditionConfig : conditionConfigs) {
+          double above = conditionConfig.above != null ? conditionConfig.above : 0.0d;
+          double below = conditionConfig.below != null ? conditionConfig.below : 1.0d;
+
+          if (conditionConfig.groups == null || conditionConfig.groups.isEmpty()) {
+            DietMod.LOGGER.error("Found empty groups in conditions config, skipping...");
+            continue;
+          }
+          Set<String> groups = new HashSet<>(conditionConfig.groups);
+          DietEffect.MatchMethod match = conditionConfig.match != null ? DietEffect.MatchMethod
+              .findOrDefault(conditionConfig.match, DietEffect.MatchMethod.AVERAGE) :
+              DietEffect.MatchMethod.AVERAGE;
+          conditions.add(new DietEffect.Condition(groups, match, above, below));
+        }
+        List<DietEffect.DietAttribute> attributes = new ArrayList<>();
+
+        for (EffectConfig.AttributeConfig attributeConfig : attributeConfigs) {
+
+          if (attributeConfig.name == null || attributeConfig.amount == null ||
+              attributeConfig.operation == null) {
+            DietMod.LOGGER.error("Found missing values in attributes config, skipping...");
+            continue;
+          }
+          Attribute att =
+              ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attributeConfig.name));
+
+          if (att == null) {
+            DietMod.LOGGER
+                .error("Found invalid attribute name " + attributeConfig.name + ", skipping...");
+            continue;
+          }
+          AttributeModifier.Operation operation = getOperation(attributeConfig.operation);
+          attributes.add(new DietEffect.DietAttribute(att, operation, attributeConfig.amount));
+        }
+        List<DietEffect.DietStatusEffect> statusEffects = new ArrayList<>();
+
+        for (EffectConfig.StatusEffectConfig statusEffectConfig : statusEffectConfigs) {
+
+          if (statusEffectConfig.name == null) {
+            DietMod.LOGGER.error("Found missing name for status effect config, skipping...");
+            continue;
+          }
+          Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(
+              statusEffectConfig.name));
+
+          if (effect == null) {
+            DietMod.LOGGER.error(
+                "Found invalid status effect name " + statusEffectConfig.name + ", skipping...");
+            continue;
+          }
+          int power = statusEffectConfig.power != null ? statusEffectConfig.power : 1;
+          statusEffects.add(new DietEffect.DietStatusEffect(effect, power));
+        }
+        UUID uuid = UUID.nameUUIDFromBytes((UUID_PREFIX + uuidSuffix).getBytes());
+        uuidSuffix++;
+        effects.add(new DietEffect(uuid, attributes, statusEffects, conditions));
       }
-      List<DietEffect.DietAttribute> attributes = new ArrayList<>();
-
-      for (EffectConfig.AttributeConfig attributeConfig : attributeConfigs) {
-
-        if (attributeConfig.name == null || attributeConfig.amount == null ||
-            attributeConfig.operation == null) {
-          DietMod.LOGGER.error("Found missing values in attributes config, skipping...");
-          continue;
-        }
-        Attribute att =
-            ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attributeConfig.name));
-
-        if (att == null) {
-          DietMod.LOGGER
-              .error("Found invalid attribute name " + attributeConfig.name + ", skipping...");
-          continue;
-        }
-        AttributeModifier.Operation operation = getOperation(attributeConfig.operation);
-        attributes.add(new DietEffect.DietAttribute(att, operation, attributeConfig.amount));
-      }
-      List<DietEffect.DietStatusEffect> statusEffects = new ArrayList<>();
-
-      for (EffectConfig.StatusEffectConfig statusEffectConfig : statusEffectConfigs) {
-
-        if (statusEffectConfig.name == null) {
-          DietMod.LOGGER.error("Found missing name for status effect config, skipping...");
-          continue;
-        }
-        Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(
-            statusEffectConfig.name));
-
-        if (effect == null) {
-          DietMod.LOGGER.error(
-              "Found invalid status effect name " + statusEffectConfig.name + ", skipping...");
-          continue;
-        }
-        int power = statusEffectConfig.power != null ? statusEffectConfig.power : 1;
-        statusEffects.add(new DietEffect.DietStatusEffect(effect, power));
-      }
-      UUID uuid = UUID.nameUUIDFromBytes((UUID_PREFIX + uuidSuffix).getBytes());
-      uuidSuffix++;
-      effects.add(new DietEffect(uuid, attributes, statusEffects, conditions));
     }
   }
 
