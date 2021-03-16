@@ -38,6 +38,7 @@ public class DietServerConfig {
 
   public enum DeathPenaltyMethod {
     AMOUNT,
-    PERCENT
+    PERCENT,
+    RESET
   }
 }

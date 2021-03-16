@@ -133,7 +133,8 @@ public class DietConfigReader {
       deathPenaltyMethod = builder
           .comment("The method to apply for losses due to death penalties." +
               "\nAMOUNT = Reduce by a flat percentage amount" +
-              "\nPERCENT = Reduce by a percent of the current value")
+              "\nPERCENT = Reduce by a percent of the current value" +
+              "\nRESET = Reset value to defaults")
           .translation(CONFIG_PREFIX + "deathPenaltyMethod")
           .defineEnum("deathPenaltyMethod", DietServerConfig.DeathPenaltyMethod.AMOUNT);
 

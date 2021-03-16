@@ -44,6 +44,8 @@ import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.api.IDietTracker;
 import top.theillusivec4.diet.common.config.DietServerConfig;
+import top.theillusivec4.diet.common.group.DietGroup;
+import top.theillusivec4.diet.common.group.DietGroups;
 
 @Mod.EventBusSubscriber(modid = DietMod.MOD_ID)
 public class DietCapabilityEventsListener {
@@ -68,20 +70,29 @@ public class DietCapabilityEventsListener {
       ServerPlayerEntity player = (ServerPlayerEntity) evt.getPlayer();
       DietCapability.get(player)
           .ifPresent(diet -> DietCapability.get(evt.getOriginal()).ifPresent(originalDiet -> {
-            for (Map.Entry<String, Float> entry : originalDiet.getValues().entrySet()) {
-              float value = entry.getValue();
+            Map<String, Float> originalValues = originalDiet.getValues();
+
+            for (DietGroup group : DietGroups.get()) {
+              String id = group.getName();
+              float value = originalValues.getOrDefault(id, group.getDefaultValue());
 
               if (evt.isWasDeath()) {
 
                 if (DietServerConfig.deathPenaltyMethod ==
-                    DietServerConfig.DeathPenaltyMethod.AMOUNT) {
-                  value = value - DietServerConfig.deathPenaltyLoss;
+                    DietServerConfig.DeathPenaltyMethod.RESET) {
+                  value = group.getDefaultValue();
                 } else {
-                  value = value * (1 - DietServerConfig.deathPenaltyLoss);
+
+                  if (DietServerConfig.deathPenaltyMethod ==
+                      DietServerConfig.DeathPenaltyMethod.AMOUNT) {
+                    value = value - DietServerConfig.deathPenaltyLoss;
+                  } else {
+                    value = value * (1 - DietServerConfig.deathPenaltyLoss);
+                  }
+                  value = Math.max(DietServerConfig.deathPenaltyMin, value);
                 }
-                value = Math.max(DietServerConfig.deathPenaltyMin, value);
               }
-              diet.setValue(entry.getKey(), value);
+              diet.setValue(id, value);
             }
             diet.setActive(originalDiet.isActive());
 
