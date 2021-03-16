@@ -22,6 +22,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.FoodStats;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,7 +31,7 @@ import top.theillusivec4.diet.common.util.PlayerSensitive;
 
 @SuppressWarnings("unused")
 @Mixin(FoodStats.class)
-public class FoodStatsMixin implements PlayerSensitive {
+public abstract class FoodStatsMixin implements PlayerSensitive {
 
   PlayerEntity player;
 
@@ -39,7 +40,7 @@ public class FoodStatsMixin implements PlayerSensitive {
     DietCapability.get(player).ifPresent(tracker -> {
       ItemStack captured = tracker.getCapturedStack();
 
-      if (!captured.isEmpty()) {
+      if (!captured.isEmpty() && needFood()) {
         tracker.consume(captured, healing, saturationModifier);
       }
     });
@@ -48,4 +49,7 @@ public class FoodStatsMixin implements PlayerSensitive {
   public void setPlayer(PlayerEntity playerIn) {
     player = playerIn;
   }
+
+  @Shadow
+  public abstract boolean needFood();
 }

@@ -25,6 +25,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -136,9 +137,12 @@ public class DietCapabilityEventsListener {
     ItemStack stack = evt.getItem();
     LivingEntity livingEntity = evt.getEntityLiving();
 
-    if (stack.getItem().isFood() && !livingEntity.world.isRemote &&
-        livingEntity instanceof PlayerEntity) {
-      DietCapability.get((PlayerEntity) livingEntity).ifPresent(diet -> diet.consume(stack));
+    if (!livingEntity.world.isRemote && livingEntity instanceof PlayerEntity) {
+      Food food = stack.getItem().getFood();
+
+      if (food != null && ((PlayerEntity) livingEntity).getFoodStats().needFood()) {
+        DietCapability.get((PlayerEntity) livingEntity).ifPresent(diet -> diet.consume(stack));
+      }
     }
   }
 
