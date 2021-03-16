@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.17] - 2021.03.16
+### Added
+- Added five-food-group support for:
+  - Food Enhancements
+- Added "RESET" to config option for death penalties to reset values to defaults
+### Changed
+- Updated five-food-group support for:
+  - Autumnity
+  - Bloom and Gloom
+- Players no longer gain diet values when full
+
 ## [1.16.5-0.16] - 2021.03.13
 ### Added
 - Partial Taiwanese translation (thanks Pancakes0228!) [#22](https://github.com/TheIllusiveC4/Diet/pull/22)
