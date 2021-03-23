@@ -40,7 +40,7 @@ public abstract class FoodStatsMixin implements PlayerSensitive {
     DietCapability.get(player).ifPresent(tracker -> {
       ItemStack captured = tracker.getCapturedStack();
 
-      if (!captured.isEmpty() && needFood()) {
+      if (!captured.isEmpty()) {
         tracker.consume(captured, healing, saturationModifier);
       }
     });
@@ -49,7 +49,4 @@ public abstract class FoodStatsMixin implements PlayerSensitive {
   public void setPlayer(PlayerEntity playerIn) {
     player = playerIn;
   }
-
-  @Shadow
-  public abstract boolean needFood();
 }

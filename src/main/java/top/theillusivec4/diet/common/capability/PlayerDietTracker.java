@@ -108,7 +108,7 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void consume(ItemStack stack, int healing, float saturationModifier) {
 
-    if (active &&
+    if (active && prevFood != player.getFoodStats().getFoodLevel() &&
         !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItemStack(stack, player))) {
       DietResult result = DietCalculator.get(player, stack, healing, saturationModifier);
 
@@ -121,7 +121,8 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void consume(ItemStack stack) {
 
-    if (active && !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItemStack(stack, player))) {
+    if (active && prevFood != player.getFoodStats().getFoodLevel() &&
+        !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItemStack(stack, player))) {
       DietResult result = DietCalculator.get(player, stack);
 
       if (result != DietResult.EMPTY) {

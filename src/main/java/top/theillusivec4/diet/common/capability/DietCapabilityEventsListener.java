@@ -151,7 +151,7 @@ public class DietCapabilityEventsListener {
     if (!livingEntity.world.isRemote && livingEntity instanceof PlayerEntity) {
       Food food = stack.getItem().getFood();
 
-      if (food != null && ((PlayerEntity) livingEntity).getFoodStats().needFood()) {
+      if (food != null) {
         DietCapability.get((PlayerEntity) livingEntity).ifPresent(diet -> diet.consume(stack));
       }
     }
