@@ -81,14 +81,14 @@ sourceSets {
 
 jar {
     manifest {
-        attributes(["Specification-Title": "${mod_name}",
-                    "Specification-Vendor": "${mod_author}",
-                    "Specification-Version": "${getArchiveVersion()}",
-                    "Implementation-Title": "${mod_name}",
-                    "Implementation-Version": "${getArchiveVersion()}",
-                    "Implementation-Vendor" :"${mod_author}",
+        attributes(["Specification-Title"     : "${mod_name}",
+                    "Specification-Vendor"    : "${mod_author}",
+                    "Specification-Version"   : "${getArchiveVersion()}",
+                    "Implementation-Title"    : "${mod_name}",
+                    "Implementation-Version"  : "${getArchiveVersion()}",
+                    "Implementation-Vendor"   : "${mod_author}",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    "MixinConfigs": "${mod_id}.mixins.json"],)
+                    "MixinConfigs"            : "${mod_id}.mixins.json"],)
     }
 }
 
@@ -103,7 +103,7 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include 'META-INF/mods.toml'
-        expand 'version': project.version, 'mod_id' : mod_id, 'mod_name': mod_name, 'mod_url': mod_url, 'mod_author': mod_author, 'mod_description': mod_description, 'mod_icon': mod_icon
+        expand 'version': project.version, 'mod_id': mod_id, 'mod_name': mod_name, 'mod_url': mod_url, 'mod_author': mod_author, 'mod_description': mod_description, 'mod_icon': mod_icon
     }
 
     from(sourceSets.main.resources.srcDirs) {
