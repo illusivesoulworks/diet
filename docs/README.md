@@ -109,6 +109,7 @@ Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4
 - [Caves and Cliffs Backport](https://www.curseforge.com/minecraft/mc-mods/caves-and-cliffs-backport)
 - [Caves and Cliffs Mod](https://www.curseforge.com/minecraft/mc-mods/caves-and-cliffs-mod)
 - [Combustive Fishing](https://www.curseforge.com/minecraft/mc-mods/combustive-fishing)
+- [Conjurer's Cookbook](https://www.curseforge.com/minecraft/mc-mods/conjurers-cookbook)
 - [Cookielicious](https://www.curseforge.com/minecraft/mc-mods/cookielicious)
 - [Create](https://www.curseforge.com/minecraft/mc-mods/create)
 - [Creatures and Beasts](https://www.curseforge.com/minecraft/mc-mods/creatures-and-beasts)
