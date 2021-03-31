@@ -38,6 +38,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
+import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
@@ -104,7 +105,7 @@ public class DietScreen extends Screen {
           int y = this.height / 2 - this.ySize / 2 + 25;
           int x = this.width / 2 - this.xSize / 2 + 10;
 
-          for (DietGroup group : DietGroups.get()) {
+          for (IDietGroup group : DietGroups.get()) {
             this.itemRenderer.renderItemIntoGUI(new ItemStack(group.getIcon()), x, y - 5);
             TranslationTextComponent text = new TranslationTextComponent(
                 "groups." + DietMod.MOD_ID + "." + group.getName() + ".name");

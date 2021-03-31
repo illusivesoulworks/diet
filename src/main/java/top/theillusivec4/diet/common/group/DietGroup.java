@@ -26,8 +26,9 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import top.theillusivec4.diet.DietMod;
+import top.theillusivec4.diet.api.IDietGroup;
 
-public final class DietGroup {
+public final class DietGroup implements IDietGroup {
 
   private final String name;
   private final Item icon;
@@ -50,34 +51,42 @@ public final class DietGroup {
     this.tag = ItemTags.createOptional(new ResourceLocation(DietMod.MOD_ID, name));
   }
 
+  @Override
   public String getName() {
     return name;
   }
 
+  @Override
   public Item getIcon() {
     return icon;
   }
 
+  @Override
   public Color getColor() {
     return color;
   }
 
+  @Override
   public float getDefaultValue() {
     return defaultValue;
   }
 
+  @Override
   public int getOrder() {
     return order;
   }
 
+  @Override
   public double getGainMultiplier() {
     return gainMultiplier;
   }
 
+  @Override
   public double getDecayMultiplier() {
     return decayMultiplier;
   }
 
+  @Override
   public boolean contains(ItemStack stack) {
     return tag.contains(stack.getItem());
   }

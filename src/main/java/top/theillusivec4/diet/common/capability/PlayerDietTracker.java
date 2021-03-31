@@ -35,16 +35,17 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
+import top.theillusivec4.diet.api.DietApi;
 import top.theillusivec4.diet.api.DietEvent;
+import top.theillusivec4.diet.api.IDietGroup;
+import top.theillusivec4.diet.api.IDietResult;
 import top.theillusivec4.diet.api.IDietTracker;
 import top.theillusivec4.diet.common.config.DietServerConfig;
 import top.theillusivec4.diet.common.effect.DietEffect;
 import top.theillusivec4.diet.common.effect.DietEffects;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
-import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
 import top.theillusivec4.diet.common.network.DietNetwork;
-import top.theillusivec4.diet.common.util.DietCalculator;
 import top.theillusivec4.diet.common.util.DietResult;
 
 public class PlayerDietTracker implements IDietTracker {
@@ -62,7 +63,7 @@ public class PlayerDietTracker implements IDietTracker {
     prevFood = playerIn.getFoodStats().getFoodLevel();
     values.clear();
 
-    for (DietGroup group : DietGroups.get()) {
+    for (IDietGroup group : DietGroups.get()) {
       String name = group.getName();
       float amount = group.getDefaultValue();
       values.put(name, MathHelper.clamp(amount, 0.0f, 1.0f));
@@ -110,7 +111,7 @@ public class PlayerDietTracker implements IDietTracker {
 
     if (active && prevFood != player.getFoodStats().getFoodLevel() &&
         !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItemStack(stack, player))) {
-      DietResult result = DietCalculator.get(player, stack, healing, saturationModifier);
+      IDietResult result = DietApi.getInstance().get(player, stack, healing, saturationModifier);
 
       if (result != DietResult.EMPTY) {
         apply(result);
@@ -123,7 +124,7 @@ public class PlayerDietTracker implements IDietTracker {
 
     if (active && prevFood != player.getFoodStats().getFoodLevel() &&
         !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItemStack(stack, player))) {
-      DietResult result = DietCalculator.get(player, stack);
+      IDietResult result = DietApi.getInstance().get(player, stack);
 
       if (result != DietResult.EMPTY) {
         apply(result);
@@ -242,7 +243,7 @@ public class PlayerDietTracker implements IDietTracker {
     float scale = ((float) foodDiff) / size;
     scale *= Math.pow(1.0f - DietServerConfig.decayPenaltyPerGroup, size - 1);
 
-    for (DietGroup group : DietGroups.get()) {
+    for (IDietGroup group : DietGroups.get()) {
       String name = group.getName();
       float value = getValue(name);
       float decay = (float) (Math.exp(value) * scale * group.getDecayMultiplier() / 100.0f);
@@ -259,11 +260,11 @@ public class PlayerDietTracker implements IDietTracker {
     }
   }
 
-  private void apply(DietResult result) {
-    Map<DietGroup, Float> entries = result.get();
+  private void apply(IDietResult result) {
+    Map<IDietGroup, Float> entries = result.get();
     Map<String, Float> applied = new HashMap<>();
 
-    for (Map.Entry<DietGroup, Float> entry : entries.entrySet()) {
+    for (Map.Entry<IDietGroup, Float> entry : entries.entrySet()) {
       String name = entry.getKey().getName();
       float value = MathHelper.clamp(entry.getValue() + values.get(name), 0.0f, 1.0f);
       values.replace(name, value);

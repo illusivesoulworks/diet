@@ -38,6 +38,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
+import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.api.IDietTracker;
 import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
@@ -89,7 +90,7 @@ public class DietTrackerCapability {
             Map<String, Float> groups = new HashMap<>();
             CompoundNBT tag = (CompoundNBT) nbt;
 
-            for (DietGroup group : DietGroups.get()) {
+            for (IDietGroup group : DietGroups.get()) {
               String name = group.getName();
               float amount = tag.contains(name) ? tag.getFloat(name) : group.getDefaultValue();
               groups.put(name, MathHelper.clamp(amount, 0.0f, 1.0f));

@@ -45,9 +45,10 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.diet.DietMod;
+import top.theillusivec4.diet.api.DietApi;
+import top.theillusivec4.diet.api.IDietGroup;
+import top.theillusivec4.diet.api.IDietResult;
 import top.theillusivec4.diet.common.config.DietClientConfig;
-import top.theillusivec4.diet.common.group.DietGroup;
-import top.theillusivec4.diet.common.util.DietCalculator;
 import top.theillusivec4.diet.common.util.DietResult;
 
 @Mod.EventBusSubscriber(modid = DietMod.MOD_ID, value = Dist.CLIENT)
@@ -65,11 +66,10 @@ public class DietClientEventsListener {
 
     if (evt.getGui() instanceof InventoryScreen) {
       InventoryScreen inventoryScreen = (InventoryScreen) evt.getGui();
-      evt.addWidget(
-          new DynamicButton(inventoryScreen,
-              inventoryScreen.getGuiLeft() + DietClientConfig.buttonX,
-              inventoryScreen.height / 2 + DietClientConfig.buttonY, 20, 18, 0, 0, 19, ICONS,
-              (button) -> Minecraft.getInstance().displayGuiScreen(new DietScreen())));
+      evt.addWidget(new DynamicButton(inventoryScreen,
+          inventoryScreen.getGuiLeft() + DietClientConfig.buttonX,
+          inventoryScreen.height / 2 + DietClientConfig.buttonY, 20, 18, 0, 0, 19, ICONS,
+          (button) -> Minecraft.getInstance().displayGuiScreen(new DietScreen())));
     }
   }
 
@@ -93,17 +93,17 @@ public class DietClientEventsListener {
     ItemStack stack = evt.getItemStack();
 
     if (player != null) {
-      DietResult result = DietCalculator.get(player, stack);
+      IDietResult result = DietApi.getInstance().get(player, stack);
 
       if (result != DietResult.EMPTY) {
-        Map<DietGroup, Float> groups = result.get();
+        Map<IDietGroup, Float> groups = result.get();
 
         if (!groups.isEmpty()) {
           tooltips.add(StringTextComponent.EMPTY);
           tooltips.add(new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".eaten")
               .mergeStyle(TextFormatting.GRAY));
 
-          for (Map.Entry<DietGroup, Float> entry : groups.entrySet()) {
+          for (Map.Entry<IDietGroup, Float> entry : groups.entrySet()) {
             float value = entry.getValue();
             TranslationTextComponent groupName = new TranslationTextComponent(
                 "groups." + DietMod.MOD_ID + "." + entry.getKey().getName() + ".name");

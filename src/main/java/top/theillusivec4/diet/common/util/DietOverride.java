@@ -18,7 +18,9 @@
 
 package top.theillusivec4.diet.common.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +30,10 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.InterModComms;
 import org.apache.commons.lang3.tuple.Triple;
 
-public class DietMessage {
+public class DietOverride {
+
+  private static final Map<Item, BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>>>
+      items = new HashMap<>();
 
   @SuppressWarnings("unchecked")
   public static void process(Stream<InterModComms.IMCMessage> messages) {
@@ -40,9 +45,14 @@ public class DietMessage {
         Tuple<Item, BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>>>
             value =
             (Tuple<Item, BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>>>) object;
-        DietCalculator.items.put(value.getA(), value.getB());
+        items.put(value.getA(), value.getB());
       }
     });
+  }
+
+  public static BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>> get(
+      Item item) {
+    return items.get(item);
   }
 
   public enum Type {

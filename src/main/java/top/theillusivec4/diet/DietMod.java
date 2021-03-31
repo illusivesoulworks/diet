@@ -33,7 +33,7 @@ import top.theillusivec4.diet.common.capability.DietTrackerCapability;
 import top.theillusivec4.diet.common.command.DietCommand;
 import top.theillusivec4.diet.common.config.data.DietConfigReader;
 import top.theillusivec4.diet.common.network.DietNetwork;
-import top.theillusivec4.diet.common.util.DietMessage;
+import top.theillusivec4.diet.common.util.DietOverride;
 
 @Mod(DietMod.MOD_ID)
 public class DietMod {
@@ -60,7 +60,7 @@ public class DietMod {
   }
 
   private void process(final InterModProcessEvent evt) {
-    DietMessage.process(evt.getIMCStream());
+    DietOverride.process(evt.getIMCStream());
   }
 
   private void setupCommands(final RegisterCommandsEvent evt) {

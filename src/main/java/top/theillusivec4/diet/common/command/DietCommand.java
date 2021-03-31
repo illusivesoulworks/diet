@@ -35,6 +35,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
+import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
 
@@ -42,7 +43,7 @@ public class DietCommand {
 
   private static final SuggestionProvider<CommandSource> SUGGESTIONS_PROVIDER =
       (ctx, builder) -> ISuggestionProvider
-          .suggest(DietGroups.get().stream().map(DietGroup::getName).collect(
+          .suggest(DietGroups.get().stream().map(IDietGroup::getName).collect(
               Collectors.toSet()), builder);
 
   public static void register(CommandDispatcher<CommandSource> dispatcher) {
@@ -150,7 +151,7 @@ public class DietCommand {
 
   private static int reset(CommandSource sender, ServerPlayerEntity player) {
     DietCapability.get(player).ifPresent(diet -> {
-      for (DietGroup group : DietGroups.get()) {
+      for (IDietGroup group : DietGroups.get()) {
         diet.setValue(group.getName(), group.getDefaultValue());
       }
       diet.sync();

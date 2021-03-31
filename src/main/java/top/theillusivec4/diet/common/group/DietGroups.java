@@ -28,14 +28,15 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
+import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.config.data.GroupConfig;
 
 public class DietGroups {
 
-  private static final Set<DietGroup> groups = new TreeSet<>(
-      Comparator.comparingInt(DietGroup::getOrder).thenComparing(DietGroup::getName));
+  private static final Set<IDietGroup> groups = new TreeSet<>(
+      Comparator.comparingInt(IDietGroup::getOrder).thenComparing(IDietGroup::getName));
 
-  public static Set<DietGroup> get() {
+  public static Set<IDietGroup> get() {
     return ImmutableSet.copyOf(groups);
   }
 
@@ -51,7 +52,7 @@ public class DietGroups {
           String name = config.name;
           float defaultValue = (float) (config.default_value != null ? config.default_value : 0);
           int order = config.order != null ? config.order : 0;
-          DietGroup group =
+          IDietGroup group =
               new DietGroup(name, item, Color.decode(config.color), defaultValue, order,
                   config.gain_multiplier, config.decay_multiplier);
 

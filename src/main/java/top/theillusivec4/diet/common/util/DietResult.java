@@ -20,27 +20,29 @@ package top.theillusivec4.diet.common.util;
 
 import java.util.HashMap;
 import java.util.Map;
-import top.theillusivec4.diet.common.group.DietGroup;
+import top.theillusivec4.diet.api.IDietGroup;
+import top.theillusivec4.diet.api.IDietResult;
 
-public class DietResult {
+public class DietResult implements IDietResult {
 
-  public static final DietResult EMPTY = new DietResult();
+  public static final IDietResult EMPTY = new DietResult();
 
-  private final Map<DietGroup, Float> groups;
+  private final Map<IDietGroup, Float> groups;
 
   private DietResult() {
     this(new HashMap<>());
   }
 
-  public DietResult(Map<DietGroup, Float> groups) {
+  public DietResult(Map<IDietGroup, Float> groups) {
     this.groups = groups;
   }
 
-  public Map<DietGroup, Float> get() {
+  @Override
+  public Map<IDietGroup, Float> get() {
     return groups;
   }
 
-  public float get(DietGroup group) {
+  public float get(IDietGroup group) {
     return groups.getOrDefault(group, 0.0f);
   }
 }

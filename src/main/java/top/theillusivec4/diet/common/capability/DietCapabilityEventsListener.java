@@ -42,9 +42,9 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
+import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.api.IDietTracker;
 import top.theillusivec4.diet.common.config.DietServerConfig;
-import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
 
 @Mod.EventBusSubscriber(modid = DietMod.MOD_ID)
@@ -72,7 +72,7 @@ public class DietCapabilityEventsListener {
           .ifPresent(diet -> DietCapability.get(evt.getOriginal()).ifPresent(originalDiet -> {
             Map<String, Float> originalValues = originalDiet.getValues();
 
-            for (DietGroup group : DietGroups.get()) {
+            for (IDietGroup group : DietGroups.get()) {
               String id = group.getName();
               float value = originalValues.getOrDefault(id, group.getDefaultValue());
 

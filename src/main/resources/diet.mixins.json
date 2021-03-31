@@ -5,6 +5,7 @@
   "refmap": "diet.refmap.json",
   "mixins": [
     "AbstractBlockStateMixin",
+    "DietApiMixin",
     "FoodStatsMixin",
     "PlayerEntityMixin"
   ],
