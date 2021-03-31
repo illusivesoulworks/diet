@@ -155,6 +155,7 @@ Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4
 - [Resourceful Bees](https://www.curseforge.com/minecraft/mc-mods/resourceful-bees)
 - [Seasonals](https://www.curseforge.com/minecraft/mc-mods/seasonals)
 - [Silent Gear](https://www.curseforge.com/minecraft/mc-mods/silent-gear)
+- [Silent's Gems (Experimental)](https://www.curseforge.com/minecraft/mc-mods/silents-gems-experimental)
 - [Silent's Mechanisms](https://www.curseforge.com/minecraft/mc-mods/silents-mechanisms)
 - [Simple Farming](https://www.curseforge.com/minecraft/mc-mods/simple-farming)
 - [Simply Tea](https://www.curseforge.com/minecraft/mc-mods/simply-tea)
