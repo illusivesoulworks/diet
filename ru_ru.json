@@ -1,0 +1,22 @@
+{
+  "gui.diet.title": "Диета",
+  "tooltip.diet.eaten": "При употребление:",
+  "tooltip.diet.group": "+%s%% %s",
+  "tooltip.diet.group_": "+%s",
+  "tooltip.diet.effects": "Эффекты от диеты",
+  "groups.diet.grains.name": "Зерна",
+  "groups.diet.proteins.name": "Протеины",
+  "groups.diet.fruits.name": "Фрукты",
+  "groups.diet.vegetables.name": "Овощи",
+  "groups.diet.sugars.name": "Сахар",
+  "commands.diet.set.success": "Значение для группы %s установлена %s%% для %s",
+  "commands.diet.get.success": "Значение для группы %s является %s%% для %s",
+  "commands.diet.add.success": "Значение для группы %s увеличилось на %s%% для %s",
+  "commands.diet.subtract.success": "Значение для группы %s уменьшилось на %s%% для %s",
+  "commands.diet.reset.success": "Вернуть значение диеты для %s",
+  "commands.diet.pause.success": "Остановить контроль диеты для %s",
+  "commands.diet.resume.success": "Продолжить контроль диеты для %s",
+  "commands.diet.clear.success": "Очистить эффекты от диеты для %s",
+  "key.diet.category": "Диета",
+  "key.diet.open.desc": "Открыть экран диеты"
+}
