@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.22] - 2021.04.02
+### Added
+- Added Russian localization (thanks LEDshade!) [#32](https://github.com/TheIllusiveC4/Diet/pull/32)
+
 ## [1.16.5-0.21] - 2021.04.01
 ### Added
 - Added five-food-group support for:
