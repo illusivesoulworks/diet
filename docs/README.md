@@ -9,8 +9,6 @@ comes with a default configuration that creates five classical food groups (frui
 proteins, and sugars). The mod is highly configurable; users and modpack developers can define their
 own food groups, classifications, and diet effects.
 
-[![BisectHosting](https://i.postimg.cc/prDcRzJ8/logo-final.png)](https://bisecthosting.com/illusive)
-
 ## Features
 
 ### Food Groups
@@ -84,6 +82,10 @@ All source code and assets are licensed under LGPL 3.0.
 ## Donations
 
 Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4O).
+
+## Affiliates
+
+[![BisectHosting](https://i.ibb.co/1G4QPdc/bh-illusive.png)](https://bisecthosting.com/illusive)
 
 ## Five Food Groups - Supported Mods
 - [Abnormals Delight](https://www.curseforge.com/minecraft/mc-mods/abnormals-delight)
