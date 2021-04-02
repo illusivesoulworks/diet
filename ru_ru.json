@@ -1,5 +1,5 @@
 {
-  "gui.diet.title": "Diet",
+  "gui.diet.title": "Диета",
   "tooltip.diet.eaten": "При употребление:",
   "tooltip.diet.group": "+%s%% %s",
   "tooltip.diet.group_": "+%s",
