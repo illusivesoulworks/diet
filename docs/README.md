@@ -118,6 +118,7 @@ Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4
 - [Crock Pot](https://www.curseforge.com/minecraft/mc-mods/crock-pot)
 - [Croptopia](https://www.curseforge.com/minecraft/mc-mods/croptopia-fabric)
 - [Cyclic](https://www.curseforge.com/minecraft/mc-mods/cyclic)
+- [Delicate and Dainty](https://www.curseforge.com/minecraft/mc-mods/delicate-and-dainty)
 - [Drop the Meat](https://www.curseforge.com/minecraft/mc-mods/drop-the-meat)
 - [Druidcraft](https://www.curseforge.com/minecraft/mc-mods/druidcraft)
 - [Edible Bugs](https://www.curseforge.com/minecraft/mc-mods/edible-bugs)
