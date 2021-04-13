@@ -23,28 +23,21 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import java.util.stream.Collectors;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.server.command.ModIdArgument;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.api.IDietGroup;
-import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
 
 public class DietCommand {
-
-  private static final SuggestionProvider<CommandSource> SUGGESTIONS_PROVIDER =
-      (ctx, builder) -> ISuggestionProvider
-          .suggest(DietGroups.get().stream().map(IDietGroup::getName).collect(
-              Collectors.toSet()), builder);
 
   public static void register(CommandDispatcher<CommandSource> dispatcher) {
     final int opPermissionLevel = 2;
@@ -53,39 +46,35 @@ public class DietCommand {
 
     dietCommand.then(Commands.literal("get")
         .then(Commands.argument("player", EntityArgument.player())
-            .then(Commands.argument("group", StringArgumentType.word())
-                .suggests(SUGGESTIONS_PROVIDER)
+            .then(Commands.argument("group", DietGroupArgument.group())
                 .executes(ctx -> get(ctx.getSource(), EntityArgument.getPlayer(ctx, "player"),
-                    StringArgumentType.getString(ctx, "group"))))));
+                    DietGroupArgument.getGroup(ctx, "group"))))));
 
     dietCommand.then(Commands.literal("set")
         .then(Commands.argument("player", EntityArgument.player())
-            .then(Commands.argument("group", StringArgumentType.word())
-                .suggests(SUGGESTIONS_PROVIDER)
+            .then(Commands.argument("group", DietGroupArgument.group())
                 .then(Commands.argument("value", FloatArgumentType.floatArg(0.0f, 1.0f))
                     .executes(ctx -> set(ctx.getSource(), EntityArgument.getPlayer(ctx, "player"),
                         FloatArgumentType.getFloat(ctx, "value"),
-                        StringArgumentType.getString(ctx, "group")))))));
+                        DietGroupArgument.getGroup(ctx, "group")))))));
 
     dietCommand.then(Commands.literal("add")
         .then(Commands.argument("player", EntityArgument.player())
-            .then(Commands.argument("group", StringArgumentType.word())
-                .suggests(SUGGESTIONS_PROVIDER)
+            .then(Commands.argument("group", DietGroupArgument.group())
                 .then(Commands.argument("value", FloatArgumentType.floatArg(0.0f, 1.0f))
                     .executes(
                         ctx -> modify(ctx.getSource(), EntityArgument.getPlayer(ctx, "player"),
                             FloatArgumentType.getFloat(ctx, "value"),
-                            StringArgumentType.getString(ctx, "group")))))));
+                            DietGroupArgument.getGroup(ctx, "group")))))));
 
     dietCommand.then(Commands.literal("subtract")
         .then(Commands.argument("player", EntityArgument.player())
-            .then(Commands.argument("group", StringArgumentType.word())
-                .suggests(SUGGESTIONS_PROVIDER)
+            .then(Commands.argument("group", DietGroupArgument.group())
                 .then(Commands.argument("value", FloatArgumentType.floatArg(0.0f, 1.0f))
                     .executes(
                         ctx -> modify(ctx.getSource(), EntityArgument.getPlayer(ctx, "player"),
                             -1 * FloatArgumentType.getFloat(ctx, "value"),
-                            StringArgumentType.getString(ctx, "group")))))));
+                            DietGroupArgument.getGroup(ctx, "group")))))));
 
     dietCommand.then(Commands.literal("reset")
         .then(Commands.argument("player", EntityArgument.player())
@@ -105,12 +94,29 @@ public class DietCommand {
         .then(Commands.argument("player", EntityArgument.player())
             .executes(ctx -> clear(ctx.getSource(), EntityArgument.getPlayer(ctx, "player")))));
 
+    LiteralArgumentBuilder<CommandSource> exportArg =
+        Commands.literal("export").executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.ALL));
+
+    exportArg.then(Commands.literal("group").then(
+        Commands.argument("group", DietGroupArgument.group()).executes(
+            ctx -> export(ctx.getSource(), DietGroupArgument.getGroup(ctx, "group")))));
+
+    exportArg.then(Commands.literal("mod_id").then(
+        Commands.argument("mod_id", ModIdArgument.modIdArgument())
+            .executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.MOD_ID,
+                StringArgumentType.getString(ctx, "mod_id")))));
+
+    exportArg.then(Commands.literal("uncategorized")
+        .executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.UNCATEGORIZED)));
+
+    dietCommand.then(exportArg);
+
     dispatcher.register(dietCommand);
   }
 
-  private static int get(CommandSource sender, ServerPlayerEntity player, String group) {
+  private static int get(CommandSource sender, ServerPlayerEntity player, IDietGroup group) {
     DietCapability.get(player).ifPresent(diet -> {
-      float amount = diet.getValue(group);
+      float amount = diet.getValue(group.getName());
       sender.sendFeedback(
           new TranslationTextComponent("commands." + DietMod.MOD_ID + ".get.success",
               new TranslationTextComponent("groups." + DietMod.MOD_ID + "." + group + ".name"),
@@ -120,30 +126,34 @@ public class DietCommand {
   }
 
   private static int set(CommandSource sender, ServerPlayerEntity player, float value,
-                         String group) {
+                         IDietGroup group) {
     DietCapability.get(player).ifPresent(diet -> {
-      diet.setValue(group, value);
-      diet.sync();
-      sender.sendFeedback(
-          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".set.success",
-              new TranslationTextComponent("groups." + DietMod.MOD_ID + "." + group + ".name"),
-              value * 100, player.getName()), true);
+      if (diet.getValues().containsKey(group.getName())) {
+        diet.setValue(group.getName(), value);
+        diet.sync();
+        sender.sendFeedback(
+            new TranslationTextComponent("commands." + DietMod.MOD_ID + ".set.success",
+                new TranslationTextComponent("groups." + DietMod.MOD_ID + "." + group + ".name"),
+                value * 100, player.getName()), true);
+      }
     });
     return Command.SINGLE_SUCCESS;
   }
 
   private static int modify(CommandSource sender, ServerPlayerEntity player, float amount,
-                            String group) {
+                            IDietGroup group) {
 
     if (amount != 0) {
       DietCapability.get(player).ifPresent(diet -> {
-        diet.setValue(group, diet.getValue(group) + amount);
-        diet.sync();
-        String arg = amount > 0 ? "add" : "remove";
-        sender.sendFeedback(
-            new TranslationTextComponent("commands." + DietMod.MOD_ID + "." + arg + ".success",
-                new TranslationTextComponent("groups." + DietMod.MOD_ID + "." + group + ".name"),
-                amount * 100, player.getName()), true);
+        if (diet.getValues().containsKey(group.getName())) {
+          diet.setValue(group.getName(), diet.getValue(group.getName()) + amount);
+          diet.sync();
+          String arg = amount > 0 ? "add" : "remove";
+          sender.sendFeedback(
+              new TranslationTextComponent("commands." + DietMod.MOD_ID + "." + arg + ".success",
+                  new TranslationTextComponent("groups." + DietMod.MOD_ID + "." + group + ".name"),
+                  amount * 100, player.getName()), true);
+        }
       });
     }
     return Command.SINGLE_SUCCESS;
@@ -188,6 +198,38 @@ public class DietCommand {
     sender.sendFeedback(
         new TranslationTextComponent("commands." + DietMod.MOD_ID + ".clear.success",
             player.getName()), true);
+    return Command.SINGLE_SUCCESS;
+  }
+
+  private static int export(CommandSource sender, IDietGroup group) {
+
+    if (sender.getEntity() instanceof PlayerEntity) {
+      sender.sendFeedback(
+          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".export.started"), true);
+      DietCsv.writeGroup((PlayerEntity) sender.getEntity(), group);
+      sender.sendFeedback(
+          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".export.finished"), true);
+    }
+    return Command.SINGLE_SUCCESS;
+  }
+
+  private static int export(CommandSource sender, DietCsv.ExportMode mode, String... args) {
+
+    if (sender.getEntity() instanceof PlayerEntity) {
+      PlayerEntity player = (PlayerEntity) sender.getEntity();
+      sender.sendFeedback(
+          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".export.started"), true);
+
+      if (mode == DietCsv.ExportMode.ALL) {
+        DietCsv.write(player, "");
+      } else if (mode == DietCsv.ExportMode.MOD_ID) {
+        DietCsv.write(player, args[0]);
+      } else if (mode == DietCsv.ExportMode.UNCATEGORIZED) {
+        DietCsv.writeUncategorized(player);
+      }
+      sender.sendFeedback(
+          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".export.finished"), true);
+    }
     return Command.SINGLE_SUCCESS;
   }
 }

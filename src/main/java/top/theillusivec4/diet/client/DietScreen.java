@@ -101,7 +101,7 @@ public class DietScreen extends Screen {
       ClientPlayerEntity player = this.minecraft.player;
 
       if (player != null) {
-        player.getCapability(DietCapability.DIET_TRACKER).ifPresent(diet -> {
+        DietCapability.get(player).ifPresent(diet -> {
           int y = this.height / 2 - this.ySize / 2 + 25;
           int x = this.width / 2 - this.xSize / 2 + 10;
 

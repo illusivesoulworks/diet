@@ -3,6 +3,7 @@ package top.theillusivec4.diet.api;
 import java.awt.Color;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 
 public interface IDietGroup {
 
@@ -19,6 +20,8 @@ public interface IDietGroup {
   double getGainMultiplier();
 
   double getDecayMultiplier();
+
+  ITag<Item> getTag();
 
   boolean contains(ItemStack stack);
 }

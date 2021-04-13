@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.util.Objects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
@@ -87,8 +88,13 @@ public final class DietGroup implements IDietGroup {
   }
 
   @Override
+  public ITag<Item> getTag() {
+    return tag;
+  }
+
+  @Override
   public boolean contains(ItemStack stack) {
-    return tag.contains(stack.getItem());
+    return getTag().contains(stack.getItem());
   }
 
   @Override
