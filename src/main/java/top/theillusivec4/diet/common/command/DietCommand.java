@@ -119,8 +119,9 @@ public class DietCommand {
       float amount = diet.getValue(group.getName());
       sender.sendFeedback(
           new TranslationTextComponent("commands." + DietMod.MOD_ID + ".get.success",
-              new TranslationTextComponent("groups." + DietMod.MOD_ID + "." + group + ".name"),
-              amount * 100, player.getName()), true);
+              new TranslationTextComponent(
+                  "groups." + DietMod.MOD_ID + "." + group.getName() + ".name"), amount * 100,
+              player.getName()), true);
     });
     return Command.SINGLE_SUCCESS;
   }
@@ -133,8 +134,9 @@ public class DietCommand {
         diet.sync();
         sender.sendFeedback(
             new TranslationTextComponent("commands." + DietMod.MOD_ID + ".set.success",
-                new TranslationTextComponent("groups." + DietMod.MOD_ID + "." + group + ".name"),
-                value * 100, player.getName()), true);
+                new TranslationTextComponent(
+                    "groups." + DietMod.MOD_ID + "." + group.getName() + ".name"), value * 100,
+                player.getName()), true);
       }
     });
     return Command.SINGLE_SUCCESS;
@@ -151,8 +153,9 @@ public class DietCommand {
           String arg = amount > 0 ? "add" : "remove";
           sender.sendFeedback(
               new TranslationTextComponent("commands." + DietMod.MOD_ID + "." + arg + ".success",
-                  new TranslationTextComponent("groups." + DietMod.MOD_ID + "." + group + ".name"),
-                  amount * 100, player.getName()), true);
+                  new TranslationTextComponent(
+                      "groups." + DietMod.MOD_ID + "." + group.getName() + ".name"), amount * 100,
+                  player.getName()), true);
         }
       });
     }
