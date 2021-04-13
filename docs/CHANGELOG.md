@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.24] - 2021.04.12
+### Added
+- Added 5-food-group support for:
+  - Delicate and Dainty
+- Added `/diet export` for logging diet information for foods
+
 ## [1.16.5-0.23] - 2021.04.05
 ### Added
 - Added 5-food-group support for:
