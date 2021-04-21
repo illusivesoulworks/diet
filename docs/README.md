@@ -90,6 +90,7 @@ Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4
 ## Five Food Groups - Supported Mods
 - [Abnormals Delight](https://www.curseforge.com/minecraft/mc-mods/abnormals-delight)
 - [Abundance](https://www.curseforge.com/minecraft/mc-mods/abundance)
+- [Advent of Ascension (Nevermine)](https://www.curseforge.com/minecraft/mc-mods/advent-of-ascension-nevermine)
 - [akkamaddi's Ashenwheat](https://www.curseforge.com/minecraft/mc-mods/akkamaddis-ashenwheat)
 - [Alex's Mobs](https://www.curseforge.com/minecraft/mc-mods/alexs-mobs)
 - [Animalium](https://www.curseforge.com/minecraft/mc-mods/animalium)
