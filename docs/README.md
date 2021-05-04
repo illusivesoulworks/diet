@@ -65,6 +65,7 @@ Diet registers a few commands to help aid debugging and server management.
     - `reset <player>`
     - `pause <player>`
     - `resume <player>`
+    - `export <filter> <argument>`
 
 ## Downloads
 - [Diet on CurseForge](https://www.curseforge.com/minecraft/mc-mods/diet/files)
@@ -177,6 +178,7 @@ Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4
 - [Simply Tea](https://www.curseforge.com/minecraft/mc-mods/simply-tea)
 - [Supplementaries](https://www.curseforge.com/minecraft/mc-mods/supplementaries)
 - [SurvivalPlus](https://www.curseforge.com/minecraft/mc-mods/survivalplus)
+- [Tea Kettle](https://www.curseforge.com/minecraft/mc-mods/tea-kettle)
 - [Terra Incognita](https://www.curseforge.com/minecraft/mc-mods/terraincognita)
 - [The Bumblezone](https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-forge)
 - [The Outer End](https://www.curseforge.com/minecraft/mc-mods/the-outer-end)
