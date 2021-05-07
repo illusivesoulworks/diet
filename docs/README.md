@@ -136,6 +136,7 @@ Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4
 - [Fantasy Mounts](https://www.curseforge.com/minecraft/mc-mods/fantasy-mounts)
 - [Farmer's Delight](https://www.curseforge.com/minecraft/mc-mods/farmers-delight)
 - [Fins and Tails](https://www.curseforge.com/minecraft/mc-mods/fins-and-tails)
+- [Fluffy's Farming](https://www.curseforge.com/minecraft/mc-mods/fluffys-farming)
 - [ForageCraft](https://www.curseforge.com/minecraft/mc-mods/foragecraft)
 - [Forbidden and Arcanus](https://www.curseforge.com/minecraft/mc-mods/forbidden-arcanus)
 - [Frozen Up](https://www.curseforge.com/minecraft/mc-mods/frozen-up)
