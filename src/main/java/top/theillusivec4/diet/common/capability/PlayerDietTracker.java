@@ -31,6 +31,7 @@ import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.MathHelper;
@@ -50,6 +51,8 @@ import top.theillusivec4.diet.common.util.DietResult;
 
 public class PlayerDietTracker implements IDietTracker {
 
+  private static final Map<Effect, Integer> EFFECT_DURATION = new HashMap<>();
+
   private final PlayerEntity player;
   private final Map<String, Float> values = new HashMap<>();
   private final Map<Attribute, Set<UUID>> activeModifiers = new HashMap<>();
@@ -57,6 +60,11 @@ public class PlayerDietTracker implements IDietTracker {
   private boolean active = true;
   private int prevFood;
   private ItemStack captured = ItemStack.EMPTY;
+
+  static {
+    EFFECT_DURATION.put(Effects.NIGHT_VISION, 300);
+    EFFECT_DURATION.put(Effects.NAUSEA, 300);
+  }
 
   public PlayerDietTracker(PlayerEntity playerIn) {
     player = playerIn;
@@ -218,7 +226,7 @@ public class PlayerDietTracker implements IDietTracker {
         }
 
         for (DietEffect.DietStatusEffect statusEffect : effect.statusEffects) {
-          int duration = statusEffect.effect == Effects.NIGHT_VISION ? 300 : 100;
+          int duration = EFFECT_DURATION.getOrDefault(statusEffect.effect, 100);
           EffectInstance instance =
               new EffectInstance(statusEffect.effect, duration, statusEffect.power * multiplier,
                   true, false);
