@@ -27,6 +27,7 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
@@ -40,7 +41,6 @@ import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
-import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
 
 public class DietScreen extends Screen {
@@ -54,11 +54,31 @@ public class DietScreen extends Screen {
 
   private final int xSize;
   private final int ySize;
+  private final boolean fromInventory;
 
-  public DietScreen() {
+  public DietScreen(boolean fromInventory) {
     super(new TranslationTextComponent("gui." + DietMod.MOD_ID + ".title"));
     this.xSize = 248;
     this.ySize = 166;
+    this.fromInventory = fromInventory;
+  }
+
+  @Override
+  protected void init() {
+    super.init();
+    int numGroups = DietGroups.get().size();
+    this.addButton(
+        new Button(this.width / 2 - 50, (this.height - this.ySize) / 2 + (1 + numGroups) * 18 + 14,
+            100, 20, new TranslationTextComponent("gui.diet.close"), (p_213002_1_) -> {
+          if (this.minecraft != null && this.minecraft.player != null) {
+
+            if (fromInventory) {
+              this.minecraft.displayGuiScreen(new InventoryScreen(this.minecraft.player));
+            } else {
+              this.closeScreen();
+            }
+          }
+        }));
   }
 
   @Override
@@ -152,9 +172,9 @@ public class DietScreen extends Screen {
       int j = (this.height - this.ySize) / 2;
       AbstractGui.blit(matrixStack, i, j, 248, 4, 0, 0, 248, 4, 256, 256);
       AbstractGui
-          .blit(matrixStack, i, j + 4, 248, 20 + (1 + numGroups) * 18, 0, 4, 248, 24, 256, 256);
+          .blit(matrixStack, i, j + 4, 248, 40 + (1 + numGroups) * 18, 0, 4, 248, 24, 256, 256);
       AbstractGui
-          .blit(matrixStack, i, j + (1 + numGroups) * 18 + 24, 248, 4, 0, 162, 248, 4, 256, 256);
+          .blit(matrixStack, i, j + (1 + numGroups) * 18 + 44, 248, 4, 0, 162, 248, 4, 256, 256);
     }
   }
 
@@ -167,7 +187,12 @@ public class DietScreen extends Screen {
         this.minecraft.displayGuiScreen(new InventoryScreen(this.minecraft.player));
         return true;
       } else if (DietKeys.OPEN_GUI.matchesKey(keyCode, scanCode)) {
-        this.closeScreen();
+
+        if (fromInventory) {
+          this.minecraft.displayGuiScreen(new InventoryScreen(this.minecraft.player));
+        } else {
+          this.closeScreen();
+        }
         return true;
       }
     }

@@ -69,7 +69,7 @@ public class DietClientEventsListener {
       evt.addWidget(new DynamicButton(inventoryScreen,
           inventoryScreen.getGuiLeft() + DietClientConfig.buttonX,
           inventoryScreen.height / 2 + DietClientConfig.buttonY, 20, 18, 0, 0, 19, ICONS,
-          (button) -> Minecraft.getInstance().displayGuiScreen(new DietScreen())));
+          (button) -> Minecraft.getInstance().displayGuiScreen(new DietScreen(true))));
     }
   }
 
@@ -81,7 +81,7 @@ public class DietClientEventsListener {
 
     if (player != null && evt.phase == TickEvent.Phase.END && mc.isGameFocused() &&
         !(mc.currentScreen instanceof DietScreen) && DietKeys.OPEN_GUI.isPressed()) {
-      mc.displayGuiScreen(new DietScreen());
+      mc.displayGuiScreen(new DietScreen(mc.currentScreen instanceof InventoryScreen));
     }
   }
 
