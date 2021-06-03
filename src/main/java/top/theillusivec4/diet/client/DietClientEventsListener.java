@@ -27,6 +27,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
@@ -49,6 +50,8 @@ import top.theillusivec4.diet.api.DietApi;
 import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.api.IDietResult;
 import top.theillusivec4.diet.common.config.DietClientConfig;
+import top.theillusivec4.diet.common.integration.CuriosIntegration;
+import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.util.DietResult;
 
 @Mod.EventBusSubscriber(modid = DietMod.MOD_ID, value = Dist.CLIENT)
@@ -63,12 +66,13 @@ public class DietClientEventsListener {
   @SubscribeEvent
   @SuppressWarnings("unused")
   public static void initGui(final GuiScreenEvent.InitGuiEvent.Post evt) {
+    Screen screen = evt.getGui();
 
-    if (evt.getGui() instanceof InventoryScreen) {
-      InventoryScreen inventoryScreen = (InventoryScreen) evt.getGui();
-      evt.addWidget(new DynamicButton(inventoryScreen,
-          inventoryScreen.getGuiLeft() + DietClientConfig.buttonX,
-          inventoryScreen.height / 2 + DietClientConfig.buttonY, 20, 18, 0, 0, 19, ICONS,
+    if (screen instanceof InventoryScreen || (IntegrationManager.isCuriosLoaded() && CuriosIntegration.isCuriosScreen(screen))) {
+      ContainerScreen<?> containerScreen = (ContainerScreen<?>) screen;
+      evt.addWidget(new DynamicButton(containerScreen,
+          containerScreen.getGuiLeft() + DietClientConfig.buttonX,
+          containerScreen.height / 2 + DietClientConfig.buttonY, 20, 18, 0, 0, 19, ICONS,
           (button) -> Minecraft.getInstance().displayGuiScreen(new DietScreen(true))));
     }
   }

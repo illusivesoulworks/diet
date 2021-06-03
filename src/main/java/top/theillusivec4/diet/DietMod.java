@@ -36,6 +36,7 @@ import top.theillusivec4.diet.common.capability.DietTrackerCapability;
 import top.theillusivec4.diet.common.command.DietCommand;
 import top.theillusivec4.diet.common.command.DietGroupArgument;
 import top.theillusivec4.diet.common.config.data.DietConfigReader;
+import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.network.DietNetwork;
 import top.theillusivec4.diet.common.util.DietOverride;
 
@@ -62,6 +63,7 @@ public class DietMod {
   private void setup(final FMLCommonSetupEvent evt) {
     DietTrackerCapability.setup();
     DietNetwork.setup();
+    IntegrationManager.setup();
   }
 
   private void clientSetup(final FMLClientSetupEvent evt) {
