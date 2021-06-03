@@ -42,5 +42,9 @@ public class EffectConfig {
     public String match;
     public Double above;
     public Double below;
+    public List<String> origins;
+    public String matchOrigins;
+    public List<String> powers;
+    public String matchPowers;
   }
 }

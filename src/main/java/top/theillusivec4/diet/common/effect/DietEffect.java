@@ -25,8 +25,11 @@ import java.util.Set;
 import java.util.UUID;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import top.theillusivec4.diet.DietMod;
+import top.theillusivec4.diet.common.integration.IntegrationManager;
+import top.theillusivec4.diet.common.integration.OriginsIntegration;
 
 public class DietEffect {
 
@@ -71,16 +74,65 @@ public class DietEffect {
     public final MatchMethod match;
     public final double above;
     public final double below;
+    public final Set<String> origins;
+    public final OriginsMatchMethod originsMatch;
+    public final Set<String> powers;
+    public final OriginsMatchMethod powersMatch;
 
-    public Condition(Set<String> groups, MatchMethod match, double above, double below) {
+    public Condition(Set<String> groups, MatchMethod match, double above, double below,
+                     Set<String> origins, OriginsMatchMethod originsMatch, Set<String> powers,
+                     OriginsMatchMethod powersMatch) {
       this.groups = groups;
       this.match = match;
       this.above = above;
       this.below = below;
+      this.origins = origins;
+      this.originsMatch = originsMatch;
+      this.powers = powers;
+      this.powersMatch = powersMatch;
     }
 
-    public int getMatches(Map<String, Float> values) {
+    public int getMatches(PlayerEntity player, Map<String, Float> values) {
+
+      if (IntegrationManager.isOriginsLoaded() &&
+          (!originsMatch.matches(origins, OriginsIntegration.getOrigins(player)) ||
+              !powersMatch.matches(powers, OriginsIntegration.getOriginPowers(player)))) {
+        return 0;
+      }
       return match.getMatches(groups, values, (float) above, (float) below);
+    }
+  }
+
+  public enum OriginsMatchMethod {
+    ANY {
+      @Override
+      boolean matches(Set<String> origins, Set<String> originValues) {
+        return origins == null || originValues.stream().anyMatch(origins::contains);
+      }
+    },
+    ALL {
+      @Override
+      boolean matches(Set<String> origins, Set<String> originValues) {
+        return origins == null || origins.containsAll(originValues);
+      }
+    },
+    NONE {
+      @Override
+      boolean matches(Set<String> origins, Set<String> originValues) {
+        return origins == null || originValues.stream().noneMatch(origins::contains);
+      }
+    };
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    abstract boolean matches(Set<String> origins, Set<String> originValues);
+
+    public static OriginsMatchMethod findOrDefault(String val, OriginsMatchMethod def) {
+      try {
+        return OriginsMatchMethod.valueOf(val.toUpperCase(Locale.ROOT));
+      } catch (IllegalArgumentException e) {
+        DietMod.LOGGER.error("No such origins match method " + val);
+      }
+      return def;
     }
   }
 

@@ -188,7 +188,7 @@ public class PlayerDietTracker implements IDietTracker {
       int multiplier = 0;
 
       for (DietEffect.Condition condition : effect.conditions) {
-        int matches = condition.getMatches(values);
+        int matches = condition.getMatches(player, values);
 
         if (matches == 0) {
           match = false;

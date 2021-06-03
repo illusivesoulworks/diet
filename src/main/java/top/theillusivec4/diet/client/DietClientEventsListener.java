@@ -140,11 +140,11 @@ public class DietClientEventsListener {
     }
 
     @Override
-    public void renderButton(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY,
+    public void renderWidget(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY,
                              float partialTicks) {
       x = containerScreen.getGuiLeft() + DietClientConfig.buttonX;
       y = containerScreen.getGuiTop() + DietClientConfig.buttonY + 83;
-      super.renderButton(matrixStack, mouseX, mouseY, partialTicks);
+      super.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
     }
 
     @Override

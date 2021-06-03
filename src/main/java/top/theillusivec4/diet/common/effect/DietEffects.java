@@ -79,7 +79,21 @@ public class DietEffects {
           DietEffect.MatchMethod match = conditionConfig.match != null ? DietEffect.MatchMethod
               .findOrDefault(conditionConfig.match, DietEffect.MatchMethod.AVERAGE) :
               DietEffect.MatchMethod.AVERAGE;
-          conditions.add(new DietEffect.Condition(groups, match, above, below));
+          Set<String> origins =
+              conditionConfig.origins != null ? new HashSet<>(conditionConfig.origins) : null;
+          DietEffect.OriginsMatchMethod originsMatchMethod = conditionConfig.matchOrigins != null ?
+              DietEffect.OriginsMatchMethod
+                  .findOrDefault(conditionConfig.matchOrigins, DietEffect.OriginsMatchMethod.ANY) :
+              DietEffect.OriginsMatchMethod.ANY;
+          Set<String> powers =
+              conditionConfig.powers != null ? new HashSet<>(conditionConfig.powers) : null;
+          DietEffect.OriginsMatchMethod powersMatchMethod = conditionConfig.matchPowers != null ?
+              DietEffect.OriginsMatchMethod
+                  .findOrDefault(conditionConfig.matchPowers, DietEffect.OriginsMatchMethod.ANY) :
+              DietEffect.OriginsMatchMethod.ANY;
+          conditions.add(
+              new DietEffect.Condition(groups, match, above, below, origins, originsMatchMethod,
+                  powers, powersMatchMethod));
         }
         List<DietEffect.DietAttribute> attributes = new ArrayList<>();
 

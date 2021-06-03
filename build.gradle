@@ -66,7 +66,12 @@ mixin {
 
 repositories {
     maven {
+        name = "C4's Maven"
         url = "https://maven.theillusivec4.top/"
+    }
+    maven {
+        name = "CurseForge"
+        url = "https://www.cursemaven.com"
     }
 }
 
@@ -76,6 +81,7 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
+    compileOnly fg.deobf("curse.maven:origins-474438:${version_origins}")
 }
 
 sourceSets {

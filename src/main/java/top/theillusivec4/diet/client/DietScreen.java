@@ -92,7 +92,7 @@ public class DietScreen extends Screen {
   public void renderTitle(MatrixStack matrixStack, int mouseX, int mouseY) {
     int titleWidth = this.font.getStringWidth(this.title.getString());
     this.font
-        .func_243248_b(matrixStack, this.title, (float) this.width / 2 - (float) titleWidth / 2,
+        .drawText(matrixStack, this.title, (float) this.width / 2 - (float) titleWidth / 2,
             (float) this.height / 2 - (float) this.ySize / 2 + 10, 4210752);
     List<DietEffectsInfo.AttributeModifier> modifiers = DietScreen.tooltip.getModifiers();
     List<DietEffectsInfo.StatusEffect> effects = DietScreen.tooltip.getEffects();
@@ -129,7 +129,7 @@ public class DietScreen extends Screen {
             this.itemRenderer.renderItemIntoGUI(new ItemStack(group.getIcon()), x, y - 5);
             TranslationTextComponent text = new TranslationTextComponent(
                 "groups." + DietMod.MOD_ID + "." + group.getName() + ".name");
-            this.font.func_243248_b(matrixStack, text, x + 20, y, 4210752);
+            this.font.drawText(matrixStack, text, x + 20, y, 4210752);
             this.minecraft.getTextureManager().bindTexture(ICONS);
             Color color = diet.isActive() ? group.getColor() : Color.gray;
             int red = color.getRed();
