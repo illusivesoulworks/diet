@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.29] - 2021.06.03
+### Added
+- Added Curios GUI integration [#48](https://github.com/TheIllusiveC4/Diet/issues/48)
+- Added exit button to the Diet GUI [#47](https://github.com/TheIllusiveC4/Diet/issues/47)
+- Added Origins integration for Diet Effect conditions:
+  - `origins` - A list of origins by identifier
+  - `originsMatch` - `any`, `all`, or `none` - The match method for the origins list
+  - `powers` - A list of powers by identifier
+  - `powersMatch` - `any`, `all`, or `none` - The match method for the powers list
+
 ## [1.16.5-0.28] - 2021.05.06
 ### Added
 - Added 5-food-group support for:
