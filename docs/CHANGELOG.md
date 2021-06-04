@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [Unreleased] - 2021.06.03
+### Changed
+- Updated 5-food-group support for:
+  - Simply Tea
+  - Bloom and Gloom (project name changed to Habitat)
+  - Pam's HarvestCraft 2 - Food Extended
+### Fixed
+- Fixed stuttering issue with Nausea as a dietary effect
+
 ## [1.16.5-0.29] - 2021.06.03
 ### Added
 - Added Curios GUI integration [#48](https://github.com/TheIllusiveC4/Diet/issues/48)
