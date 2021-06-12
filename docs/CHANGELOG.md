@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.31] - 2021.06.12
+### Added
+- Added 5-food-group support for:
+  - Food Expansion: Reimagined
+### Fixed
+- Fixed Origins integrations bug with testing conditions [#55](https://github.com/TheIllusiveC4/Diet/issues/55)
+
 ## [1.16.5-0.30] - 2021.06.03
 ### Changed
 - Updated 5-food-group support for:
