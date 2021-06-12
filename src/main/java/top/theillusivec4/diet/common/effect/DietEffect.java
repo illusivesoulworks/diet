@@ -106,20 +106,20 @@ public class DietEffect {
   public enum OriginsMatchMethod {
     ANY {
       @Override
-      boolean matches(Set<String> origins, Set<String> originValues) {
-        return origins == null || originValues.stream().anyMatch(origins::contains);
+      boolean matches(Set<String> input, Set<String> playerValues) {
+        return input == null || input.stream().anyMatch(playerValues::contains);
       }
     },
     ALL {
       @Override
-      boolean matches(Set<String> origins, Set<String> originValues) {
-        return origins == null || origins.containsAll(originValues);
+      boolean matches(Set<String> input, Set<String> playerValues) {
+        return input == null || playerValues.containsAll(input);
       }
     },
     NONE {
       @Override
-      boolean matches(Set<String> origins, Set<String> originValues) {
-        return origins == null || originValues.stream().noneMatch(origins::contains);
+      boolean matches(Set<String> input, Set<String> playerValues) {
+        return input == null || input.stream().noneMatch(playerValues::contains);
       }
     };
 
