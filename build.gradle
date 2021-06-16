@@ -82,6 +82,8 @@ dependencies {
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
     compileOnly fg.deobf("curse.maven:origins-474438:${version_origins}")
+
+    runtimeOnly fg.deobf("curse.maven:jei-238222:3345971")
 }
 
 sourceSets {

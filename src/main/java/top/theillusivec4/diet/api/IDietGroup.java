@@ -4,6 +4,7 @@ import java.awt.Color;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
+import net.minecraftforge.common.Tags;
 
 public interface IDietGroup {
 
@@ -21,7 +22,7 @@ public interface IDietGroup {
 
   double getDecayMultiplier();
 
-  ITag<Item> getTag();
+  Tags.IOptionalNamedTag<Item> getTag();
 
   boolean contains(ItemStack stack);
 }

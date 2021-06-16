@@ -19,13 +19,15 @@
 package top.theillusivec4.diet.common.group;
 
 import java.awt.Color;
+import java.util.HashSet;
 import java.util.Objects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeTagHandler;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietGroup;
 
@@ -49,7 +51,9 @@ public final class DietGroup implements IDietGroup {
     this.order = order;
     this.gainMultiplier = gainMultiplier;
     this.decayMultiplier = decayMultiplier;
-    this.tag = ItemTags.createOptional(new ResourceLocation(DietMod.MOD_ID, name));
+    this.tag = ForgeTagHandler
+        .createOptionalTag(ForgeRegistries.ITEMS, new ResourceLocation(DietMod.MOD_ID, name),
+            new HashSet<>());
   }
 
   @Override
@@ -88,13 +92,17 @@ public final class DietGroup implements IDietGroup {
   }
 
   @Override
-  public ITag<Item> getTag() {
+  public Tags.IOptionalNamedTag<Item> getTag() {
     return tag;
   }
 
   @Override
   public boolean contains(ItemStack stack) {
-    return getTag().contains(stack.getItem());
+
+    if (TagCollectionManager.getManager().getItemTags().getDirectIdFromTag(tag) == null || tag.isDefaulted()) {
+      return false;
+    }
+    return tag.contains(stack.getItem());
   }
 
   @Override

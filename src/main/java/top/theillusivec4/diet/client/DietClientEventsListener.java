@@ -96,7 +96,7 @@ public class DietClientEventsListener {
     List<ITextComponent> tooltips = evt.getToolTip();
     ItemStack stack = evt.getItemStack();
 
-    if (player != null) {
+    if (player != null && player.world != null) {
       IDietResult result = DietApi.getInstance().get(player, stack);
 
       if (result != DietResult.EMPTY) {
