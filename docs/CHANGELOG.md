@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.33] - 2021.06.17
+### Added
+- Added client config option in `diet-client.toml` for GUI text color [#57](https://github.com/TheIllusiveC4/Diet/issues/57)
+
 ## [1.16.5-0.32] - 2021.06.15
 ### Fixed
 - Fixed possible crashes related to tagging logic [#56](https://github.com/TheIllusiveC4/Diet/issues/56)

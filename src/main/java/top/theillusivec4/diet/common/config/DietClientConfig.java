@@ -22,4 +22,5 @@ public class DietClientConfig {
 
   public static int buttonX;
   public static int buttonY;
+  public static int textColor;
 }

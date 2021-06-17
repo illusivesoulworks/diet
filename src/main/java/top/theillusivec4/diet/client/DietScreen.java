@@ -40,6 +40,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.api.IDietGroup;
+import top.theillusivec4.diet.common.config.DietClientConfig;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 import top.theillusivec4.diet.common.group.DietGroups;
 
@@ -93,7 +94,7 @@ public class DietScreen extends Screen {
     int titleWidth = this.font.getStringWidth(this.title.getString());
     this.font
         .drawText(matrixStack, this.title, (float) this.width / 2 - (float) titleWidth / 2,
-            (float) this.height / 2 - (float) this.ySize / 2 + 10, 4210752);
+            (float) this.height / 2 - (float) this.ySize / 2 + 10, DietClientConfig.textColor);
     List<DietEffectsInfo.AttributeModifier> modifiers = DietScreen.tooltip.getModifiers();
     List<DietEffectsInfo.StatusEffect> effects = DietScreen.tooltip.getEffects();
 
@@ -129,7 +130,7 @@ public class DietScreen extends Screen {
             this.itemRenderer.renderItemIntoGUI(new ItemStack(group.getIcon()), x, y - 5);
             TranslationTextComponent text = new TranslationTextComponent(
                 "groups." + DietMod.MOD_ID + "." + group.getName() + ".name");
-            this.font.drawText(matrixStack, text, x + 20, y, 4210752);
+            this.font.drawText(matrixStack, text, x + 20, y, DietClientConfig.textColor);
             this.minecraft.getTextureManager().bindTexture(ICONS);
             Color color = diet.isActive() ? group.getColor() : Color.gray;
             int red = color.getRed();

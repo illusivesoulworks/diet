@@ -20,6 +20,7 @@ package top.theillusivec4.diet.common.config.data;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.conversion.ObjectConverter;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -91,17 +92,21 @@ public class DietConfigReader {
 
     private final ForgeConfigSpec.IntValue buttonX;
     private final ForgeConfigSpec.IntValue buttonY;
+    private final ForgeConfigSpec.ConfigValue<String> textColor;
 
     public Client(ForgeConfigSpec.Builder builder) {
       builder.push("gui");
 
       buttonX =
           builder.comment("The x-position of the GUI button").translation(CONFIG_PREFIX + "buttonX")
-              .defineInRange("buttonX", 126, -1000, 1000);
+              .defineInRange("buttonX", 126, -10000, 10000);
 
       buttonY =
           builder.comment("The y-position of the GUI button").translation(CONFIG_PREFIX + "buttonY")
-              .defineInRange("buttonY", -22, -1000, 1000);
+              .defineInRange("buttonY", -22, -10000, 10000);
+
+      textColor = builder.comment("The main text color for the GUI")
+          .translation(CONFIG_PREFIX + "textColor").define("textColor", "4210752");
 
       builder.pop();
     }
@@ -244,6 +249,7 @@ public class DietConfigReader {
   public static void readClient() {
     DietClientConfig.buttonX = CLIENT.buttonX.get();
     DietClientConfig.buttonY = CLIENT.buttonY.get();
+    DietClientConfig.textColor = Color.decode(CLIENT.textColor.get()).getRGB();
   }
 
   private static void createCustomServerConfig(ForgeConfigSpec spec, String name) {
