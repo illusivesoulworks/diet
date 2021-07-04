@@ -27,6 +27,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -74,25 +75,27 @@ public class DietCapabilityEventsListener {
 
             for (IDietGroup group : DietGroups.get()) {
               String id = group.getName();
-              float value = originalValues.getOrDefault(id, group.getDefaultValue());
+              float originalValue = originalValues.getOrDefault(id, group.getDefaultValue());
+              float newValue = originalValue;
 
               if (evt.isWasDeath()) {
 
                 if (DietServerConfig.deathPenaltyMethod ==
                     DietServerConfig.DeathPenaltyMethod.RESET) {
-                  value = group.getDefaultValue();
+                  newValue = group.getDefaultValue();
                 } else {
 
                   if (DietServerConfig.deathPenaltyMethod ==
                       DietServerConfig.DeathPenaltyMethod.AMOUNT) {
-                    value = value - DietServerConfig.deathPenaltyLoss;
+                    newValue -= DietServerConfig.deathPenaltyLoss;
                   } else {
-                    value = value * (1 - DietServerConfig.deathPenaltyLoss);
+                    newValue *= (1 - DietServerConfig.deathPenaltyLoss);
                   }
-                  value = Math.max(DietServerConfig.deathPenaltyMin, value);
+                  newValue =
+                      Math.min(originalValue, Math.max(newValue, DietServerConfig.deathPenaltyMin));
                 }
               }
-              diet.setValue(id, value);
+              diet.setValue(id, newValue);
             }
             diet.setActive(originalDiet.isActive());
 
@@ -170,17 +173,34 @@ public class DietCapabilityEventsListener {
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-      return DietCapability.DIET_TRACKER.orEmpty(cap, this.capability);
+
+      if (DietCapability.DIET_TRACKER != null) {
+        return DietCapability.DIET_TRACKER.orEmpty(cap, this.capability);
+      } else {
+        DietMod.LOGGER.error("Missing Diet capability!");
+        return LazyOptional.empty();
+      }
     }
 
     @Override
     public INBT serializeNBT() {
-      return DietCapability.DIET_TRACKER.writeNBT(capability.orElse(EMPTY_TRACKER), null);
+
+      if (DietCapability.DIET_TRACKER != null) {
+        return DietCapability.DIET_TRACKER.writeNBT(capability.orElse(EMPTY_TRACKER), null);
+      } else {
+        DietMod.LOGGER.error("Missing Diet capability!");
+        return new CompoundNBT();
+      }
     }
 
     @Override
     public void deserializeNBT(INBT nbt) {
-      DietCapability.DIET_TRACKER.readNBT(capability.orElse(EMPTY_TRACKER), null, nbt);
+
+      if (DietCapability.DIET_TRACKER != null) {
+        DietCapability.DIET_TRACKER.readNBT(capability.orElse(EMPTY_TRACKER), null, nbt);
+      } else {
+        DietMod.LOGGER.error("Missing Diet capability!");
+      }
     }
   }
 }
