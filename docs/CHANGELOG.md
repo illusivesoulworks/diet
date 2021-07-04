@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.34] - 2021.07.04
+### Changed
+- Updated 5-food-group support for:
+  - Alex's Mobs
+  - Fins and Tails
+### Fixed
+- Fixed diet being paused randomly [#40](https://github.com/TheIllusiveC4/Diet/issues/40)
+- Fixed diet values increasing to `deathPenaltyMin` when lower [#62](https://github.com/TheIllusiveC4/Diet/issues/62)
+
 ## [1.16.5-0.33] - 2021.06.17
 ### Added
 - Added client config option in `diet-client.toml` for GUI text color [#57](https://github.com/TheIllusiveC4/Diet/issues/57)
