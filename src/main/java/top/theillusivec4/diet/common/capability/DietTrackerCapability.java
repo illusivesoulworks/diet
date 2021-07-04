@@ -115,7 +115,7 @@ public class DietTrackerCapability {
             }
             instance.setModifiers(modifiers);
             instance.setValues(groups);
-            instance.setActive(tag.getBoolean("Active"));
+            instance.setActive(!tag.contains("Active") || tag.getBoolean("Active"));
           }
         }, EmptyDietTracker::new);
   }
@@ -169,7 +169,7 @@ public class DietTrackerCapability {
 
     @Override
     public boolean isActive() {
-      return false;
+      return true;
     }
 
     @Override
@@ -194,7 +194,7 @@ public class DietTrackerCapability {
 
     @Override
     public ItemStack getCapturedStack() {
-      return null;
+      return ItemStack.EMPTY;
     }
   }
 }
