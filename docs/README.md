@@ -108,6 +108,7 @@ Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4
 - [Better End (Forge)](https://www.curseforge.com/minecraft/mc-mods/betterend-forge-port)
 - [Integrated Dynamics](https://www.curseforge.com/minecraft/mc-mods/integrated-dynamics)
 - [Bloom and Gloom](https://www.curseforge.com/minecraft/mc-mods/bloom-and-gloom)
+- [Blue Skies](https://www.curseforge.com/minecraft/mc-mods/blue-skies)
 - [Blueberry](https://www.curseforge.com/minecraft/mc-mods/blueberry)
 - [Buzzier Bees](https://www.curseforge.com/minecraft/mc-mods/buzzier-bees)
 - [Caves and Cliffs Backport](https://www.curseforge.com/minecraft/mc-mods/caves-and-cliffs-backport)
