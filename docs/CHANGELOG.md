@@ -3,6 +3,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.37] - 2021.08.02
+### Added
+- Added 5-food-group support for:
+  - Atum 2
+  - Create Crafts & Additions
+  - Extended Caves
+  - Extra Food Recipes
+  - Nef's Medieval decoration
+- Updated 5-food-group support for:
+  - Blue Skies
+  - Oh The Biomes You'll Go
+- Added Japanese localization (thanks Lazialize!)
+- Added Russian localization (thanks LEDshade!)
+
 ## [1.16.5-0.36] - 2021.07.22
 ### Added
 - Added 5-food-group support for:
