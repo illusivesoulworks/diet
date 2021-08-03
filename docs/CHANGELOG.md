@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.38] - 2021.08.03
+### Fixed
+- Fixed Russian localization
+
 ## [1.16.5-0.37] - 2021.08.02
 ### Added
 - Added 5-food-group support for:
