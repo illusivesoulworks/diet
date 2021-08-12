@@ -188,6 +188,11 @@ public class PlayerDietTracker implements IDietTracker {
   }
 
   private void applyEffects() {
+
+    if (MinecraftForge.EVENT_BUS.post(new DietEvent.ApplyEffect(getPlayer()))) {
+      return;
+    }
+
     List<DietEffect> effects = DietEffects.get();
     DietEffectsInfo info = new DietEffectsInfo();
 

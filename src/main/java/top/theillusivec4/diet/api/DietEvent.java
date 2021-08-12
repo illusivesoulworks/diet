@@ -52,4 +52,12 @@ public class DietEvent extends PlayerEvent {
       super(player);
     }
   }
+
+  @Cancelable
+  public static class ApplyEffect extends DietEvent {
+
+    public ApplyEffect(PlayerEntity player) {
+      super(player);
+    }
+  }
 }

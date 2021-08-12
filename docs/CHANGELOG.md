@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.39] - 2021.08.12
+### Added
+- [API] Added ApplyEffect event for modders to cancel the effects from Diet
+- Added 5-food-group support for:
+  - Infernal Expansion
+  - Unique Crops
+### Changed
+- Updated 5-food-group support for:
+  - Ars Noveau
+  - Cookielicious
+
 ## [1.16.5-0.38] - 2021.08.03
 ### Fixed
 - Fixed Russian localization
