@@ -629,6 +629,8 @@
     "xercamod:item_sprinkles",
     "xercamod:sweet_berry_cupcake",
     "xercamod:sweet_berry_cupcake_fancy",
-    "xercamod:sweet_berry_pie"
+    "xercamod:sweet_berry_pie",
+    "improved_berries":"sweet_berry_pie",
+    "improved_berries":"sweet_berry_wine"
   ]
 }
