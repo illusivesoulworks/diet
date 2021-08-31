@@ -774,6 +774,8 @@
     "xercamod:item_apple_pie",
     "xercamod:item_melon_juice",
     "xercamod:item_sweet_berry_juice",
-    "xercamod:sweet_berry_pie"
+    "xercamod:sweet_berry_pie",
+    "improved_berries:sweet_berry_pie",
+    "improved_berries:sweet_berry_wine"
   ]
 }
