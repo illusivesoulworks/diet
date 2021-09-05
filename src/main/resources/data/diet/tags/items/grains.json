@@ -5,6 +5,11 @@
     "minecraft:cookie"
   ],
   "optional": [
+    "abnormals_delight:cherry_cookie",
+    "abnormals_delight:duck_noodles",
+    "abnormals_delight:maple_cookie",
+    "abnormals_delight:mulberry_cookie",
+    "abnormals_delight:perch_with_mushrooms",
     "alexsmobs:kangaroo_burger",
     "alexsmobs:shrimp_fried_rice",
     "aoa3:gingerbread_cookie",
@@ -407,6 +412,7 @@
     "pumpkin_spice_everything:pumpkin_spice_cookie",
     "rats:potato_knishes",
     "rats:rat_burger",
+    "rootsclassic:rooty_stew",
     "seasonals:chocolate_pumpkin_muffin",
     "silentgems:sugar_cookie",
     "simplefarming:apple_pie",
