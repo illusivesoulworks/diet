@@ -54,7 +54,6 @@ public class DietMod {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     eventBus.addListener(this::setup);
     eventBus.addListener(this::clientSetup);
-    eventBus.addListener(this::parallelDispatch);
     eventBus.addListener(this::process);
     MinecraftForge.EVENT_BUS.addListener(this::setupCommands);
     DietConfigReader.setup();
@@ -64,15 +63,12 @@ public class DietMod {
     DietTrackerCapability.setup();
     DietNetwork.setup();
     IntegrationManager.setup();
+    evt.enqueueWork(() -> ArgumentTypes.register(id("group"), DietGroupArgument.class,
+        new ArgumentSerializer<>(DietGroupArgument::group)));
   }
 
   private void clientSetup(final FMLClientSetupEvent evt) {
     DietKeys.setup();
-  }
-
-  private void parallelDispatch(final ParallelDispatchEvent evt) {
-    evt.enqueueWork(() -> ArgumentTypes.register(id("group"), DietGroupArgument.class,
-        new ArgumentSerializer<>(DietGroupArgument::group)));
   }
 
   private void process(final InterModProcessEvent evt) {
