@@ -57,11 +57,32 @@ minecraft {
                 }
             }
         }
+
+        data {
+            workingDirectory project.file('run')
+
+            arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            jvmArg "-Dmixin.env.disableRefMap=true"
+
+            args '--mod', 'diet', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                diet {
+                    source sourceSets.main
+                }
+            }
+        }
     }
 }
 
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
 }
 
 repositories {

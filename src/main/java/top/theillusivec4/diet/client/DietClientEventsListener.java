@@ -21,6 +21,7 @@ package top.theillusivec4.diet.client;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -110,11 +111,10 @@ public class DietClientEventsListener {
 
       if (result != DietResult.EMPTY) {
         Map<IDietGroup, Float> groups = result.get();
+        boolean specialFood = SPECIAL_FOOD.contains(stack.getItem());
 
         if (!groups.isEmpty()) {
-          tooltips.add(StringTextComponent.EMPTY);
-          tooltips.add(new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".eaten")
-              .mergeStyle(TextFormatting.GRAY));
+          List<ITextComponent> groupsTooltips = new ArrayList<>();
 
           for (Map.Entry<IDietGroup, Float> entry : groups.entrySet()) {
             float value = entry.getValue();
@@ -122,14 +122,22 @@ public class DietClientEventsListener {
                 "groups." + DietMod.MOD_ID + "." + entry.getKey().getName() + ".name");
 
             if (value > 0.0f) {
-              tooltips.add((new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group",
-                  DECIMALFORMAT.format(entry.getValue() * 100), groupName))
-                  .mergeStyle(TextFormatting.GREEN));
-            } else if (SPECIAL_FOOD.contains(stack.getItem())) {
-              tooltips.add(
+              groupsTooltips.add(
+                  (new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group",
+                      DECIMALFORMAT.format(entry.getValue() * 100), groupName))
+                      .mergeStyle(TextFormatting.GREEN));
+            } else if (specialFood) {
+              groupsTooltips.add(
                   (new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName))
                       .mergeStyle(TextFormatting.GREEN));
             }
+          }
+
+          if (!groupsTooltips.isEmpty()) {
+            tooltips.add(StringTextComponent.EMPTY);
+            tooltips.add(new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".eaten")
+                .mergeStyle(TextFormatting.GRAY));
+            tooltips.addAll(groupsTooltips);
           }
         }
       }

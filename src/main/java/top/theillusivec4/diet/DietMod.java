@@ -20,13 +20,16 @@ package top.theillusivec4.diet;
 
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
+import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -40,6 +43,8 @@ import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.network.DietNetwork;
 import top.theillusivec4.diet.common.util.DietFallback;
 import top.theillusivec4.diet.common.util.DietOverride;
+import top.theillusivec4.diet.data.DietBlockTagsProvider;
+import top.theillusivec4.diet.data.DietTagsProvider;
 
 @Mod(DietMod.MOD_ID)
 public class DietMod {
@@ -56,6 +61,7 @@ public class DietMod {
     eventBus.addListener(this::setup);
     eventBus.addListener(this::clientSetup);
     eventBus.addListener(this::process);
+    eventBus.addListener(this::gatherData);
     MinecraftForge.EVENT_BUS.addListener(this::setupCommands);
     MinecraftForge.EVENT_BUS.addListener(this::onDatapackSync);
     DietConfigReader.setup();
@@ -75,6 +81,18 @@ public class DietMod {
 
   private void process(final InterModProcessEvent evt) {
     DietOverride.process(evt.getIMCStream());
+  }
+
+  private void gatherData(final GatherDataEvent evt) {
+    DataGenerator generator = evt.getGenerator();
+
+    if (evt.includeServer()) {
+      ExistingFileHelper existingFileHelper = evt.getExistingFileHelper();
+      DietBlockTagsProvider blockTagsProvider =
+          new DietBlockTagsProvider(generator, DietMod.MOD_ID, existingFileHelper);
+      generator.addProvider(
+          new DietTagsProvider(generator, blockTagsProvider, DietMod.MOD_ID, existingFileHelper));
+    }
   }
 
   private void setupCommands(final RegisterCommandsEvent evt) {
