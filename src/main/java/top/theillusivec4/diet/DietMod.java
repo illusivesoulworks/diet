@@ -21,13 +21,13 @@ package top.theillusivec4.diet;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.lifecycle.ParallelDispatchEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,6 +38,7 @@ import top.theillusivec4.diet.common.command.DietGroupArgument;
 import top.theillusivec4.diet.common.config.data.DietConfigReader;
 import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.network.DietNetwork;
+import top.theillusivec4.diet.common.util.DietFallback;
 import top.theillusivec4.diet.common.util.DietOverride;
 
 @Mod(DietMod.MOD_ID)
@@ -56,6 +57,7 @@ public class DietMod {
     eventBus.addListener(this::clientSetup);
     eventBus.addListener(this::process);
     MinecraftForge.EVENT_BUS.addListener(this::setupCommands);
+    MinecraftForge.EVENT_BUS.addListener(this::onDatapackSync);
     DietConfigReader.setup();
   }
 
@@ -77,5 +79,9 @@ public class DietMod {
 
   private void setupCommands(final RegisterCommandsEvent evt) {
     DietCommand.register(evt.getDispatcher());
+  }
+
+  private void onDatapackSync(final OnDatapackSyncEvent evt) {
+    DietFallback.reload(evt.getPlayerList().getServer());
   }
 }

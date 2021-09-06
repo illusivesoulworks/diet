@@ -21,6 +21,7 @@ package top.theillusivec4.diet.client;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,6 +33,7 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
@@ -41,10 +43,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.common.ForgeTagHandler;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietApi;
 import top.theillusivec4.diet.api.IDietGroup;
@@ -57,6 +62,9 @@ import top.theillusivec4.diet.common.util.DietResult;
 @Mod.EventBusSubscriber(modid = DietMod.MOD_ID, value = Dist.CLIENT)
 public class DietClientEventsListener {
 
+  private static final Tags.IOptionalNamedTag<Item> SPECIAL_FOOD =
+      ForgeTagHandler.createOptionalTag(ForgeRegistries.ITEMS,
+          new ResourceLocation(DietMod.MOD_ID, "special_food"), new HashSet<>());
   private static final DecimalFormat DECIMALFORMAT = Util.make(new DecimalFormat("#.#"),
       (num) -> num.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT)));
 
@@ -68,7 +76,8 @@ public class DietClientEventsListener {
   public static void initGui(final GuiScreenEvent.InitGuiEvent.Post evt) {
     Screen screen = evt.getGui();
 
-    if (screen instanceof InventoryScreen || (IntegrationManager.isCuriosLoaded() && CuriosIntegration.isCuriosScreen(screen))) {
+    if (screen instanceof InventoryScreen ||
+        (IntegrationManager.isCuriosLoaded() && CuriosIntegration.isCuriosScreen(screen))) {
       ContainerScreen<?> containerScreen = (ContainerScreen<?>) screen;
       evt.addWidget(new DynamicButton(containerScreen,
           containerScreen.getGuiLeft() + DietClientConfig.buttonX,
@@ -116,7 +125,7 @@ public class DietClientEventsListener {
               tooltips.add((new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group",
                   DECIMALFORMAT.format(entry.getValue() * 100), groupName))
                   .mergeStyle(TextFormatting.GREEN));
-            } else {
+            } else if (SPECIAL_FOOD.contains(stack.getItem())) {
               tooltips.add(
                   (new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName))
                       .mergeStyle(TextFormatting.GREEN));

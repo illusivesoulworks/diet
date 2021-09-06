@@ -19,6 +19,7 @@ import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.api.IDietResult;
 import top.theillusivec4.diet.common.config.DietServerConfig;
 import top.theillusivec4.diet.common.group.DietGroups;
+import top.theillusivec4.diet.common.util.DietFallback;
 import top.theillusivec4.diet.common.util.DietOverride;
 import top.theillusivec4.diet.common.util.DietResult;
 
@@ -67,7 +68,7 @@ public class DietApiImpl extends DietApi {
         }
       }
     }
-    return groups;
+    return groups.isEmpty() ? DietFallback.get(input.getItem()).orElse(new HashSet<>()) : groups;
   }
 
   @Override
@@ -85,13 +86,13 @@ public class DietApiImpl extends DietApi {
         DietOverride.get(item);
     Float override = DietServerConfig.foodOverrides.get(item);
 
-    if (func != null) {
+    if (override != null) {
+      healing = override;
+      saturation = 0.0f;
+    } else if (func != null) {
       Triple<List<ItemStack>, Integer, Float> apply = func.apply(player, input);
       healing = apply.getMiddle();
       saturation = apply.getRight();
-    } else if (override != null) {
-      healing = override;
-      saturation = 0.0f;
     } else if (food != null) {
       healing = food.getHealing();
       saturation = food.getSaturation();
