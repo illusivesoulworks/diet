@@ -41,7 +41,7 @@ import top.theillusivec4.diet.common.command.DietGroupArgument;
 import top.theillusivec4.diet.common.config.data.DietConfigReader;
 import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.network.DietNetwork;
-import top.theillusivec4.diet.common.util.DietFallback;
+import top.theillusivec4.diet.common.util.DietValueGenerator;
 import top.theillusivec4.diet.common.util.DietOverride;
 import top.theillusivec4.diet.data.DietBlockTagsProvider;
 import top.theillusivec4.diet.data.DietTagsProvider;
@@ -69,6 +69,7 @@ public class DietMod {
 
   private void setup(final FMLCommonSetupEvent evt) {
     DietTrackerCapability.setup();
+    DietValueGenerator.setup();
     DietNetwork.setup();
     IntegrationManager.setup();
     evt.enqueueWork(() -> ArgumentTypes.register(id("group"), DietGroupArgument.class,
@@ -89,9 +90,11 @@ public class DietMod {
     if (evt.includeServer()) {
       ExistingFileHelper existingFileHelper = evt.getExistingFileHelper();
       DietBlockTagsProvider blockTagsProvider =
-          new DietBlockTagsProvider(generator, DietMod.MOD_ID, existingFileHelper);
+          new DietBlockTagsProvider(generator, existingFileHelper);
       generator.addProvider(
-          new DietTagsProvider(generator, blockTagsProvider, DietMod.MOD_ID, existingFileHelper));
+          new DietTagsProvider(generator, blockTagsProvider, existingFileHelper));
+//      generator.addProvider(
+//          new DietOptionalTagsProvider(generator, blockTagsProvider, existingFileHelper));
     }
   }
 
@@ -100,6 +103,6 @@ public class DietMod {
   }
 
   private void onDatapackSync(final OnDatapackSyncEvent evt) {
-    DietFallback.reload(evt.getPlayerList().getServer());
+    DietValueGenerator.reload(evt.getPlayerList().getServer());
   }
 }

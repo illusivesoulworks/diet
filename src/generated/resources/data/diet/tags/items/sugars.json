@@ -1,9 +1,8 @@
 {
   "replace": false,
   "values": [
-    "minecraft:cake",
-    "minecraft:cookie",
-    "minecraft:honey_bottle",
-    "minecraft:pumpkin_pie"
+    "minecraft:cocoa_beans",
+    "minecraft:honey_block",
+    "minecraft:sugar"
   ]
 }

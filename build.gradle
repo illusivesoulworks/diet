@@ -105,6 +105,11 @@ dependencies {
     compileOnly fg.deobf("curse.maven:origins-474438:${version_origins}")
 
     runtimeOnly fg.deobf("curse.maven:jei-238222:3345971")
+    runtimeOnly fg.deobf("curse.maven:appleskin-248787:3395800")
+    runtimeOnly fg.deobf("curse.maven:pamhc2foodcore-372534:3190867")
+    runtimeOnly fg.deobf("curse.maven:pamhc2crops-361385:3276350")
+    runtimeOnly fg.deobf("curse.maven:pamhc2foodextended-402231:3418627")
+    runtimeOnly fg.deobf("curse.maven:pamhc2trees-365460:3281234")
 }
 
 sourceSets {

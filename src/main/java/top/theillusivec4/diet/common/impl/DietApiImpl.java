@@ -19,7 +19,7 @@ import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.api.IDietResult;
 import top.theillusivec4.diet.common.config.DietServerConfig;
 import top.theillusivec4.diet.common.group.DietGroups;
-import top.theillusivec4.diet.common.util.DietFallback;
+import top.theillusivec4.diet.common.util.DietValueGenerator;
 import top.theillusivec4.diet.common.util.DietOverride;
 import top.theillusivec4.diet.common.util.DietResult;
 
@@ -68,7 +68,7 @@ public class DietApiImpl extends DietApi {
         }
       }
     }
-    return groups.isEmpty() ? DietFallback.get(input.getItem()).orElse(new HashSet<>()) : groups;
+    return groups.isEmpty() ? DietValueGenerator.get(input.getItem()).orElse(new HashSet<>()) : groups;
   }
 
   @Override

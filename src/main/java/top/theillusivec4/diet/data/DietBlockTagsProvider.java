@@ -4,11 +4,11 @@ import javax.annotation.Nullable;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import top.theillusivec4.diet.DietMod;
 
 public class DietBlockTagsProvider extends BlockTagsProvider {
 
-  public DietBlockTagsProvider(DataGenerator generatorIn, String modId,
-                               @Nullable ExistingFileHelper existingFileHelper) {
-    super(generatorIn, modId, existingFileHelper);
+  public DietBlockTagsProvider(DataGenerator generatorIn, @Nullable ExistingFileHelper existingFileHelper) {
+    super(generatorIn, DietMod.MOD_ID, existingFileHelper);
   }
 }
