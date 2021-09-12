@@ -69,7 +69,6 @@ public class DietMod {
 
   private void setup(final FMLCommonSetupEvent evt) {
     DietTrackerCapability.setup();
-    DietValueGenerator.setup();
     DietNetwork.setup();
     IntegrationManager.setup();
     evt.enqueueWork(() -> ArgumentTypes.register(id("group"), DietGroupArgument.class,

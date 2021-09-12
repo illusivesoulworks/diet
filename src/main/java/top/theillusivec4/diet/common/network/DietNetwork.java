@@ -19,10 +19,12 @@
 package top.theillusivec4.diet.common.network;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -30,10 +32,12 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import top.theillusivec4.diet.DietMod;
+import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 import top.theillusivec4.diet.common.network.server.SPacketActivate;
 import top.theillusivec4.diet.common.network.server.SPacketDiet;
 import top.theillusivec4.diet.common.network.server.SPacketEffectsInfo;
+import top.theillusivec4.diet.common.network.server.SPacketGeneratedValues;
 
 public class DietNetwork {
 
@@ -54,6 +58,8 @@ public class DietNetwork {
         SPacketEffectsInfo::handle);
     register(SPacketActivate.class, SPacketActivate::encode, SPacketActivate::decode,
         SPacketActivate::handle);
+    register(SPacketGeneratedValues.class, SPacketGeneratedValues::encode,
+        SPacketGeneratedValues::decode, SPacketGeneratedValues::handle);
   }
 
   public static void sendEffectsInfoS2C(ServerPlayerEntity player, DietEffectsInfo info) {
@@ -66,6 +72,10 @@ public class DietNetwork {
 
   public static void sendActivationS2C(ServerPlayerEntity player, boolean flag) {
     INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SPacketActivate(flag));
+  }
+
+  public static void sendGeneratedValuesS2C(ServerPlayerEntity player, Map<Item, Set<IDietGroup>> generated) {
+    INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SPacketGeneratedValues(generated));
   }
 
   private static <M> void register(Class<M> messageType, BiConsumer<M, PacketBuffer> encoder,

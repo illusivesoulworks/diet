@@ -1,14 +1,16 @@
 package top.theillusivec4.diet.common.util;
 
 import com.google.common.base.Stopwatch;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,74 +18,66 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tags.TagCollectionManager;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ForgeTagHandler;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
+import top.theillusivec4.diet.common.network.DietNetwork;
+import top.theillusivec4.diet.common.network.server.SPacketGeneratedValues;
 
 public class DietValueGenerator {
 
   private static final Map<Item, Set<IDietGroup>> GENERATED = new HashMap<>();
   private static final Stopwatch STOPWATCH = Stopwatch.createUnstarted();
-  private static Tags.IOptionalNamedTag<Item> INGREDIENTS;
-
-  public static void setup() {
-
-    if (INGREDIENTS == null) {
-      INGREDIENTS = ForgeTagHandler.createOptionalTag(ForgeRegistries.ITEMS,
-          new ResourceLocation(DietMod.MOD_ID, "ingredients"), new HashSet<>());
-    }
-  }
+  private static final Tags.IOptionalNamedTag<Item> INGREDIENTS =
+      ItemTags.createOptional(new ResourceLocation(DietMod.id("ingredients")));
 
   public static void reload(MinecraftServer server) {
     DietMod.LOGGER.info("Generating diet values...");
     STOPWATCH.reset();
     STOPWATCH.start();
+    DietMod.LOGGER.info("Finding ungrouped food items...");
     GENERATED.clear();
     RecipeManager recipeManager = server.getRecipeManager();
-    Set<Item> foodWithoutTags = new HashSet<>();
+    Set<Item> ungroupedFood = new HashSet<>();
     Set<IDietGroup> groups = DietGroups.get();
-
+    items:
     for (Item item : ForgeRegistries.ITEMS) {
       Food food = item.getFood();
 
       if (food != null && food.getHealing() > 0) {
-        boolean hasGroup = false;
 
         for (IDietGroup group : groups) {
 
           if (group.contains(new ItemStack(item))) {
-            hasGroup = true;
-            break;
+            continue items;
           }
         }
-
-        if (!hasGroup) {
-          foodWithoutTags.add(item);
-        }
+        ungroupedFood.add(item);
       }
     }
-    DietMod.LOGGER.info("Found {} ungrouped food items: Processing recipes...",
-        foodWithoutTags.size());
+    DietMod.LOGGER.info("Found {} ungrouped food items", ungroupedFood.size());
+    DietMod.LOGGER.info("Finding recipes...");
     Map<Item, IRecipe<?>> recipes = new HashMap<>();
-    Set<IRecipe<?>> sortedRecipes =
-        recipeManager.getRecipes().stream().sorted(Comparator.comparing(IRecipe::getId)).collect(
-            Collectors.toCollection(LinkedHashSet::new));
+    List<IRecipe<?>> sortedRecipes =
+        recipeManager.getRecipes().stream().sorted(Comparator.comparing(IRecipe::getId))
+            .collect(Collectors.toList());
     Set<IRecipe<?>> processedRecipes = new HashSet<>();
 
     for (IRecipe<?> recipe : sortedRecipes) {
       ItemStack output = recipe.getRecipeOutput();
       Item item = output.getItem();
 
-      if (foodWithoutTags.contains(item) && !processedRecipes.contains(recipe)) {
+      if (ungroupedFood.contains(item) && !processedRecipes.contains(recipe)) {
         recipes.putIfAbsent(item, recipe);
         traverseRecipes(processedRecipes, recipes, sortedRecipes, recipe);
       }
     }
+    DietMod.LOGGER.info("Found {} recipes to process", recipes.size());
+    DietMod.LOGGER.info("Processing items...");
     Set<Item> processedItems = new HashSet<>();
 
     for (Map.Entry<Item, IRecipe<?>> entry : recipes.entrySet()) {
@@ -93,29 +87,38 @@ public class DietValueGenerator {
         traverseIngredients(processedItems, recipes, groups, item);
       }
     }
+    DietMod.LOGGER.info("Processed {} items", processedItems.size());
     STOPWATCH.stop();
-    DietMod.LOGGER.info("Processed {} recipes: {} took {}", processedRecipes.size(),
-        DietMod.MOD_ID, STOPWATCH);
+    DietMod.LOGGER.info("Generating diet values took {}", STOPWATCH);
+
+    for (ServerPlayerEntity player : server.getPlayerList().getPlayers()) {
+      DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
+    }
+  }
+
+  public static void sync(SPacketGeneratedValues packet) {
+    GENERATED.clear();
+    GENERATED.putAll(packet.generated);
   }
 
   private static void traverseRecipes(Set<IRecipe<?>> processed, Map<Item, IRecipe<?>> recipes,
-                                      Set<IRecipe<?>> allRecipes, IRecipe<?> recipe) {
+                                      List<IRecipe<?>> allRecipes, IRecipe<?> recipe) {
     processed.add(recipe);
 
     for (Ingredient ingredient : recipe.getIngredients()) {
+      Arrays.stream(ingredient.getMatchingStacks())
+          .min(Comparator.comparing(ItemStack::getTranslationKey)).ifPresent(stack -> {
 
-      for (ItemStack matchingStack : ingredient.getMatchingStacks()) {
+            for (IRecipe<?> entry : allRecipes) {
+              ItemStack output = entry.getRecipeOutput();
+              Item item = output.getItem();
 
-        for (IRecipe<?> entry : allRecipes) {
-          ItemStack output = entry.getRecipeOutput();
-          Item item = output.getItem();
-
-          if (item == matchingStack.getItem() && !processed.contains(entry)) {
-            recipes.putIfAbsent(item, entry);
-            traverseRecipes(processed, recipes, allRecipes, entry);
-          }
-        }
-      }
+              if (item == stack.getItem() && !processed.contains(entry)) {
+                recipes.putIfAbsent(item, entry);
+                traverseRecipes(processed, recipes, allRecipes, entry);
+              }
+            }
+          });
     }
   }
 
@@ -124,41 +127,48 @@ public class DietValueGenerator {
                                                      Set<IDietGroup> groups, Item item) {
     processed.add(item);
     Set<IDietGroup> result = new HashSet<>();
-    IRecipe<?> recipe = recipes.get(item);
+    ItemStack fillerStack = new ItemStack(item);
 
-    if (recipe != null) {
+    for (IDietGroup group : groups) {
 
-      for (Ingredient ingredient : recipe.getIngredients()) {
+      if (group.contains(fillerStack)) {
+        result.add(group);
+      }
+    }
 
-        for (ItemStack matchingStack : ingredient.getMatchingStacks()) {
-          Item matchingItem = matchingStack.getItem();
-          Set<IDietGroup> fallback = GENERATED.get(matchingItem);
+    if (result.isEmpty()) {
+      IRecipe<?> recipe = recipes.get(item);
 
-          if (fallback != null) {
-            result.addAll(fallback);
-          } else if (!processed.contains(matchingItem)) {
+      if (recipe != null) {
 
-            if (TagCollectionManager.getManager().getItemTags().getDirectIdFromTag(INGREDIENTS) != null &&
-                !INGREDIENTS.isDefaulted() && INGREDIENTS.contains(matchingItem)) {
-              processed.add(matchingItem);
-              GENERATED.putIfAbsent(matchingItem, new HashSet<>());
-              continue;
-            }
-            Set<IDietGroup> found = new HashSet<>();
+        for (Ingredient ingredient : recipe.getIngredients()) {
+          Arrays.stream(ingredient.getMatchingStacks())
+              .min(Comparator.comparing(ItemStack::getTranslationKey)).ifPresent(stack -> {
+                Item matchingItem = stack.getItem();
 
-            for (IDietGroup group : groups) {
+                if (!INGREDIENTS.contains(matchingItem)) {
+                  Set<IDietGroup> fallback = GENERATED.get(matchingItem);
 
-              if (group.contains(matchingStack)) {
-                found.add(group);
-              }
-            }
+                  if (fallback != null) {
+                    result.addAll(fallback);
+                  } else if (!processed.contains(matchingItem)) {
+                    Set<IDietGroup> found = new HashSet<>();
 
-            if (found.isEmpty()) {
-              found.addAll(traverseIngredients(processed, recipes, groups, matchingItem));
-            }
-            GENERATED.putIfAbsent(matchingItem, found);
-            result.addAll(found);
-          }
+                    for (IDietGroup group : groups) {
+
+                      if (group.contains(stack)) {
+                        found.add(group);
+                      }
+                    }
+
+                    if (found.isEmpty()) {
+                      found.addAll(traverseIngredients(processed, recipes, groups, matchingItem));
+                    }
+                    GENERATED.putIfAbsent(matchingItem, found);
+                    result.addAll(found);
+                  }
+                }
+              });
         }
       }
     }
