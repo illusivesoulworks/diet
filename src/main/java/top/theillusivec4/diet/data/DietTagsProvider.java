@@ -138,6 +138,7 @@ public class DietTagsProvider extends ItemTagsProvider {
       add(this.vegetables, element);
     }
     addTag(this.vegetables, ItemTags.FLOWERS);
+    addTag(this.vegetables, ItemTags.LEAVES);
 
     add(this.specialFood, Items.CAKE);
     addTag(this.ingredients, Tags.Items.DYES);
@@ -369,7 +370,12 @@ public class DietTagsProvider extends ItemTagsProvider {
         "vanillafoodpantry:juice_melon",
         "watersource:coconut_piece",
         "xercamod:item_apple_pie",
-        "xercamod:sweet_berry_pie"
+        "xercamod:sweet_berry_pie",
+        "silentgear:nether_banana",
+        "simpledelights:strawberry_shortcake",
+        "simpledelights:plum_pudding",
+        "simpledelights:fruit_tart",
+        "simpledelights:creamcicle"
     );
 
     for (String element : optionalElements) {
@@ -529,7 +535,10 @@ public class DietTagsProvider extends ItemTagsProvider {
         "xercamod:sweet_berry_cupcake_fancy",
         "xercamod:item_honey_cupcake",
         "xercamod:item_apple_pie",
-        "xercamod:sweet_berry_pie"
+        "xercamod:sweet_berry_pie",
+        "simpledelights:strawberry_shortcake",
+        "simpledelights:plum_pudding",
+        "simpledelights:fruit_tart"
     );
 
     for (String element : optionalElements) {
@@ -928,7 +937,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "wyrmroost:raw_apex_meat",
         "wyrmroost:raw_behemoth_meat",
         "wyrmroost:desert_wyrm",
-        "xercamod:doner_slice"
+        "xercamod:doner_slice",
+        "simplefarming:raw_chicken_wings",
+        "simplefarming:raw_bacon"
     );
 
     for (String element : optionalElements) {
@@ -1129,7 +1140,12 @@ public class DietTagsProvider extends ItemTagsProvider {
         "xercamod:sweet_berry_cupcake_fancy",
         "xercamod:item_honey_cupcake",
         "xercamod:item_apple_pie",
-        "xercamod:sweet_berry_pie"
+        "xercamod:sweet_berry_pie",
+        "trickcreeps:treat_powder",
+        "simpledelights:strawberry_shortcake",
+        "simpledelights:plum_pudding",
+        "simpledelights:fruit_tart",
+        "simpledelights:creamcicle"
     );
 
     for (String element : optionalElements) {
@@ -1439,7 +1455,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "vanillafoodpantry:juice_cane",
         "vanillafoodpantry:juice_cactus",
         "vanillafoodpantry:juice_potato",
-        "xercamod:item_tomato"
+        "xercamod:item_tomato",
+        "vanillafoodpantry:roast_corn",
+        "vanillafoodpantry:roasted_eggplant"
     );
 
     for (String element : optionalElements) {
@@ -1490,7 +1508,8 @@ public class DietTagsProvider extends ItemTagsProvider {
         "vanillafoodpantry:enzyme_extractor_agent",
         "vanillafoodpantry:sunbutter_jar",
         "vanillafoodpantry:portion_milk",
-        "vanillafoodpantry:foodpowder_jerky_mix"
+        "vanillafoodpantry:foodpowder_jerky_mix",
+        "simplefarming:ginger"
     );
 
     for (String element : optionalElements) {

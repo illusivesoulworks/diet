@@ -70,7 +70,13 @@ public class DietValueGenerator {
     Set<IRecipe<?>> processedRecipes = new HashSet<>();
 
     for (IRecipe<?> recipe : sortedRecipes) {
-      ItemStack output = recipe.getRecipeOutput();
+      ItemStack output = ItemStack.EMPTY;
+
+      try {
+        output = recipe.getRecipeOutput();
+      } catch (Exception e) {
+        DietMod.LOGGER.error("Diet was unable to process recipe: {}", recipe.getId());
+      }
       Item item = output.getItem();
 
       if (ungroupedFood.contains(item) && !processedRecipes.contains(recipe)) {
@@ -112,7 +118,13 @@ public class DietValueGenerator {
           .min(Comparator.comparing(ItemStack::getTranslationKey)).ifPresent(stack -> {
 
             for (IRecipe<?> entry : allRecipes) {
-              ItemStack output = entry.getRecipeOutput();
+              ItemStack output = ItemStack.EMPTY;
+
+              try {
+                output = entry.getRecipeOutput();
+              } catch (Exception e) {
+                DietMod.LOGGER.error("Diet was unable to process recipe: {}", entry.getId());
+              }
               Item item = output.getItem();
 
               if (item == stack.getItem() && !processed.contains(entry)) {
