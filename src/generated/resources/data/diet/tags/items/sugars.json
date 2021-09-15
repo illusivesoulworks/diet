@@ -1,8 +1,790 @@
 {
   "replace": false,
   "values": [
+    "minecraft:cake",
     "minecraft:cocoa_beans",
-    "minecraft:honey_block",
-    "minecraft:sugar"
+    "minecraft:honey_bottle",
+    "minecraft:honeycomb",
+    "minecraft:sugar",
+    {
+      "id": "aoa3:candy_cane",
+      "required": false
+    },
+    {
+      "id": "aoa3:candy_corn",
+      "required": false
+    },
+    {
+      "id": "aoa3:gingerbread_cookie",
+      "required": false
+    },
+    {
+      "id": "aoa3:gingerbread_wing",
+      "required": false
+    },
+    {
+      "id": "aoa3:peppermint_candy",
+      "required": false
+    },
+    {
+      "id": "aoa3:sour_candy",
+      "required": false
+    },
+    {
+      "id": "aoa3:sour_gummy",
+      "required": false
+    },
+    {
+      "id": "aoa3:sour_pop",
+      "required": false
+    },
+    {
+      "id": "aoa3:spearmint_candy",
+      "required": false
+    },
+    {
+      "id": "autumnity:pancake",
+      "required": false
+    },
+    {
+      "id": "autumnity:syrup_bottle",
+      "required": false
+    },
+    {
+      "id": "blueberry:blueberry_muffin",
+      "required": false
+    },
+    {
+      "id": "buzzier_bees:sticky_honey_wand",
+      "required": false
+    },
+    {
+      "id": "charcoal_pit:choco_powder",
+      "required": false
+    },
+    {
+      "id": "charcoal_pit:chocolate",
+      "required": false
+    },
+    {
+      "id": "create:bar_of_chocolate",
+      "required": false
+    },
+    {
+      "id": "create:chocolate_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create:honeyed_apple",
+      "required": false
+    },
+    {
+      "id": "create:sweet_roll",
+      "required": false
+    },
+    {
+      "id": "createaddition:chocolate_cake",
+      "required": false
+    },
+    {
+      "id": "createaddition:honey_cake",
+      "required": false
+    },
+    {
+      "id": "crockpot:avaj",
+      "required": false
+    },
+    {
+      "id": "crockpot:candy",
+      "required": false
+    },
+    {
+      "id": "crockpot:honey_ham",
+      "required": false
+    },
+    {
+      "id": "crockpot:honey_nuggets",
+      "required": false
+    },
+    {
+      "id": "crockpot:hot_cocoa",
+      "required": false
+    },
+    {
+      "id": "crockpot:ice_cream",
+      "required": false
+    },
+    {
+      "id": "crockpot:iced_tea",
+      "required": false
+    },
+    {
+      "id": "crockpot:pow_cake",
+      "required": false
+    },
+    {
+      "id": "crockpot:pumpkin_cookie",
+      "required": false
+    },
+    {
+      "id": "crockpot:syrup",
+      "required": false
+    },
+    {
+      "id": "crockpot:taffy",
+      "required": false
+    },
+    {
+      "id": "croptopia:apple_pie",
+      "required": false
+    },
+    {
+      "id": "croptopia:brownies",
+      "required": false
+    },
+    {
+      "id": "croptopia:cheese_cake",
+      "required": false
+    },
+    {
+      "id": "croptopia:cherry_pie",
+      "required": false
+    },
+    {
+      "id": "croptopia:churros",
+      "required": false
+    },
+    {
+      "id": "croptopia:doughnut",
+      "required": false
+    },
+    {
+      "id": "croptopia:eton_mess",
+      "required": false
+    },
+    {
+      "id": "croptopia:figgy_pudding",
+      "required": false
+    },
+    {
+      "id": "croptopia:molasses",
+      "required": false
+    },
+    {
+      "id": "croptopia:scones",
+      "required": false
+    },
+    {
+      "id": "croptopia:tres_leche_cake",
+      "required": false
+    },
+    {
+      "id": "druidcraft:blueberry_muffin",
+      "required": false
+    },
+    {
+      "id": "environmental:truffle",
+      "required": false
+    },
+    {
+      "id": "extrafood:cupcake",
+      "required": false
+    },
+    {
+      "id": "extrafood:pancake",
+      "required": false
+    },
+    {
+      "id": "extrafoods:chocolate_chip_waffle",
+      "required": false
+    },
+    {
+      "id": "extrafoods:waffle",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:honey_glazed_ham",
+      "required": false
+    },
+    {
+      "id": "fluffy_farmer:carmel",
+      "required": false
+    },
+    {
+      "id": "fluffy_farmer:chocolate_bar",
+      "required": false
+    },
+    {
+      "id": "fluffy_farmer:melted_carmel",
+      "required": false
+    },
+    {
+      "id": "foodexpansion:chocolate_cake",
+      "required": false
+    },
+    {
+      "id": "frozenup:truffle",
+      "required": false
+    },
+    {
+      "id": "gaiadimension:blue_geode_slice",
+      "required": false
+    },
+    {
+      "id": "gaiadimension:green_geode_slice",
+      "required": false
+    },
+    {
+      "id": "gaiadimension:pink_geode_slice",
+      "required": false
+    },
+    {
+      "id": "gaiadimension:purple_geode_slice",
+      "required": false
+    },
+    {
+      "id": "good_nights_sleep:candy",
+      "required": false
+    },
+    {
+      "id": "iceandfire:cannoli",
+      "required": false
+    },
+    {
+      "id": "iceandfire:pixie_dust",
+      "required": false
+    },
+    {
+      "id": "meetyourfight:aether_glazed_cupcake",
+      "required": false
+    },
+    {
+      "id": "neapolitan:adzuki_cake",
+      "required": false
+    },
+    {
+      "id": "neapolitan:banana_cake",
+      "required": false
+    },
+    {
+      "id": "neapolitan:chocolate_bar",
+      "required": false
+    },
+    {
+      "id": "neapolitan:chocolate_cake",
+      "required": false
+    },
+    {
+      "id": "neapolitan:mint_cake",
+      "required": false
+    },
+    {
+      "id": "neapolitan:strawberry_cake",
+      "required": false
+    },
+    {
+      "id": "neapolitan:vanilla_cake",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodcore:caramelitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodcore:trailmixitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:aebleskiversitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:brownieitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:candycornitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:cherrysodaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:colasodaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:frosteddonutitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:gingersodaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:grapefruitsodaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:grapesodaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:holidaycakeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:honeyglazedcarrotsitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:honeyglazedhamitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:lemonlimesodaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:meringuebrownieitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:meringueitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:mochicakeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:orangesodaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:pavlovaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:rivermudcakeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:rootbeersodaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:strawberrysodaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:sugarcookieitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:theatreboxitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:timtamitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:maplesyrupitem",
+      "required": false
+    },
+    {
+      "id": "peculiars:aloe_cake",
+      "required": false
+    },
+    {
+      "id": "peculiars:passionfruit_cake",
+      "required": false
+    },
+    {
+      "id": "peculiars:yucca_cake",
+      "required": false
+    },
+    {
+      "id": "pumpkin_spice_everything:pumpkin_spice",
+      "required": false
+    },
+    {
+      "id": "pumpkin_spice_everything:pumpkin_spice_cake",
+      "required": false
+    },
+    {
+      "id": "rats:treacle",
+      "required": false
+    },
+    {
+      "id": "resourcefulbees:catnip_honey_bottle",
+      "required": false
+    },
+    {
+      "id": "resourcefulbees:oreo_cookie",
+      "required": false
+    },
+    {
+      "id": "resourcefulbees:rainbow_honey_bottle",
+      "required": false
+    },
+    {
+      "id": "seasonals:pumpkin_cake",
+      "required": false
+    },
+    {
+      "id": "seasonals:sweet_berry_cake",
+      "required": false
+    },
+    {
+      "id": "simplefarming:birthday_cake",
+      "required": false
+    },
+    {
+      "id": "simplefarming:chocolate",
+      "required": false
+    },
+    {
+      "id": "simplefarming:chocolate_cake",
+      "required": false
+    },
+    {
+      "id": "simplefarming:jaffa_cake",
+      "required": false
+    },
+    {
+      "id": "simplefarming:marshmallow",
+      "required": false
+    },
+    {
+      "id": "simplefarming:pancakes",
+      "required": false
+    },
+    {
+      "id": "supplementaries:pancake",
+      "required": false
+    },
+    {
+      "id": "survivalplus:cheese_cake",
+      "required": false
+    },
+    {
+      "id": "survivalplus:sponge_cake",
+      "required": false
+    },
+    {
+      "id": "tconstruct:blood_cake",
+      "required": false
+    },
+    {
+      "id": "tconstruct:earth_cake",
+      "required": false
+    },
+    {
+      "id": "tconstruct:ender_cake",
+      "required": false
+    },
+    {
+      "id": "tconstruct:magma_cake",
+      "required": false
+    },
+    {
+      "id": "tconstruct:sky_cake",
+      "required": false
+    },
+    {
+      "id": "tea_kettle:half_honey_bottle",
+      "required": false
+    },
+    {
+      "id": "terraincognita:taffy",
+      "required": false
+    },
+    {
+      "id": "the_bumblezone:honey_crystal_shards",
+      "required": false
+    },
+    {
+      "id": "the_bumblezone:sugar_water_bottle",
+      "required": false
+    },
+    {
+      "id": "twilightforest:experiment_115",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:berry_brownie",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:berry_cake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:berry_pancake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:book_cake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:brownie",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:carrot_cake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:chocolate",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:chocolate_cake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:chocolate_egg",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:chorus_cake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:honey_pancake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:ice_cream_cake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:mohnkuchen",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:pancake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:rose_cake",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:apple_bread",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:apple_muffin",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:bottle_syrup_base",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:carrot_muffin",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:chocolate_sunbutter_sandwich",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:cookie_apple",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:enriched_pumpkin_pie",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:fizzing_agent",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:fizzydrink_apple",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:fizzydrink_klingon",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:fizzydrink_melon",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:fizzydrink_milk",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_apple",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_berry_mix",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_chorusfruit",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_cocoa",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_dandy",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_honey",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_klingon",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_melon",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_midnight",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_orange",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_poppy",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_sugarbomb",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:gelo_ugli",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:hardened_sugar",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:honey_bread",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:honey_muffin",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:honey_sunbutter_sandwich",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:molasses_bread",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:pumpkin_bread",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:snocone_apple",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:snocone_melon",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:teadrink_bushtea",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:teadrink_milky_bushtea",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:teadrink_milky_dandtea",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:uglifruit_muffin",
+      "required": false
+    },
+    {
+      "id": "xercamod:ender_cupcake",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_apple_cupcake",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_apple_pie",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_carrot_cupcake",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_chocolate",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_cocoa_cupcake",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_donut",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_fancy_apple_cupcake",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_fancy_donut",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_fancy_pumpkin_cupcake",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_honey_cupcake",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_melon_cupcake",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_pumpkin_cupcake",
+      "required": false
+    },
+    {
+      "id": "xercamod:sweet_berry_cupcake",
+      "required": false
+    },
+    {
+      "id": "xercamod:sweet_berry_cupcake_fancy",
+      "required": false
+    },
+    {
+      "id": "xercamod:sweet_berry_pie",
+      "required": false
+    }
   ]
 }

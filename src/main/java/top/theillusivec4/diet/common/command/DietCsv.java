@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -53,8 +54,9 @@ public class DietCsv {
     List<String[]> data = new ArrayList<>();
 
     for (Item item : ForgeRegistries.ITEMS) {
+      Food food = item.getFood();
 
-      if (item.isFood() &&
+      if (food != null && food.getHealing() > 0 &&
           DietApi.getInstance().getGroups(player, item.getDefaultInstance()).isEmpty()) {
         data.add(new String[] {Objects.requireNonNull(item.getRegistryName()).toString()});
       }

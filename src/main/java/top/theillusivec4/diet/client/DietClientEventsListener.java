@@ -121,14 +121,14 @@ public class DietClientEventsListener {
             TranslationTextComponent groupName = new TranslationTextComponent(
                 "groups." + DietMod.MOD_ID + "." + entry.getKey().getName() + ".name");
 
-            if (value > 0.0f) {
+            if (specialFood) {
+              groupsTooltips.add(
+                  (new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName))
+                      .mergeStyle(TextFormatting.GREEN));
+            } else if (value > 0.0f) {
               groupsTooltips.add(
                   (new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group",
                       DECIMALFORMAT.format(entry.getValue() * 100), groupName))
-                      .mergeStyle(TextFormatting.GREEN));
-            } else if (specialFood) {
-              groupsTooltips.add(
-                  (new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName))
                       .mergeStyle(TextFormatting.GREEN));
             }
           }

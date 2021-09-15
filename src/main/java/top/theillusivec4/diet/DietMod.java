@@ -92,8 +92,6 @@ public class DietMod {
           new DietBlockTagsProvider(generator, existingFileHelper);
       generator.addProvider(
           new DietTagsProvider(generator, blockTagsProvider, existingFileHelper));
-//      generator.addProvider(
-//          new DietOptionalTagsProvider(generator, blockTagsProvider, existingFileHelper));
     }
   }
 

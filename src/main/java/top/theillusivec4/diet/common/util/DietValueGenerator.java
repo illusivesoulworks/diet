@@ -34,6 +34,8 @@ public class DietValueGenerator {
   private static final Stopwatch STOPWATCH = Stopwatch.createUnstarted();
   private static final Tags.IOptionalNamedTag<Item> INGREDIENTS =
       ItemTags.createOptional(new ResourceLocation(DietMod.id("ingredients")));
+  private static final Tags.IOptionalNamedTag<Item> SPECIAL_FOOD =
+      ItemTags.createOptional(new ResourceLocation(DietMod.id("special_food")));
 
   public static void reload(MinecraftServer server) {
     DietMod.LOGGER.info("Generating diet values...");
@@ -48,7 +50,7 @@ public class DietValueGenerator {
     for (Item item : ForgeRegistries.ITEMS) {
       Food food = item.getFood();
 
-      if (food != null && food.getHealing() > 0) {
+      if ((food != null && food.getHealing() > 0) || SPECIAL_FOOD.contains(item)) {
 
         for (IDietGroup group : groups) {
 

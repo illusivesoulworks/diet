@@ -96,6 +96,10 @@ public class DietApiImpl extends DietApi {
     } else if (food != null) {
       healing = food.getHealing();
       saturation = food.getSaturation();
+
+      if (healing == 0) {
+        return DietResult.EMPTY;
+      }
     } else {
       Map<IDietGroup, Float> result = new HashMap<>();
 
