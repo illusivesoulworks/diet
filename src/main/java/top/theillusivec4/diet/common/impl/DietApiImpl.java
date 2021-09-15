@@ -19,9 +19,9 @@ import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.api.IDietResult;
 import top.theillusivec4.diet.common.config.DietServerConfig;
 import top.theillusivec4.diet.common.group.DietGroups;
-import top.theillusivec4.diet.common.util.DietValueGenerator;
 import top.theillusivec4.diet.common.util.DietOverride;
 import top.theillusivec4.diet.common.util.DietResult;
+import top.theillusivec4.diet.common.util.DietValueGenerator;
 
 public class DietApiImpl extends DietApi {
 
@@ -59,16 +59,24 @@ public class DietApiImpl extends DietApi {
       }
     }
 
-    for (IDietGroup group : DietGroups.get()) {
+    for (ItemStack stack : stacks) {
+      Set<IDietGroup> found = new HashSet<>();
 
-      for (ItemStack stack : stacks) {
+      for (IDietGroup group : DietGroups.get()) {
 
         if (group.contains(stack)) {
-          groups.add(group);
+          found.add(group);
         }
       }
+
+      if (found.isEmpty()) {
+        groups.addAll(DietValueGenerator.get(stack.getItem()).orElse(new HashSet<>()));
+      } else {
+        groups.addAll(found);
+      }
     }
-    return groups.isEmpty() ? DietValueGenerator.get(input.getItem()).orElse(new HashSet<>()) : groups;
+    return groups.isEmpty() ? DietValueGenerator.get(input.getItem()).orElse(new HashSet<>()) :
+        groups;
   }
 
   @Override
