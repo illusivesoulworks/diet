@@ -29,6 +29,7 @@
     "minecraft:warped_roots",
     "minecraft:wheat_seeds",
     "#minecraft:flowers",
+    "#minecraft:leaves",
     {
       "id": "abundance:lavender",
       "required": false
@@ -1207,6 +1208,14 @@
     },
     {
       "id": "vanillafoodpantry:raw_vegetables",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:roast_corn",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:roasted_eggplant",
       "required": false
     },
     {

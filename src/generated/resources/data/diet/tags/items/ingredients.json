@@ -128,6 +128,10 @@
       "required": false
     },
     {
+      "id": "simplefarming:ginger",
+      "required": false
+    },
+    {
       "id": "simplefarming:vinegar",
       "required": false
     },

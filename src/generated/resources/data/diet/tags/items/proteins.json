@@ -1313,7 +1313,15 @@
       "required": false
     },
     {
+      "id": "simplefarming:raw_bacon",
+      "required": false
+    },
+    {
       "id": "simplefarming:raw_calamari",
+      "required": false
+    },
+    {
+      "id": "simplefarming:raw_chicken_wings",
       "required": false
     },
     {

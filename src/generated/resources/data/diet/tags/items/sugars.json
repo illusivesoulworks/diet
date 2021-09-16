@@ -439,6 +439,22 @@
       "required": false
     },
     {
+      "id": "simpledelights:creamcicle",
+      "required": false
+    },
+    {
+      "id": "simpledelights:fruit_tart",
+      "required": false
+    },
+    {
+      "id": "simpledelights:plum_pudding",
+      "required": false
+    },
+    {
+      "id": "simpledelights:strawberry_shortcake",
+      "required": false
+    },
+    {
       "id": "simplefarming:birthday_cake",
       "required": false
     },
@@ -508,6 +524,10 @@
     },
     {
       "id": "the_bumblezone:sugar_water_bottle",
+      "required": false
+    },
+    {
+      "id": "trickcreeps:treat_powder",
       "required": false
     },
     {

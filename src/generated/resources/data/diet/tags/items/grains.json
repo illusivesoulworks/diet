@@ -336,6 +336,18 @@
       "required": false
     },
     {
+      "id": "simpledelights:fruit_tart",
+      "required": false
+    },
+    {
+      "id": "simpledelights:plum_pudding",
+      "required": false
+    },
+    {
+      "id": "simpledelights:strawberry_shortcake",
+      "required": false
+    },
+    {
       "id": "simplefarming:barley",
       "required": false
     },
