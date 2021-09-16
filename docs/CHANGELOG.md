@@ -3,6 +3,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.40] - 2021.09.15
+### Added
+- Added 5-food-group support for:
+  - Improved Berries
+  - Nourished End
+  - Project Vibrant Journeys
+  - Roots Classic
+  - Shulkered
+  - Simple Delights
+  - Trick O'Creeps
+- Added configuration option for hiding diet food group tooltips for a player until that food has been eaten at least once [#85](https://github.com/TheIllusiveC4/Diet/issues/85)
+### Changed
+- Revamped tagging system to include automatic tagging for foods without a group tag
+  - Existing groupings for foods may have changed or disappeared due to migrating to the new system, please report an issue if this happened in error
+  - New tags:
+    - `diet:ingredients` for items that should not add their own food groups to foods they are a part of (such as salt)
+    - `diet:special_food` for items that do not have food values but should still display food group tooltips (such as cake)
+
 ## [1.16.5-0.39] - 2021.08.12
 ### Added
 - [API] Added ApplyEffect event for modders to cancel the effects from Diet
