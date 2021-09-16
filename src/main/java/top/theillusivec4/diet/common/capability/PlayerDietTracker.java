@@ -19,6 +19,7 @@
 package top.theillusivec4.diet.common.capability;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +31,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -56,6 +58,7 @@ public class PlayerDietTracker implements IDietTracker {
   private final PlayerEntity player;
   private final Map<String, Float> values = new HashMap<>();
   private final Map<Attribute, Set<UUID>> activeModifiers = new HashMap<>();
+  private final Set<Item> eatenFood = new HashSet<>();
 
   private boolean active = true;
   private int prevFood;
@@ -122,6 +125,7 @@ public class PlayerDietTracker implements IDietTracker {
       IDietResult result = DietApi.getInstance().get(player, stack, healing, saturationModifier);
 
       if (result != DietResult.EMPTY) {
+        addEaten(stack.getItem());
         apply(result);
       }
     }
@@ -135,6 +139,7 @@ public class PlayerDietTracker implements IDietTracker {
       IDietResult result = DietApi.getInstance().get(player, stack);
 
       if (result != DietResult.EMPTY) {
+        addEaten(stack.getItem());
         apply(result);
       }
     }
@@ -293,6 +298,14 @@ public class PlayerDietTracker implements IDietTracker {
   public void sync() {
     sync(values);
     sync(active);
+    sync(eatenFood);
+  }
+
+  private void sync(Set<Item> values) {
+
+    if (player instanceof ServerPlayerEntity) {
+      DietNetwork.sendEatenS2C((ServerPlayerEntity) player, values);
+    }
   }
 
   private void sync(Map<String, Float> values) {
@@ -317,5 +330,22 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public ItemStack getCapturedStack() {
     return captured;
+  }
+
+  @Override
+  public void addEaten(Item item) {
+    eatenFood.add(item);
+    sync(Sets.newHashSet(item));
+  }
+
+  @Override
+  public Set<Item> getEaten() {
+    return eatenFood;
+  }
+
+  @Override
+  public void setEaten(Set<Item> foods) {
+    eatenFood.clear();
+    eatenFood.addAll(foods);
   }
 }

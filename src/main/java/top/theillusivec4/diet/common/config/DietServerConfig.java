@@ -34,6 +34,7 @@ public class DietServerConfig {
   public static DeathPenaltyMethod deathPenaltyMethod;
   public static float decayPenaltyPerGroup;
   public static float gainPenaltyPerGroup;
+  public static boolean hideTooltipsUntilEaten;
   public static Map<Item, Float> foodOverrides;
 
   public enum DeathPenaltyMethod {

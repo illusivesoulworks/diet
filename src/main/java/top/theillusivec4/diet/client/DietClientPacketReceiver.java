@@ -21,9 +21,11 @@ package top.theillusivec4.diet.client;
 import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.common.network.server.SPacketActivate;
 import top.theillusivec4.diet.common.network.server.SPacketDiet;
+import top.theillusivec4.diet.common.network.server.SPacketEaten;
 
 public class DietClientPacketReceiver {
 
@@ -42,6 +44,19 @@ public class DietClientPacketReceiver {
       DietCapability.get(player).ifPresent(diet -> {
         for (Map.Entry<String, Float> entry : msg.groups.entrySet()) {
           diet.setValue(entry.getKey(), entry.getValue());
+        }
+      });
+    }
+  }
+
+  public static void handleEaten(SPacketEaten msg) {
+    PlayerEntity player = Minecraft.getInstance().player;
+
+    if (player != null) {
+      DietCapability.get(player).ifPresent(diet -> {
+
+        for (Item item : msg.items) {
+          diet.addEaten(item);
         }
       });
     }

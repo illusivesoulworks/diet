@@ -36,6 +36,7 @@ import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 import top.theillusivec4.diet.common.network.server.SPacketActivate;
 import top.theillusivec4.diet.common.network.server.SPacketDiet;
+import top.theillusivec4.diet.common.network.server.SPacketEaten;
 import top.theillusivec4.diet.common.network.server.SPacketEffectsInfo;
 import top.theillusivec4.diet.common.network.server.SPacketGeneratedValues;
 
@@ -60,6 +61,7 @@ public class DietNetwork {
         SPacketActivate::handle);
     register(SPacketGeneratedValues.class, SPacketGeneratedValues::encode,
         SPacketGeneratedValues::decode, SPacketGeneratedValues::handle);
+    register(SPacketEaten.class, SPacketEaten::encode, SPacketEaten::decode, SPacketEaten::handle);
   }
 
   public static void sendEffectsInfoS2C(ServerPlayerEntity player, DietEffectsInfo info) {
@@ -74,8 +76,14 @@ public class DietNetwork {
     INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SPacketActivate(flag));
   }
 
-  public static void sendGeneratedValuesS2C(ServerPlayerEntity player, Map<Item, Set<IDietGroup>> generated) {
-    INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SPacketGeneratedValues(generated));
+  public static void sendGeneratedValuesS2C(ServerPlayerEntity player,
+                                            Map<Item, Set<IDietGroup>> generated) {
+    INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
+        new SPacketGeneratedValues(generated));
+  }
+
+  public static void sendEatenS2C(ServerPlayerEntity player, Set<Item> items) {
+    INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SPacketEaten(items));
   }
 
   private static <M> void register(Class<M> messageType, BiConsumer<M, PacketBuffer> encoder,

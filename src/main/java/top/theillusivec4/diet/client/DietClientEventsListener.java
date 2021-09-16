@@ -53,9 +53,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietApi;
+import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.api.IDietResult;
 import top.theillusivec4.diet.common.config.DietClientConfig;
+import top.theillusivec4.diet.common.config.DietServerConfig;
 import top.theillusivec4.diet.common.integration.CuriosIntegration;
 import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.util.DietResult;
@@ -107,6 +109,12 @@ public class DietClientEventsListener {
     ItemStack stack = evt.getItemStack();
 
     if (player != null && player.world != null) {
+
+      if (DietServerConfig.hideTooltipsUntilEaten &&
+          DietCapability.get(player).map(tracker -> !tracker.getEaten().contains(stack.getItem()))
+              .orElse(false)) {
+        return;
+      }
       IDietResult result = DietApi.getInstance().get(player, stack);
 
       if (result != DietResult.EMPTY) {

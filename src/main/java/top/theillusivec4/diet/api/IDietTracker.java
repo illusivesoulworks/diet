@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public interface IDietTracker {
@@ -56,4 +57,10 @@ public interface IDietTracker {
   void captureStack(ItemStack stack);
 
   ItemStack getCapturedStack();
+
+  void addEaten(Item item);
+
+  Set<Item> getEaten();
+
+  void setEaten(Set<Item> foods);
 }

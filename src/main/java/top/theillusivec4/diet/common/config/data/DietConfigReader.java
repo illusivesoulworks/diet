@@ -122,6 +122,8 @@ public class DietConfigReader {
     public final ForgeConfigSpec.DoubleValue decayPenaltyPerGroup;
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> foodOverrides;
 
+    public final ForgeConfigSpec.BooleanValue hideTooltipsUntilEaten;
+
     public General(ForgeConfigSpec.Builder builder) {
       builder.push("death_penalty");
 
@@ -158,10 +160,19 @@ public class DietConfigReader {
           .defineInRange("decayPenaltyPerGroup", 0.15f, 0.0f, 1.0f);
 
       foodOverrides = builder.comment(
-          "List of food quality overrides for diet gain values." +
-              "\nFormat: \"modid:name;quality\"")
+              "List of food quality overrides for diet gain values." +
+                  "\nFormat: \"modid:name;quality\"")
           .translation(CONFIG_PREFIX + "foodOverrides")
           .defineList("foodOverrides", new ArrayList<>(), s -> s instanceof String);
+
+      builder.pop();
+
+      builder.push("management");
+
+      hideTooltipsUntilEaten = builder.comment(
+              "Hide diet food group tooltips on food until player has eaten it at least once.")
+          .translation(CONFIG_PREFIX + "hideTooltipsUntilEaten")
+          .define("hideTooltipsUntilEaten", false);
 
       builder.pop();
     }
@@ -217,6 +228,7 @@ public class DietConfigReader {
     DietServerConfig.deathPenaltyMethod = GENERAL.deathPenaltyMethod.get();
     DietServerConfig.decayPenaltyPerGroup = GENERAL.decayPenaltyPerGroup.get().floatValue();
     DietServerConfig.gainPenaltyPerGroup = GENERAL.gainPenaltyPerGroup.get().floatValue();
+    DietServerConfig.hideTooltipsUntilEaten = GENERAL.hideTooltipsUntilEaten.get();
     DietServerConfig.foodOverrides = new HashMap<>();
 
     for (String s : GENERAL.foodOverrides.get()) {

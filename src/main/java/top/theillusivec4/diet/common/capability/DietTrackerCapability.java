@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -40,7 +41,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.api.IDietTracker;
-import top.theillusivec4.diet.common.group.DietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
 
 public class DietTrackerCapability {
@@ -80,6 +80,20 @@ public class DietTrackerCapability {
               }
             }
             tag.put("Modifiers", list);
+            list = new ListNBT();
+            Set<Item> eaten = instance.getEaten();
+
+            if (eaten != null) {
+
+              for (Item item : eaten) {
+                ResourceLocation rl = item.getRegistryName();
+
+                if (rl != null) {
+                  list.add(StringNBT.valueOf(rl.toString()));
+                }
+              }
+            }
+            tag.put("Eaten", list);
             tag.putBoolean("Active", instance.isActive());
             return tag;
           }
@@ -113,6 +127,19 @@ public class DietTrackerCapability {
                 modifiers.put(att, uuids);
               }
             }
+            list = tag.getList("Eaten", Constants.NBT.TAG_STRING);
+            Set<Item> eaten = new HashSet<>();
+
+            for (int i = 0; i < list.size(); i++) {
+              String s = list.getString(i);
+              ResourceLocation rl = new ResourceLocation(s);
+              Item item = ForgeRegistries.ITEMS.getValue(rl);
+
+              if (item != null) {
+                eaten.add(item);
+              }
+            }
+            instance.setEaten(eaten);
             instance.setModifiers(modifiers);
             instance.setValues(groups);
             instance.setActive(!tag.contains("Active") || tag.getBoolean("Active"));
@@ -195,6 +222,21 @@ public class DietTrackerCapability {
     @Override
     public ItemStack getCapturedStack() {
       return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void addEaten(Item item) {
+
+    }
+
+    @Override
+    public Set<Item> getEaten() {
+      return new HashSet<>();
+    }
+
+    @Override
+    public void setEaten(Set<Item> foods) {
+
     }
   }
 }
