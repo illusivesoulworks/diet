@@ -36,6 +36,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.FoodStats;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import top.theillusivec4.diet.api.DietApi;
@@ -61,7 +62,9 @@ public class PlayerDietTracker implements IDietTracker {
   private final Set<Item> eatenFood = new HashSet<>();
 
   private boolean active = true;
+
   private int prevFood;
+  private float prevSaturation;
   private ItemStack captured = ItemStack.EMPTY;
 
   static {
@@ -71,7 +74,9 @@ public class PlayerDietTracker implements IDietTracker {
 
   public PlayerDietTracker(PlayerEntity playerIn) {
     player = playerIn;
-    prevFood = playerIn.getFoodStats().getFoodLevel();
+    FoodStats stats = playerIn.getFoodStats();
+    prevFood = stats.getFoodLevel();
+    prevSaturation = stats.getSaturationLevel();
     values.clear();
 
     for (IDietGroup group : DietGroups.get()) {
@@ -88,12 +93,21 @@ public class PlayerDietTracker implements IDietTracker {
 
       if (!player.isCreative() && active) {
         int currentFood = player.getFoodStats().getFoodLevel();
+        float currentSaturation = player.getFoodStats().getSaturationLevel();
 
-        if (currentFood < prevFood &&
-            !MinecraftForge.EVENT_BUS.post(new DietEvent.ApplyDecay(player))) {
-          decay(prevFood - currentFood);
+        if (currentFood < prevFood) {
+
+          if (!MinecraftForge.EVENT_BUS.post(new DietEvent.ApplyDecay(player))) {
+            decay(prevFood - currentFood);
+          }
+        } else if (currentFood > prevFood && !captured.isEmpty()) {
+          int healing = currentFood - prevFood;
+          float saturationModifier = (currentSaturation - prevSaturation) / healing;
+          consume(captured, healing, saturationModifier);
+          captured = ItemStack.EMPTY;
         }
         prevFood = currentFood;
+        prevSaturation = currentSaturation;
       }
 
       if (player.ticksExisted % 80 == 0) {

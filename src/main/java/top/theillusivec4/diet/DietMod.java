@@ -31,11 +31,13 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.theillusivec4.diet.api.DietApi;
 import top.theillusivec4.diet.client.DietKeys;
 import top.theillusivec4.diet.common.capability.DietTrackerCapability;
 import top.theillusivec4.diet.common.command.DietCommand;
 import top.theillusivec4.diet.common.command.DietGroupArgument;
 import top.theillusivec4.diet.common.config.data.DietConfigReader;
+import top.theillusivec4.diet.common.impl.DietApiImpl;
 import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.network.DietNetwork;
 import top.theillusivec4.diet.common.util.DietOverride;
@@ -54,6 +56,7 @@ public class DietMod {
   }
 
   public DietMod() {
+    DietApi.setInstance(new DietApiImpl());
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     eventBus.addListener(this::setup);
     eventBus.addListener(this::clientSetup);
