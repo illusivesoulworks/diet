@@ -21,10 +21,7 @@ package top.theillusivec4.diet;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.event.OnDatapackSyncEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -41,8 +38,8 @@ import top.theillusivec4.diet.common.command.DietGroupArgument;
 import top.theillusivec4.diet.common.config.data.DietConfigReader;
 import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.network.DietNetwork;
-import top.theillusivec4.diet.common.util.DietValueGenerator;
 import top.theillusivec4.diet.common.util.DietOverride;
+import top.theillusivec4.diet.common.util.DietValueGenerator;
 import top.theillusivec4.diet.data.DietBlockTagsProvider;
 import top.theillusivec4.diet.data.DietTagsProvider;
 
@@ -62,14 +59,14 @@ public class DietMod {
     eventBus.addListener(this::clientSetup);
     eventBus.addListener(this::process);
     eventBus.addListener(this::gatherData);
-    MinecraftForge.EVENT_BUS.addListener(this::setupCommands);
-    MinecraftForge.EVENT_BUS.addListener(this::onDatapackSync);
     DietConfigReader.setup();
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
     DietTrackerCapability.setup();
     DietNetwork.setup();
+    DietValueGenerator.setup();
+    DietCommand.setup();
     IntegrationManager.setup();
     evt.enqueueWork(() -> ArgumentTypes.register(id("group"), DietGroupArgument.class,
         new ArgumentSerializer<>(DietGroupArgument::group)));
@@ -93,13 +90,5 @@ public class DietMod {
       generator.addProvider(
           new DietTagsProvider(generator, blockTagsProvider, existingFileHelper));
     }
-  }
-
-  private void setupCommands(final RegisterCommandsEvent evt) {
-    DietCommand.register(evt.getDispatcher());
-  }
-
-  private void onDatapackSync(final OnDatapackSyncEvent evt) {
-    DietValueGenerator.reload(evt.getPlayerList().getServer());
   }
 }

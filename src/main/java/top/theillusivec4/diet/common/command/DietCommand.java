@@ -31,6 +31,8 @@ import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.server.command.ModIdArgument;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
@@ -38,6 +40,14 @@ import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
 
 public class DietCommand {
+
+  public static void setup() {
+    MinecraftForge.EVENT_BUS.addListener(DietCommand::setupCommands);
+  }
+
+  private static void setupCommands(final RegisterCommandsEvent evt) {
+    DietCommand.register(evt.getDispatcher());
+  }
 
   public static void register(CommandDispatcher<CommandSource> dispatcher) {
     final int opPermissionLevel = 2;

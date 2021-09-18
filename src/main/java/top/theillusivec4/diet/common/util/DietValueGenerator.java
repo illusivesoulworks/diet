@@ -20,7 +20,10 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietGroup;
@@ -36,6 +39,24 @@ public class DietValueGenerator {
       ItemTags.createOptional(new ResourceLocation(DietMod.id("ingredients")));
   private static final Tags.IOptionalNamedTag<Item> SPECIAL_FOOD =
       ItemTags.createOptional(new ResourceLocation(DietMod.id("special_food")));
+
+  public static void setup() {
+    MinecraftForge.EVENT_BUS.addListener(DietValueGenerator::onDatapackSync);
+    MinecraftForge.EVENT_BUS.addListener(DietValueGenerator::serverStarting);
+  }
+
+  private static void onDatapackSync(final OnDatapackSyncEvent evt) {
+
+    if (evt.getPlayer() == null) {
+      DietValueGenerator.reload(evt.getPlayerList().getServer());
+    } else {
+      DietValueGenerator.sync(evt.getPlayer());
+    }
+  }
+
+  private static void serverStarting(final FMLServerStartingEvent evt) {
+    DietValueGenerator.reload(evt.getServer());
+  }
 
   public static void reload(MinecraftServer server) {
     DietMod.LOGGER.info("Generating diet values...");
@@ -102,6 +123,10 @@ public class DietValueGenerator {
     for (ServerPlayerEntity player : server.getPlayerList().getPlayers()) {
       DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
     }
+  }
+
+  public static void sync(ServerPlayerEntity player) {
+    DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
   }
 
   public static void sync(SPacketGeneratedValues packet) {
