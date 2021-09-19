@@ -65,10 +65,6 @@ minecraft {
     }
 }
 
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-}
-
 repositories {
     maven {
         name = "C4's Maven"
@@ -94,6 +90,7 @@ sourceSets {
     main {
         resources {
             srcDirs += 'docs'
+            srcDirs += 'src/generated/resources'
         }
     }
 }
@@ -118,6 +115,7 @@ task sourcesJar(type: Jar) {
 tasks.build.dependsOn sourcesJar
 
 processResources {
+    exclude '.cache'
 
     from(sourceSets.main.resources.srcDirs) {
         include 'META-INF/mods.toml'
