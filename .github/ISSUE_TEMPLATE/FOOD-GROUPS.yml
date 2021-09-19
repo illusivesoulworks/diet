@@ -1,0 +1,27 @@
+name: Five Food Groups Request
+description: Make a suggestion for the default five food groups, including new mod support or changes to how existing foods are grouped
+title: "[Five Food Groups]: "
+labels: ["type: foodgroups", "status: triage"]
+assignees:
+  - TheIllusiveC4
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hello, and thanks for requesting more support or changes to the default five food groups.
+        Please respond to the following questions to the best of your ability.
+  - type: textarea
+    id: mods
+    attributes:
+      label: If applicable, which other mod(s) is/are involved in your request?
+      description: Please also include links to the mod(s) on CurseForge or GitHub.
+      placeholder: |
+        Example: [Pam's HarvestCraft 2 - Food Extended](https://www.curseforge.com/minecraft/mc-mods/pams-harvestcraft-2-food-extended)
+  - type: textarea
+    id: request-description
+    attributes:
+      label: What is the new support or change you're requesting?
+      description: If you're requesting new mod support and want to go the extra mile, a list of all the relevant food item IDs would be helpful.
+      placeholder: I'm requesting that foods ... from mods ... be added to the five food groups.
+    validations:
+      required: true

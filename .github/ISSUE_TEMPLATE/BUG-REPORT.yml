@@ -1,0 +1,68 @@
+name: Bug Report
+description: Create a report for bugs, crashes, and other unintended behavior
+title: "[Bug]: "
+labels: ["type: bug", "status: triage"]
+assignees:
+  - TheIllusiveC4
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hello, and thanks for filling out this bug report. Please respond to the following questions to the best of your ability.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: A bug happened and I didn't expect that!
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: How do you trigger this bug?
+      description: Please make sure to remove all unnecessary mods first.
+      placeholder: A step by step walkthrough to trigger the bug.
+      value: |
+        1.
+        2.
+        3.
+        ...
+    validations:
+      required: true
+  - type: input
+    id: forge-version
+    attributes:
+      label: Forge Version
+      description: Which version of Forge are you using?
+      placeholder: |
+        Example: Forge - 36.2.4
+    validations:
+      required: true
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod Version
+      description: What version of the mod are you using?
+      placeholder: |
+        Example: Diet 1.16.5-0.40
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies-versions
+    attributes:
+      label: Other Relevant Mod Versions
+      description: If other mods are needed to reproduce the issue, which mods are involved and what are their version numbers?
+      placeholder: |
+        Example: SomeOtherMod 1.16.5-1.2.3
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Log Outputs
+      description: |
+        Please share any relevant log outputs using a paste site (set to never expire):
+        » [GitHub Gist](https://gist.github.com/)
+        » [Paste.gg](https://paste.gg/)
+        » [Paste.ee](https://paste.ee/)
+        » [Pastebin.com](https://pastebin.com/)
+        » [Hastebin.com](https://hastebin.com/)
