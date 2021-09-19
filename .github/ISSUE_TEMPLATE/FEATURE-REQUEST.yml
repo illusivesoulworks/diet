@@ -1,5 +1,7 @@
 name: Feature Request
-description: Make a suggestion for a new feature or improvements to existing ones
+description: |
+  Make a suggestion for a new feature or improvements to existing ones
+  These should not be related to the basic food five groups, which has a separate template
 title: "[Feature]: "
 labels: ["type: enhancement", "status: triage"]
 assignees:
