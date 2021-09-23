@@ -34,6 +34,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.FileUtils;
@@ -268,7 +269,7 @@ public class DietConfigReader {
     String fileName = DietMod.MOD_ID + "-" + name + ".toml";
     ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, spec, fileName);
     File defaults =
-        new File(FMLPaths.GAMEDIR.get() + "/defaultconfigs/" + fileName);
+        new File(FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()) + "/" + fileName);
 
     if (!defaults.exists()) {
       try {
