@@ -8,20 +8,9 @@ import net.minecraft.item.ItemStack;
 
 public abstract class DietApi {
 
-  private static final DietApi DEFAULT = new DietApi() {
-  };
-  private static DietApi instance = null;
-
   // The API instance to use
   public static DietApi getInstance() {
-    return instance == null ? DEFAULT : instance;
-  }
-
-  public static void setInstance(DietApi api) {
-
-    if (instance == null) {
-      instance = api;
-    }
+    throw new IllegalArgumentException("Missing API implementation for Diet!");
   }
 
   /**

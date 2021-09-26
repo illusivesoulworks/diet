@@ -27,15 +27,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -43,7 +37,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -164,42 +157,6 @@ public class DietCapabilityEventsListener {
       if (food != null) {
         DietCapability.get((PlayerEntity) livingEntity).ifPresent(diet -> diet.consume(stack));
       }
-    }
-  }
-
-  @SubscribeEvent
-  @SuppressWarnings("unused")
-  public static void rightClickBlock(final PlayerInteractEvent.RightClickBlock evt) {
-    PlayerEntity player = evt.getPlayer();
-    World world = player.getEntityWorld();
-
-    if (!world.isRemote() && !player.isSpectator()) {
-      DietCapability.get(player).ifPresent(tracker -> {
-        Hand hand = evt.getHand();
-        ItemStack stack = player.getHeldItem(hand);
-        BlockRayTraceResult rayTraceResult = evt.getHitVec();
-        ItemUseContext itemusecontext = new ItemUseContext(player, hand, rayTraceResult);
-
-        if (evt.getUseItem() != net.minecraftforge.eventbus.api.Event.Result.DENY) {
-          ActionResultType result = stack.onItemUseFirst(itemusecontext);
-
-          if (result != ActionResultType.PASS) {
-            return;
-          }
-        }
-        BlockPos pos = rayTraceResult.getPos();
-        boolean flag =
-            !player.getHeldItemMainhand().isEmpty() || !player.getHeldItemOffhand().isEmpty();
-        boolean flag1 = (player.isSecondaryUseActive() && flag) &&
-            !(player.getHeldItemMainhand().doesSneakBypassUse(world, pos, player) &&
-                player.getHeldItemOffhand().doesSneakBypassUse(world, pos, player));
-
-        if (evt.getUseBlock() == net.minecraftforge.eventbus.api.Event.Result.ALLOW ||
-            (evt.getUseBlock() != net.minecraftforge.eventbus.api.Event.Result.DENY && !flag1)) {
-          tracker.captureStack(
-              player.world.getBlockState(pos).getPickBlock(rayTraceResult, world, pos, player));
-        }
-      });
     }
   }
 

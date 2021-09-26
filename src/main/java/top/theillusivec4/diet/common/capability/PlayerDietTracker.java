@@ -64,7 +64,6 @@ public class PlayerDietTracker implements IDietTracker {
   private boolean active = true;
 
   private int prevFood;
-  private float prevSaturation;
   private ItemStack captured = ItemStack.EMPTY;
 
   static {
@@ -76,7 +75,6 @@ public class PlayerDietTracker implements IDietTracker {
     player = playerIn;
     FoodStats stats = playerIn.getFoodStats();
     prevFood = stats.getFoodLevel();
-    prevSaturation = stats.getSaturationLevel();
     values.clear();
 
     for (IDietGroup group : DietGroups.get()) {
@@ -93,21 +91,12 @@ public class PlayerDietTracker implements IDietTracker {
 
       if (!player.isCreative() && active) {
         int currentFood = player.getFoodStats().getFoodLevel();
-        float currentSaturation = player.getFoodStats().getSaturationLevel();
 
-        if (currentFood < prevFood) {
-
-          if (!MinecraftForge.EVENT_BUS.post(new DietEvent.ApplyDecay(player))) {
-            decay(prevFood - currentFood);
-          }
-        } else if (currentFood > prevFood && !captured.isEmpty()) {
-          int healing = currentFood - prevFood;
-          float saturationModifier = (currentSaturation - prevSaturation) / healing;
-          consume(captured, healing, saturationModifier);
-          captured = ItemStack.EMPTY;
+        if (currentFood < prevFood &&
+            !MinecraftForge.EVENT_BUS.post(new DietEvent.ApplyDecay(player))) {
+          decay(prevFood - currentFood);
         }
         prevFood = currentFood;
-        prevSaturation = currentSaturation;
       }
 
       if (player.ticksExisted % 80 == 0) {

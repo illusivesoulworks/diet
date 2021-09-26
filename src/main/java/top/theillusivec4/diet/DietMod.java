@@ -56,7 +56,6 @@ public class DietMod {
   }
 
   public DietMod() {
-    DietApi.setInstance(new DietApiImpl());
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     eventBus.addListener(this::setup);
     eventBus.addListener(this::clientSetup);
