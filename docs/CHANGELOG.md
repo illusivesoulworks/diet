@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-1.0.0] - 2021.10.15
+### Added
+- Added 5-food-group support for:
+  - Simple Corn
+
 ## [1.16.5-0.43] - 2021.09.26
 ### Changed
 - Added mixins again

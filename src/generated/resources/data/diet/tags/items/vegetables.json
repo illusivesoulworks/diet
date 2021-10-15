@@ -851,6 +851,10 @@
       "required": false
     },
     {
+      "id": "simplecorn:corncob",
+      "required": false
+    },
+    {
       "id": "simplefarming:broccoli",
       "required": false
     },
