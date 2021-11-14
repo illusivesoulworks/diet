@@ -18,6 +18,7 @@
 
 package top.theillusivec4.diet.client;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.awt.Color;
@@ -36,7 +37,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.LanguageMap;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.api.IDietGroup;
@@ -85,7 +88,7 @@ public class DietScreen extends Screen {
   @Override
   public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
     this.renderBackground(matrixStack);
-    this.renderForeground(matrixStack);
+    this.renderForeground(matrixStack, mouseX, mouseY);
     this.renderTitle(matrixStack, mouseX, mouseY);
     super.render(matrixStack, mouseX, mouseY, partialTicks);
   }
@@ -110,13 +113,12 @@ public class DietScreen extends Screen {
 
       if (mouseX >= lowerX && mouseX <= upperX && mouseY >= lowerY && mouseY <= upperY) {
         List<ITextComponent> tooltips = DietTooltip.getEffects();
-        net.minecraftforge.fml.client.gui.GuiUtils
-            .drawHoveringText(matrixStack, tooltips, mouseX, mouseY, width, height, -1, font);
+        GuiUtils.drawHoveringText(matrixStack, tooltips, mouseX, mouseY, width, height, -1, font);
       }
     }
   }
 
-  public void renderForeground(MatrixStack matrixStack) {
+  public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
 
     if (this.minecraft != null) {
       ClientPlayerEntity player = this.minecraft.player;
@@ -125,6 +127,7 @@ public class DietScreen extends Screen {
         DietCapability.get(player).ifPresent(diet -> {
           int y = this.height / 2 - this.ySize / 2 + 25;
           int x = this.width / 2 - this.xSize / 2 + 10;
+          ITextComponent tooltip = null;
 
           for (IDietGroup group : DietGroups.get()) {
             this.itemRenderer.renderItemIntoGUI(new ItemStack(group.getIcon()), x, y - 5);
@@ -155,7 +158,24 @@ public class DietScreen extends Screen {
             this.font.drawString(matrixStack, percentText, (float) xPos, (float) (yPos - 1), 0);
             this.font
                 .drawString(matrixStack, percentText, (float) xPos, (float) yPos, color.getRGB());
+            int lowerY = y - 5;
+            int upperX = x + 16;
+            int upperY = lowerY + 16;
+
+            if (mouseX >= x && mouseX <= upperX && mouseY >= lowerY && mouseY <= upperY) {
+              String key = "groups." + DietMod.MOD_ID + "." + group.getName() + ".tooltip";
+
+              if (LanguageMap.getInstance().func_230506_b_(key)) {
+                tooltip = new TranslationTextComponent(key);
+              }
+            }
             y += 20;
+          }
+
+          if (tooltip != null) {
+            List<ITextComponent> tooltips = Lists.newArrayList(tooltip);
+            GuiUtils.drawHoveringText(matrixStack, tooltips, mouseX, mouseY, width, height, -1,
+                font);
           }
         });
       }
