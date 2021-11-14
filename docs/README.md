@@ -119,6 +119,7 @@ Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4
 - [Conjurer's Cookbook](https://www.curseforge.com/minecraft/mc-mods/conjurers-cookbook)
 - [Cookielicious](https://www.curseforge.com/minecraft/mc-mods/cookielicious)
 - [Create](https://www.curseforge.com/minecraft/mc-mods/create)
+- [Create Confectionary](https://www.curseforge.com/minecraft/mc-mods/create-confectionery)
 - [Create Crafts & Additions](https://www.curseforge.com/minecraft/mc-mods/createaddition)
 - [Creatures and Beasts](https://www.curseforge.com/minecraft/mc-mods/creatures-and-beasts)
 - [Crock Pot](https://www.curseforge.com/minecraft/mc-mods/crock-pot)

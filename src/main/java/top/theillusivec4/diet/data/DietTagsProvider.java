@@ -375,7 +375,11 @@ public class DietTagsProvider extends ItemTagsProvider {
         "simpledelights:strawberry_shortcake",
         "simpledelights:plum_pudding",
         "simpledelights:fruit_tart",
-        "simpledelights:creamcicle"
+        "simpledelights:creamcicle",
+        "create_confectionery:black_chocolate_glazed_berries",
+        "create_confectionery:white_chocolate_glazed_berries",
+        "create_confectionery:ruby_chocolate_glazed_berries",
+        "create_confectionery:caramel_glazed_berries"
     );
 
     for (String element : optionalElements) {
@@ -1145,7 +1149,17 @@ public class DietTagsProvider extends ItemTagsProvider {
         "simpledelights:strawberry_shortcake",
         "simpledelights:plum_pudding",
         "simpledelights:fruit_tart",
-        "simpledelights:creamcicle"
+        "simpledelights:creamcicle",
+        "create_confectionery:marshmallow",
+        "create_confectionery:bar_of_black_chocolate",
+        "create_confectionery:bar_of_white_chocolate",
+        "create_confectionery:bar_of_ruby_chocolate",
+        "create_confectionery:bar_of_caramel",
+        "create_confectionery:hot_chocolate_bottle",
+        "create_confectionery:black_chocolate_glazed_berries",
+        "create_confectionery:white_chocolate_glazed_berries",
+        "create_confectionery:ruby_chocolate_glazed_berries",
+        "create_confectionery:caramel_glazed_berries"
     );
 
     for (String element : optionalElements) {

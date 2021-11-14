@@ -165,6 +165,22 @@
       "required": false
     },
     {
+      "id": "create_confectionery:black_chocolate_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:caramel_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:ruby_chocolate_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:white_chocolate_glazed_berries",
+      "required": false
+    },
+    {
       "id": "crockpot:fruit_medley",
       "required": false
     },

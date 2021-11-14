@@ -83,6 +83,46 @@
       "required": false
     },
     {
+      "id": "create_confectionery:bar_of_black_chocolate",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:bar_of_caramel",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:bar_of_ruby_chocolate",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:bar_of_white_chocolate",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:black_chocolate_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:caramel_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:hot_chocolate_bottle",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:marshmallow",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:ruby_chocolate_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:white_chocolate_glazed_berries",
+      "required": false
+    },
+    {
       "id": "createaddition:chocolate_cake",
       "required": false
     },
