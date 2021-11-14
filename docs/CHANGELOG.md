@@ -3,7 +3,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
-## [1.16.5-1.0.0] - 2021.10.15
+## [1.16.5-1.0.1.0] - 2021.11.13
+### Added
+- Added optional lang key `groups.diet.groupname.tooltip` for adding tooltips when hovering over the group's icon in the
+Diet screen
+- Added 5-food-group support for:
+  - Create Confectionary [#93](https://github.com/TheIllusiveC4/Diet/issues/93)
+### Fixed
+- Fixed Chinese localization not working correctly
+
+## [1.16.5-1.0.0.0] - 2021.10.15
 ### Added
 - Added 5-food-group support for:
   - Simple Corn
