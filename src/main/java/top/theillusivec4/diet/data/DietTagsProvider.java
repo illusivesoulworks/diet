@@ -1472,7 +1472,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "xercamod:item_tomato",
         "vanillafoodpantry:roast_corn",
         "vanillafoodpantry:roasted_eggplant",
-        "simplecorn:corncob"
+        "simplecorn:corncob",
+        "habitat:kabloom_pulp",
+        "habitat:dried_ball_cactus"
     );
 
     for (String element : optionalElements) {

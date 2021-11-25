@@ -156,6 +156,7 @@ Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4
 - [Golden Beetroot Mod](https://www.curseforge.com/minecraft/mc-mods/golden-beetroot-mod)
 - [Good Night's Sleep](https://www.curseforge.com/minecraft/mc-mods/good-nights-sleep)
 - [Greek Fantasy](https://www.curseforge.com/minecraft/mc-mods/greek-fantasy)
+- [Habitat](https://www.curseforge.com/minecraft/mc-mods/habitat)
 - [Ice and Fire: Dragons](https://www.curseforge.com/minecraft/mc-mods/ice-and-fire-dragons)
 - [Immersive Cooking](https://www.curseforge.com/minecraft/mc-mods/immersive-cooking)
 - [Improved Berries](https://www.curseforge.com/minecraft/mc-mods/improved-berries)

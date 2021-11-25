@@ -519,6 +519,14 @@
       "required": false
     },
     {
+      "id": "habitat:dried_ball_cactus",
+      "required": false
+    },
+    {
+      "id": "habitat:kabloom_pulp",
+      "required": false
+    },
+    {
       "id": "inspirations:heartbeet",
       "required": false
     },
