@@ -102,7 +102,6 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:jei-238222:3345971")
     runtimeOnly fg.deobf("curse.maven:appleskin-248787:3395800")
-    runtimeOnly fg.deobf("curse.maven:rs-243076:3400575")
 }
 
 sourceSets {

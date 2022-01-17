@@ -63,16 +63,15 @@ public class DietScreen extends Screen {
   public DietScreen(boolean fromInventory) {
     super(new TranslationTextComponent("gui." + DietMod.MOD_ID + ".title"));
     this.xSize = 248;
-    this.ySize = 166;
+    this.ySize = DietGroups.get().size() * 20 + 60;
     this.fromInventory = fromInventory;
   }
 
   @Override
   protected void init() {
     super.init();
-    int numGroups = DietGroups.get().size();
     this.addButton(
-        new Button(this.width / 2 - 50, (this.height - this.ySize) / 2 + (1 + numGroups) * 18 + 14,
+        new Button(this.width / 2 - 50, (this.height + this.ySize) / 2 - 30,
             100, 20, new TranslationTextComponent("gui.diet.close"), (p_213002_1_) -> {
           if (this.minecraft != null && this.minecraft.player != null) {
 
@@ -187,15 +186,14 @@ public class DietScreen extends Screen {
     super.renderBackground(matrixStack);
 
     if (this.minecraft != null) {
-      int numGroups = DietGroups.get().size();
       this.minecraft.getTextureManager().bindTexture(BACKGROUND);
       int i = (this.width - this.xSize) / 2;
       int j = (this.height - this.ySize) / 2;
-      AbstractGui.blit(matrixStack, i, j, 248, 4, 0, 0, 248, 4, 256, 256);
+      AbstractGui.blit(matrixStack, i, j, this.xSize, 4, 0, 0, 248, 4, 256, 256);
       AbstractGui
-          .blit(matrixStack, i, j + 4, 248, 40 + (1 + numGroups) * 18, 0, 4, 248, 24, 256, 256);
+          .blit(matrixStack, i, j + 4, this.xSize, this.ySize - 8, 0, 4, 248, 24, 256, 256);
       AbstractGui
-          .blit(matrixStack, i, j + (1 + numGroups) * 18 + 44, 248, 4, 0, 162, 248, 4, 256, 256);
+          .blit(matrixStack, i, j + this.ySize - 4, this.xSize, 4, 0, 162, 248, 4, 256, 256);
     }
   }
 
