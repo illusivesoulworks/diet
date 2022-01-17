@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-1.0.2.0] - 2022.01.17
+### Added
+- Added 5-food-group support for:
+  - Modest Roses [#100](https://github.com/TheIllusiveC4/Diet/issues/100)
+  - Project Rankine [#102](https://github.com/TheIllusiveC4/Diet/issues/102)
+- Added optional `beneficial` field to groups in `diet-groups.toml` to distinguish beneficial and harmful effects, with
+red tooltips instead of green for harmful food groups [#104](https://github.com/TheIllusiveC4/Diet/issues/104)
+### Changed
+- Adjusted GUI sizing logic to better accommodate larger number of groups [#97](https://github.com/TheIllusiveC4/Diet/issues/97)
+### Fixed
+- Fixed potential NPE when eating food [#105](https://github.com/TheIllusiveC4/Diet/issues/105)
+
 ## [1.16.5-1.0.1.1] - 2021.11.24
 ### Added
 - Added 5-food-group support for:
