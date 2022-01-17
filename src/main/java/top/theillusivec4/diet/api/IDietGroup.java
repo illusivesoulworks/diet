@@ -22,6 +22,8 @@ public interface IDietGroup {
 
   double getDecayMultiplier();
 
+  boolean isBeneficial();
+
   Tags.IOptionalNamedTag<Item> getTag();
 
   boolean contains(ItemStack stack);

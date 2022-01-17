@@ -6,6 +6,7 @@
     default_value = 0.0
     gain_multiplier = 1.0
     decay_multiplier = 1.0
+    beneficial = true
 [[groups]]
     name = "grains"
     icon = "minecraft:bread"
@@ -14,6 +15,7 @@
     default_value = 0.0
     gain_multiplier = 1.0
     decay_multiplier = 1.0
+    beneficial = true
 [[groups]]
     name = "vegetables"
     icon = "minecraft:carrot"
@@ -22,6 +24,7 @@
     default_value = 0.0
     gain_multiplier = 1.0
     decay_multiplier = 1.0
+    beneficial = true
 [[groups]]
     name = "fruits"
     icon = "minecraft:apple"
@@ -30,6 +33,7 @@
     default_value = 0.0
     gain_multiplier = 1.0
     decay_multiplier = 1.0
+    beneficial = true
 [[groups]]
     name = "sugars"
     icon = "minecraft:honey_bottle"
@@ -38,3 +42,4 @@
     default_value = 0.0
     gain_multiplier = 1.0
     decay_multiplier = 1.0
+    beneficial = true

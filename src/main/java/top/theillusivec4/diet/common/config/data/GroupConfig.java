@@ -27,4 +27,5 @@ public class GroupConfig {
   public Integer order;
   public Double gain_multiplier;
   public Double decay_multiplier;
+  public Boolean beneficial;
 }

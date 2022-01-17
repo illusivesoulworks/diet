@@ -52,9 +52,10 @@ public class DietGroups {
           String name = config.name;
           float defaultValue = (float) (config.default_value != null ? config.default_value : 0);
           int order = config.order != null ? config.order : 0;
+          boolean beneficial = config.beneficial != null ? config.beneficial : true;
           IDietGroup group =
               new DietGroup(name, item, Color.decode(config.color), defaultValue, order,
-                  config.gain_multiplier, config.decay_multiplier);
+                  config.gain_multiplier, config.decay_multiplier, beneficial);
 
           if (!groups.add(group)) {
             DietMod.LOGGER.error("Found duplicate id in diet groups config: " + name);

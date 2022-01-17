@@ -123,23 +123,35 @@ public class DietClientEventsListener {
 
         if (!groups.isEmpty()) {
           List<ITextComponent> groupsTooltips = new ArrayList<>();
+          List<ITextComponent> beneficial = new ArrayList<>();
+          List<ITextComponent> harmful = new ArrayList<>();
 
           for (Map.Entry<IDietGroup, Float> entry : groups.entrySet()) {
             float value = entry.getValue();
             TranslationTextComponent groupName = new TranslationTextComponent(
                 "groups." + DietMod.MOD_ID + "." + entry.getKey().getName() + ".name");
+            TranslationTextComponent tooltip = null;
 
             if (specialFood) {
-              groupsTooltips.add(
-                  (new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName))
-                      .mergeStyle(TextFormatting.GREEN));
+              tooltip = new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName);
             } else if (value > 0.0f) {
-              groupsTooltips.add(
-                  (new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group",
-                      DECIMALFORMAT.format(entry.getValue() * 100), groupName))
-                      .mergeStyle(TextFormatting.GREEN));
+              tooltip = new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group",
+                  DECIMALFORMAT.format(entry.getValue() * 100), groupName);
+            }
+
+            if (tooltip != null) {
+
+              if (entry.getKey().isBeneficial()) {
+                tooltip.mergeStyle(TextFormatting.GREEN);
+                beneficial.add(tooltip);
+              } else {
+                tooltip.mergeStyle(TextFormatting.RED);
+                harmful.add(tooltip);
+              }
             }
           }
+          groupsTooltips.addAll(beneficial);
+          groupsTooltips.addAll(harmful);
 
           if (!groupsTooltips.isEmpty()) {
             tooltips.add(StringTextComponent.EMPTY);

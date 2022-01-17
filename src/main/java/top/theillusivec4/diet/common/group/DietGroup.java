@@ -37,10 +37,11 @@ public final class DietGroup implements IDietGroup {
   private final int order;
   private final double gainMultiplier;
   private final double decayMultiplier;
+  private final boolean beneficial;
   private final Tags.IOptionalNamedTag<Item> tag;
 
   public DietGroup(String name, Item icon, Color color, float defaultValue, int order,
-                   double gainMultiplier, double decayMultiplier) {
+                   double gainMultiplier, double decayMultiplier, boolean beneficial) {
     this.name = name;
     this.icon = icon;
     this.color = color;
@@ -48,6 +49,7 @@ public final class DietGroup implements IDietGroup {
     this.order = order;
     this.gainMultiplier = gainMultiplier;
     this.decayMultiplier = decayMultiplier;
+    this.beneficial = beneficial;
     this.tag = ItemTags.createOptional(new ResourceLocation(DietMod.id(name)));
   }
 
@@ -84,6 +86,11 @@ public final class DietGroup implements IDietGroup {
   @Override
   public double getDecayMultiplier() {
     return decayMultiplier;
+  }
+
+  @Override
+  public boolean isBeneficial() {
+    return beneficial;
   }
 
   @Override
