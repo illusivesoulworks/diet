@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.common.util.PlayerSensitive;
 
@@ -14,11 +15,16 @@ import top.theillusivec4.diet.common.util.PlayerSensitive;
 @Mixin(FoodStats.class)
 public class MixinFoodStats implements PlayerSensitive {
 
-  PlayerEntity player;
+  PlayerEntity diet_player;
 
   @Inject(at = @At("TAIL"), method = "addStats(IF)V")
   public void diet$addStats(int healing, float saturationModifier, CallbackInfo ci) {
-    DietCapability.get(player).ifPresent(tracker -> {
+
+    if (diet_player == null) {
+      DietMod.LOGGER.error("Attempted to add food stats to a null player!");
+      return;
+    }
+    DietCapability.get(diet_player).ifPresent(tracker -> {
       ItemStack captured = tracker.getCapturedStack();
 
       if (!captured.isEmpty()) {
@@ -30,6 +36,6 @@ public class MixinFoodStats implements PlayerSensitive {
 
   @Override
   public void setPlayer(PlayerEntity playerIn) {
-    player = playerIn;
+    diet_player = playerIn;
   }
 }

@@ -38,6 +38,6 @@ public class DietCapability {
   }
 
   public static LazyOptional<IDietTracker> get(PlayerEntity player) {
-    return player.getCapability(DIET_TRACKER);
+    return player != null ? player.getCapability(DIET_TRACKER) : LazyOptional.empty();
   }
 }
