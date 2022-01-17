@@ -111,6 +111,14 @@
       "required": false
     },
     {
+      "id": "rankine:aged_cheese",
+      "required": false
+    },
+    {
+      "id": "rankine:unaged_cheese",
+      "required": false
+    },
+    {
       "id": "seasonals:pumpkin_cake",
       "required": false
     },

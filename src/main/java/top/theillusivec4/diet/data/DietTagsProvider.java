@@ -379,7 +379,19 @@ public class DietTagsProvider extends ItemTagsProvider {
         "create_confectionery:black_chocolate_glazed_berries",
         "create_confectionery:white_chocolate_glazed_berries",
         "create_confectionery:ruby_chocolate_glazed_berries",
-        "create_confectionery:caramel_glazed_berries"
+        "create_confectionery:caramel_glazed_berries",
+        "roses:rose_hips",
+        "rankine:elderberries",
+        "rankine:snowberries",
+        "rankine:blueberries",
+        "rankine:strawberries",
+        "rankine:blackberries",
+        "rankine:cranberries",
+        "rankine:raspberries",
+        "rankine:pineapple",
+        "rankine:banana_yucca",
+        "rankine:juniper_berries",
+        "rankine:coconut"
     );
 
     for (String element : optionalElements) {
@@ -542,7 +554,13 @@ public class DietTagsProvider extends ItemTagsProvider {
         "xercamod:sweet_berry_pie",
         "simpledelights:strawberry_shortcake",
         "simpledelights:plum_pudding",
-        "simpledelights:fruit_tart"
+        "simpledelights:fruit_tart",
+        "rankine:rice",
+        "rankine:rice_flour",
+        "rankine:wheat_flour",
+        "rankine:corn_flour",
+        "rankine:pancake_batter",
+        "rankine:cake_slice"
     );
 
     for (String element : optionalElements) {
@@ -943,7 +961,11 @@ public class DietTagsProvider extends ItemTagsProvider {
         "wyrmroost:desert_wyrm",
         "xercamod:doner_slice",
         "simplefarming:raw_chicken_wings",
-        "simplefarming:raw_bacon"
+        "simplefarming:raw_bacon",
+        "rankine:black_walnut",
+        "rankine:cheese",
+        "rankine:aged_cheese",
+        "rankine:unaged_cheese"
     );
 
     for (String element : optionalElements) {
@@ -1159,7 +1181,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "create_confectionery:black_chocolate_glazed_berries",
         "create_confectionery:white_chocolate_glazed_berries",
         "create_confectionery:ruby_chocolate_glazed_berries",
-        "create_confectionery:caramel_glazed_berries"
+        "create_confectionery:caramel_glazed_berries",
+        "rankine:maple_syrup",
+        "rankine:cake_slice"
     );
 
     for (String element : optionalElements) {
@@ -1474,7 +1498,10 @@ public class DietTagsProvider extends ItemTagsProvider {
         "vanillafoodpantry:roasted_eggplant",
         "simplecorn:corncob",
         "habitat:kabloom_pulp",
-        "habitat:dried_ball_cactus"
+        "habitat:dried_ball_cactus",
+        "rankine:aloe",
+        "rankine:asparagus",
+        "rankine:corn_ear"
     );
 
     for (String element : optionalElements) {
@@ -1585,7 +1612,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "vanillacookbook:pancake_stack",
         "vanillacookbook:brownie_tray",
         "xercamod:item_apple_pie",
-        "xercamod:sweet_berry_pie"
+        "xercamod:sweet_berry_pie",
+        "rankine:aged_cheese",
+        "rankine:unaged_cheese"
     );
     for (String element : optionalElements) {
       addOptional(this.specialFood, element);

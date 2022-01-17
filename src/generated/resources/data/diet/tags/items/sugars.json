@@ -455,6 +455,14 @@
       "required": false
     },
     {
+      "id": "rankine:cake_slice",
+      "required": false
+    },
+    {
+      "id": "rankine:maple_syrup",
+      "required": false
+    },
+    {
       "id": "rats:treacle",
       "required": false
     },

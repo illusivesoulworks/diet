@@ -328,6 +328,30 @@
       "required": false
     },
     {
+      "id": "rankine:cake_slice",
+      "required": false
+    },
+    {
+      "id": "rankine:corn_flour",
+      "required": false
+    },
+    {
+      "id": "rankine:pancake_batter",
+      "required": false
+    },
+    {
+      "id": "rankine:rice",
+      "required": false
+    },
+    {
+      "id": "rankine:rice_flour",
+      "required": false
+    },
+    {
+      "id": "rankine:wheat_flour",
+      "required": false
+    },
+    {
       "id": "seasonals:pumpkin_cake",
       "required": false
     },

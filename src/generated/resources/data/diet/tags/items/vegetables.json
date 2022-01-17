@@ -843,6 +843,18 @@
       "required": false
     },
     {
+      "id": "rankine:aloe",
+      "required": false
+    },
+    {
+      "id": "rankine:asparagus",
+      "required": false
+    },
+    {
+      "id": "rankine:corn_ear",
+      "required": false
+    },
+    {
       "id": "rats:confit_byaldi",
       "required": false
     },

@@ -749,6 +749,50 @@
       "required": false
     },
     {
+      "id": "rankine:banana_yucca",
+      "required": false
+    },
+    {
+      "id": "rankine:blackberries",
+      "required": false
+    },
+    {
+      "id": "rankine:blueberries",
+      "required": false
+    },
+    {
+      "id": "rankine:coconut",
+      "required": false
+    },
+    {
+      "id": "rankine:cranberries",
+      "required": false
+    },
+    {
+      "id": "rankine:elderberries",
+      "required": false
+    },
+    {
+      "id": "rankine:juniper_berries",
+      "required": false
+    },
+    {
+      "id": "rankine:pineapple",
+      "required": false
+    },
+    {
+      "id": "rankine:raspberries",
+      "required": false
+    },
+    {
+      "id": "rankine:snowberries",
+      "required": false
+    },
+    {
+      "id": "rankine:strawberries",
+      "required": false
+    },
+    {
       "id": "rootsclassic:blackcurrant",
       "required": false
     },
@@ -766,6 +810,10 @@
     },
     {
       "id": "rootsclassic:whitecurrant",
+      "required": false
+    },
+    {
+      "id": "roses:rose_hips",
       "required": false
     },
     {

@@ -1249,6 +1249,22 @@
       "required": false
     },
     {
+      "id": "rankine:aged_cheese",
+      "required": false
+    },
+    {
+      "id": "rankine:black_walnut",
+      "required": false
+    },
+    {
+      "id": "rankine:cheese",
+      "required": false
+    },
+    {
+      "id": "rankine:unaged_cheese",
+      "required": false
+    },
+    {
       "id": "rats:blue_cheese",
       "required": false
     },
