@@ -20,20 +20,20 @@ public class DietMixinServerPlayerGameMode {
   @Inject(
       at = @At(
           value = "INVOKE",
-          target = "net/minecraft/world/level/block/state/BlockState.use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;"),
+          target = "net/minecraft/world/level/block/state/BlockState.use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;"),
       method = "useItemOn")
   public void diet$preBlockActivated(ServerPlayer player, Level world, ItemStack stack,
                                      InteractionHand hand, BlockHitResult result,
                                      CallbackInfoReturnable<InteractionResult> cir) {
     DietCapability.get(player).ifPresent(tracker -> tracker.captureStack(
         player.level.getBlockState(result.getBlockPos())
-            .getPickBlock(result, world, result.getBlockPos(), player)));
+            .getCloneItemStack(result, world, result.getBlockPos(), player)));
   }
 
   @Inject(
       at = @At(
           value = "INVOKE_ASSIGN",
-          target = "net/minecraft/world/level/block/state/BlockState.use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;"),
+          target = "net/minecraft/world/level/block/state/BlockState.use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;"),
       method = "useItemOn")
   public void diet$postBlockActivated(ServerPlayer player, Level world, ItemStack stack,
                                       InteractionHand hand, BlockHitResult result,

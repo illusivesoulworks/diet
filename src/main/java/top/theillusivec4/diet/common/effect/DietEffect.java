@@ -29,7 +29,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.effect.MobEffect;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.common.integration.IntegrationManager;
-import top.theillusivec4.diet.common.integration.OriginsIntegration;
 
 public class DietEffect {
 
@@ -93,12 +92,6 @@ public class DietEffect {
     }
 
     public int getMatches(Player player, Map<String, Float> values) {
-
-      if (IntegrationManager.isOriginsLoaded() &&
-          (!originsMatch.matches(origins, OriginsIntegration.getOrigins(player)) ||
-              !powersMatch.matches(powers, OriginsIntegration.getOriginPowers(player)))) {
-        return 0;
-      }
       return match.getMatches(groups, values, (float) above, (float) below);
     }
   }

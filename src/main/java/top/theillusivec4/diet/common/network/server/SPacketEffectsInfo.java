@@ -21,7 +21,7 @@ package top.theillusivec4.diet.common.network.server;
 import java.util.Objects;
 import java.util.function.Supplier;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.diet.client.DietScreen;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 

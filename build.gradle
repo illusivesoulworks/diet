@@ -25,10 +25,10 @@ version = "${mod_version}"
 group = "top.theillusivec4.diet"
 archivesBaseName = "diet-forge"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'parchment', version: '2021.12.12-1.17.1'
+    mappings channel: 'parchment', version: '2022.01.23-1.18.1'
 
     runs {
         client {
@@ -104,10 +104,9 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
-    compileOnly fg.deobf("curse.maven:origins-474438:${origins_file}")
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:3596034")
-    runtimeOnly fg.deobf("curse.maven:appleskin-248787:3512373")
+    runtimeOnly fg.deobf("curse.maven:jei-238222:3622553")
+    runtimeOnly fg.deobf("curse.maven:appleskin-248787:3549846")
 }
 
 sourceSets {

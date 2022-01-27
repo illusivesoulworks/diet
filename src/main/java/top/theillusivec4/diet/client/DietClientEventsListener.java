@@ -27,23 +27,23 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.ForgeTagHandler;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
@@ -62,8 +62,6 @@ import top.theillusivec4.diet.common.integration.CuriosIntegration;
 import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.util.DietResult;
 
-import net.minecraft.client.gui.components.Button.OnPress;
-
 @Mod.EventBusSubscriber(modid = DietMod.MOD_ID, value = Dist.CLIENT)
 public class DietClientEventsListener {
 
@@ -78,13 +76,13 @@ public class DietClientEventsListener {
 
   @SubscribeEvent
   @SuppressWarnings("unused")
-  public static void initGui(final GuiScreenEvent.InitGuiEvent.Post evt) {
-    Screen screen = evt.getGui();
+  public static void initGui(final ScreenEvent.InitScreenEvent.Post evt) {
+    Screen screen = evt.getScreen();
 
     if (screen instanceof InventoryScreen ||
         (IntegrationManager.isCuriosLoaded() && CuriosIntegration.isCuriosScreen(screen))) {
       AbstractContainerScreen<?> containerScreen = (AbstractContainerScreen<?>) screen;
-      evt.addWidget(new DynamicButton(containerScreen,
+      evt.addListener(new DynamicButton(containerScreen,
           containerScreen.getGuiLeft() + DietClientConfig.buttonX,
           containerScreen.height / 2 + DietClientConfig.buttonY, 20, 18, 0, 0, 19, ICONS,
           (button) -> Minecraft.getInstance().setScreen(new DietScreen(true))));
@@ -135,7 +133,8 @@ public class DietClientEventsListener {
             TranslatableComponent tooltip = null;
 
             if (specialFood) {
-              tooltip = new TranslatableComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName);
+              tooltip =
+                  new TranslatableComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName);
             } else if (value > 0.0f) {
               tooltip = new TranslatableComponent("tooltip." + DietMod.MOD_ID + ".group",
                   DECIMALFORMAT.format(entry.getValue() * 100), groupName);
@@ -170,7 +169,8 @@ public class DietClientEventsListener {
 
     private final AbstractContainerScreen<?> containerScreen;
 
-    public DynamicButton(AbstractContainerScreen<?> screenIn, int xIn, int yIn, int widthIn, int heightIn,
+    public DynamicButton(AbstractContainerScreen<?> screenIn, int xIn, int yIn, int widthIn,
+                         int heightIn,
                          int xTexStartIn, int yTexStartIn, int yDiffTextIn,
                          ResourceLocation resourceLocationIn, OnPress onPressIn) {
       super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn,

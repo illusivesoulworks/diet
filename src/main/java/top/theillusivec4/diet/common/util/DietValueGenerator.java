@@ -23,7 +23,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.OnDatapackSyncEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietGroup;
@@ -54,7 +54,7 @@ public class DietValueGenerator {
     }
   }
 
-  private static void serverStarting(final FMLServerStartingEvent evt) {
+  private static void serverStarting(final ServerStartingEvent evt) {
     DietValueGenerator.reload(evt.getServer());
   }
 
