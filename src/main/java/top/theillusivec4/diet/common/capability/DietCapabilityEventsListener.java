@@ -21,15 +21,15 @@ package top.theillusivec4.diet.common.capability;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Food;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -55,10 +55,10 @@ public class DietCapabilityEventsListener {
   @SuppressWarnings("unused")
   public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> evt) {
 
-    if (evt.getObject() instanceof PlayerEntity) {
-      final LazyOptional<IDietTracker> capability =
-          LazyOptional.of(() -> new PlayerDietTracker((PlayerEntity) evt.getObject()));
-      evt.addCapability(DietCapability.DIET_TRACKER_ID, new Provider(capability));
+    if (evt.getObject() instanceof Player player) {
+      final IDietTracker tracker = new PlayerDietTracker(player);
+      final LazyOptional<IDietTracker> capability = LazyOptional.of(() -> tracker);
+      evt.addCapability(DietCapability.DIET_TRACKER_ID, new Provider(tracker, capability));
       evt.addListener(capability::invalidate);
     }
   }
@@ -67,8 +67,7 @@ public class DietCapabilityEventsListener {
   @SuppressWarnings("unused")
   public static void playerClone(final PlayerEvent.Clone evt) {
 
-    if (evt.getPlayer() instanceof ServerPlayerEntity) {
-      ServerPlayerEntity player = (ServerPlayerEntity) evt.getPlayer();
+    if (evt.getPlayer() instanceof ServerPlayer player) {
       DietCapability.get(player)
           .ifPresent(diet -> DietCapability.get(evt.getOriginal()).ifPresent(originalDiet -> {
             Map<String, Float> originalValues = originalDiet.getValues();
@@ -110,8 +109,7 @@ public class DietCapabilityEventsListener {
   @SuppressWarnings("unused")
   public static void playerRespawned(final PlayerEvent.PlayerRespawnEvent evt) {
 
-    if (evt.getPlayer() instanceof ServerPlayerEntity) {
-      ServerPlayerEntity player = (ServerPlayerEntity) evt.getPlayer();
+    if (evt.getPlayer() instanceof ServerPlayer player) {
       DietCapability.get(player).ifPresent(IDietTracker::sync);
     }
   }
@@ -120,8 +118,7 @@ public class DietCapabilityEventsListener {
   @SuppressWarnings("unused")
   public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent evt) {
 
-    if (evt.getPlayer() instanceof ServerPlayerEntity) {
-      ServerPlayerEntity player = (ServerPlayerEntity) evt.getPlayer();
+    if (evt.getPlayer() instanceof ServerPlayer player) {
       DietCapability.get(player).ifPresent(IDietTracker::sync);
     }
   }
@@ -130,8 +127,7 @@ public class DietCapabilityEventsListener {
   @SuppressWarnings("unused")
   public static void playerDimensionTravel(final PlayerEvent.PlayerChangedDimensionEvent evt) {
 
-    if (evt.getPlayer() instanceof ServerPlayerEntity) {
-      ServerPlayerEntity player = (ServerPlayerEntity) evt.getPlayer();
+    if (evt.getPlayer() instanceof ServerPlayer player) {
       DietCapability.get(player).ifPresent(IDietTracker::sync);
     }
   }
@@ -151,24 +147,17 @@ public class DietCapabilityEventsListener {
     ItemStack stack = evt.getItem();
     LivingEntity livingEntity = evt.getEntityLiving();
 
-    if (!livingEntity.world.isRemote && livingEntity instanceof PlayerEntity) {
-      Food food = stack.getItem().getFood();
+    if (!livingEntity.level.isClientSide && livingEntity instanceof Player) {
+      FoodProperties food = stack.getItem().getFoodProperties();
 
       if (food != null) {
-        DietCapability.get((PlayerEntity) livingEntity).ifPresent(diet -> diet.consume(stack));
+        DietCapability.get((Player) livingEntity).ifPresent(diet -> diet.consume(stack));
       }
     }
   }
 
-  private static class Provider implements ICapabilitySerializable<INBT> {
-
-    private static final IDietTracker EMPTY_TRACKER = new DietTrackerCapability.EmptyDietTracker();
-
-    final LazyOptional<IDietTracker> capability;
-
-    public Provider(LazyOptional<IDietTracker> capability) {
-      this.capability = capability;
-    }
+  private record Provider(IDietTracker instance, LazyOptional<IDietTracker> capability)
+      implements ICapabilitySerializable<Tag> {
 
     @Nonnull
     @Override
@@ -183,21 +172,23 @@ public class DietCapabilityEventsListener {
     }
 
     @Override
-    public INBT serializeNBT() {
+    public Tag serializeNBT() {
 
-      if (DietCapability.DIET_TRACKER != null) {
-        return DietCapability.DIET_TRACKER.writeNBT(capability.orElse(EMPTY_TRACKER), null);
+      if (instance != null) {
+        CompoundTag tag = new CompoundTag();
+        instance.save(tag);
+        return tag;
       } else {
         DietMod.LOGGER.error("Missing Diet capability!");
-        return new CompoundNBT();
+        return new CompoundTag();
       }
     }
 
     @Override
-    public void deserializeNBT(INBT nbt) {
+    public void deserializeNBT(Tag nbt) {
 
-      if (DietCapability.DIET_TRACKER != null) {
-        DietCapability.DIET_TRACKER.readNBT(capability.orElse(EMPTY_TRACKER), null, nbt);
+      if (instance != null && nbt instanceof CompoundTag tag) {
+        instance.load(tag);
       } else {
         DietMod.LOGGER.error("Missing Diet capability!");
       }

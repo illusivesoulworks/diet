@@ -18,26 +18,25 @@
 
 package top.theillusivec4.diet;
 
-import net.minecraft.command.arguments.ArgumentSerializer;
-import net.minecraft.command.arguments.ArgumentTypes;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.data.DataGenerator;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.theillusivec4.diet.api.DietApi;
+import top.theillusivec4.diet.api.IDietTracker;
 import top.theillusivec4.diet.client.DietKeys;
-import top.theillusivec4.diet.common.capability.DietTrackerCapability;
 import top.theillusivec4.diet.common.command.DietCommand;
 import top.theillusivec4.diet.common.command.DietGroupArgument;
 import top.theillusivec4.diet.common.config.data.DietConfigReader;
-import top.theillusivec4.diet.common.impl.DietApiImpl;
 import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.network.DietNetwork;
 import top.theillusivec4.diet.common.util.DietOverride;
@@ -61,17 +60,17 @@ public class DietMod {
     eventBus.addListener(this::clientSetup);
     eventBus.addListener(this::process);
     eventBus.addListener(this::gatherData);
+    eventBus.addListener(this::registerCaps);
     DietConfigReader.setup();
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
-    DietTrackerCapability.setup();
     DietNetwork.setup();
     DietValueGenerator.setup();
     DietCommand.setup();
     IntegrationManager.setup();
     evt.enqueueWork(() -> ArgumentTypes.register(id("group"), DietGroupArgument.class,
-        new ArgumentSerializer<>(DietGroupArgument::group)));
+        new EmptyArgumentSerializer<>(DietGroupArgument::group)));
   }
 
   private void clientSetup(final FMLClientSetupEvent evt) {
@@ -92,5 +91,9 @@ public class DietMod {
       generator.addProvider(
           new DietTagsProvider(generator, blockTagsProvider, existingFileHelper));
     }
+  }
+
+  private void registerCaps(final RegisterCapabilitiesEvent evt) {
+    evt.register(IDietTracker.class);
   }
 }

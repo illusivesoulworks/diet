@@ -22,30 +22,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 
 public class DietTooltip {
 
-  public static List<ITextComponent> getEffects() {
+  public static List<Component> getEffects() {
     List<DietEffectsInfo.AttributeModifier> modifiers = DietScreen.tooltip.getModifiers();
     List<DietEffectsInfo.StatusEffect> effects = DietScreen.tooltip.getEffects();
 
     if (modifiers.isEmpty() && effects.isEmpty()) {
       return new ArrayList<>();
     }
-    List<ITextComponent> tooltips = new ArrayList<>();
-    tooltips.add(new TranslationTextComponent("tooltip.diet.effects"));
-    tooltips.add(StringTextComponent.EMPTY);
+    List<Component> tooltips = new ArrayList<>();
+    tooltips.add(new TranslatableComponent("tooltip.diet.effects"));
+    tooltips.add(TextComponent.EMPTY);
     Map<Attribute, AttributeTooltip> mergedAttributes = new HashMap<>();
 
     for (DietEffectsInfo.AttributeModifier modifier : modifiers) {
@@ -62,29 +62,29 @@ public class DietTooltip {
       addAttributeTooltip(tooltips, info.totalMultiplier - 1.0f,
           AttributeModifier.Operation.MULTIPLY_TOTAL, key);
     }
-    Map<Effect, Integer> mergedEffects = new HashMap<>();
+    Map<MobEffect, Integer> mergedEffects = new HashMap<>();
 
     for (DietEffectsInfo.StatusEffect effect : effects) {
       mergedEffects.compute(effect.getEffect(),
           (k, v) -> v == null ? effect.getAmplifier() : Math.max(v, effect.getAmplifier()));
     }
 
-    for (Map.Entry<Effect, Integer> effect : mergedEffects.entrySet()) {
-      Effect effect1 = effect.getKey();
-      IFormattableTextComponent iformattabletextcomponent =
-          new TranslationTextComponent(effect1.getName());
+    for (Map.Entry<MobEffect, Integer> effect : mergedEffects.entrySet()) {
+      MobEffect effect1 = effect.getKey();
+      MutableComponent iformattabletextcomponent =
+          new TranslatableComponent(effect1.getDescriptionId());
 
       if (effect.getValue() > 0) {
         iformattabletextcomponent =
-            new TranslationTextComponent("potion.withAmplifier", iformattabletextcomponent,
-                new TranslationTextComponent("potion.potency." + effect.getValue()));
+            new TranslatableComponent("potion.withAmplifier", iformattabletextcomponent,
+                new TranslatableComponent("potion.potency." + effect.getValue()));
       }
-      tooltips.add(iformattabletextcomponent.mergeStyle(effect1.getEffectType().getColor()));
+      tooltips.add(iformattabletextcomponent.withStyle(effect1.getCategory().getTooltipFormatting()));
     }
     return tooltips;
   }
 
-  private static void addAttributeTooltip(List<ITextComponent> tooltips, float amount,
+  private static void addAttributeTooltip(List<Component> tooltips, float amount,
                                           AttributeModifier.Operation operation,
                                           Attribute attribute) {
     double formattedAmount;
@@ -102,16 +102,16 @@ public class DietTooltip {
     }
 
     if (amount > 0.0D) {
-      tooltips.add((new TranslationTextComponent("attribute.modifier.plus." + operation.getId(),
-          ItemStack.DECIMALFORMAT.format(formattedAmount),
-          new TranslationTextComponent(attribute.getAttributeName())))
-          .mergeStyle(TextFormatting.BLUE));
+      tooltips.add((new TranslatableComponent("attribute.modifier.plus." + operation.toValue(),
+          ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(formattedAmount),
+          new TranslatableComponent(attribute.getDescriptionId())))
+          .withStyle(ChatFormatting.BLUE));
     } else if (amount < 0.0D) {
       formattedAmount = formattedAmount * -1.0D;
-      tooltips.add((new TranslationTextComponent("attribute.modifier.take." + operation.getId(),
-          ItemStack.DECIMALFORMAT.format(formattedAmount),
-          new TranslationTextComponent(attribute.getAttributeName())))
-          .mergeStyle(TextFormatting.RED));
+      tooltips.add((new TranslatableComponent("attribute.modifier.take." + operation.toValue(),
+          ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(formattedAmount),
+          new TranslatableComponent(attribute.getDescriptionId())))
+          .withStyle(ChatFormatting.RED));
     }
   }
 

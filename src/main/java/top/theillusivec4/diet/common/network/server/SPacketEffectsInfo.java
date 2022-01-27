@@ -20,8 +20,8 @@ package top.theillusivec4.diet.common.network.server;
 
 import java.util.Objects;
 import java.util.function.Supplier;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import top.theillusivec4.diet.client.DietScreen;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 
@@ -33,13 +33,13 @@ public class SPacketEffectsInfo {
     info = infoIn;
   }
 
-  public static void encode(SPacketEffectsInfo msg, PacketBuffer buf) {
-    buf.writeCompoundTag(msg.info.write());
+  public static void encode(SPacketEffectsInfo msg, FriendlyByteBuf buf) {
+    buf.writeNbt(msg.info.write());
   }
 
-  public static SPacketEffectsInfo decode(PacketBuffer buf) {
+  public static SPacketEffectsInfo decode(FriendlyByteBuf buf) {
     return new SPacketEffectsInfo(DietEffectsInfo.read(
-        Objects.requireNonNull(buf.readCompoundTag())));
+        Objects.requireNonNull(buf.readNbt())));
   }
 
   public static void handle(SPacketEffectsInfo msg, Supplier<NetworkEvent.Context> ctx) {

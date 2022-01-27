@@ -3,8 +3,8 @@ package top.theillusivec4.diet.api;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public abstract class DietApi {
 
@@ -20,7 +20,7 @@ public abstract class DietApi {
    * @param stack  The ItemStack involved
    * @return A set of diet groups
    */
-  public Set<IDietGroup> getGroups(PlayerEntity player, ItemStack stack) {
+  public Set<IDietGroup> getGroups(Player player, ItemStack stack) {
     return new HashSet<>();
   }
 
@@ -31,7 +31,7 @@ public abstract class DietApi {
    * @param stack  The ItemStack involved
    * @return A diet result
    */
-  public IDietResult get(PlayerEntity player, ItemStack stack) {
+  public IDietResult get(Player player, ItemStack stack) {
     return HashMap::new;
   }
 
@@ -44,7 +44,7 @@ public abstract class DietApi {
    * @param saturation The saturation modifier
    * @return A diet result
    */
-  public IDietResult get(PlayerEntity player, ItemStack stack, int food, float saturation) {
+  public IDietResult get(Player player, ItemStack stack, int food, float saturation) {
     return HashMap::new;
   }
 }

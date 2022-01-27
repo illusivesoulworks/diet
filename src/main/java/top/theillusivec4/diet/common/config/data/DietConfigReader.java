@@ -27,13 +27,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.IConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -201,13 +203,13 @@ public class DietConfigReader {
 
   @SubscribeEvent
   @SuppressWarnings("unused")
-  static void configLoad(final ModConfig.Loading evt) {
+  static void configLoad(final ModConfigEvent.Loading evt) {
     load(evt.getConfig());
   }
 
   @SubscribeEvent
   @SuppressWarnings("unused")
-  static void configReload(final ModConfig.Reloading evt) {
+  static void configReload(final ModConfigEvent.Reloading evt) {
     load(evt.getConfig());
   }
 
@@ -287,7 +289,7 @@ public class DietConfigReader {
     if (config.getModId().equals(DietMod.MOD_ID)) {
 
       if (config.getType() == ModConfig.Type.SERVER) {
-        ForgeConfigSpec spec = config.getSpec();
+        IConfigSpec<?> spec = config.getSpec();
         CommentedConfig configData = config.getConfigData();
 
         if (spec == GROUPS_SPEC) {
@@ -298,7 +300,7 @@ public class DietConfigReader {
           readServer();
         }
       } else if (config.getType() == ModConfig.Type.CLIENT) {
-        ForgeConfigSpec spec = config.getSpec();
+        IConfigSpec<?> spec = config.getSpec();
 
         if (spec == CLIENT_SPEC) {
           readClient();

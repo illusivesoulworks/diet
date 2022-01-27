@@ -1,33 +1,40 @@
 package top.theillusivec4.diet.common.integration;
 
-import io.github.apace100.origins.origin.Origin;
-import io.github.apace100.origins.origin.OriginLayer;
-import io.github.apace100.origins.power.PowerType;
+import io.github.edwinmindcraft.origins.api.capabilities.IOriginContainer;
+import io.github.edwinmindcraft.origins.api.origin.Origin;
+import io.github.edwinmindcraft.origins.api.origin.OriginLayer;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 
 public class OriginsIntegration {
 
-  public static Set<String> getOrigins(PlayerEntity player) {
+  public static Set<String> getOrigins(Player player) {
     Set<String> result = new HashSet<>();
+    IOriginContainer.get(player).ifPresent(originContainer -> {
+      for (Map.Entry<OriginLayer, Origin> entry : originContainer.getOrigins().entrySet()) {
+        ResourceLocation rl = entry.getValue().getRegistryName();
 
-    for (Map.Entry<OriginLayer, Origin> entry : Origin.get(player).entrySet()) {
-      result.add(entry.getValue().getIdentifier().toString());
-    }
+        if (rl != null) {
+          result.add(rl.toString());
+        }
+      }
+    });
     return result;
   }
 
-  public static Set<String> getOriginPowers(PlayerEntity player) {
+  public static Set<String> getOriginPowers(Player player) {
     Set<String> result = new HashSet<>();
+    IOriginContainer.get(player).ifPresent(originContainer -> {
+      for (Map.Entry<OriginLayer, Origin> entry : originContainer.getOrigins().entrySet()) {
 
-    for (Map.Entry<OriginLayer, Origin> entry : Origin.get(player).entrySet()) {
-
-      for (PowerType<?> powerType : entry.getValue().getPowerTypes()) {
-        result.add(powerType.getIdentifier().toString());
+        for (ResourceLocation powerType : entry.getValue().getPowers()) {
+          result.add(powerType.toString());
+        }
       }
-    }
+    });
     return result;
   }
 }

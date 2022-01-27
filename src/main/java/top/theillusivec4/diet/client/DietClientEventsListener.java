@@ -18,7 +18,7 @@
 
 package top.theillusivec4.diet.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -28,20 +28,20 @@ import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.ForgeTagHandler;
@@ -62,6 +62,8 @@ import top.theillusivec4.diet.common.integration.CuriosIntegration;
 import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.util.DietResult;
 
+import net.minecraft.client.gui.components.Button.OnPress;
+
 @Mod.EventBusSubscriber(modid = DietMod.MOD_ID, value = Dist.CLIENT)
 public class DietClientEventsListener {
 
@@ -81,11 +83,11 @@ public class DietClientEventsListener {
 
     if (screen instanceof InventoryScreen ||
         (IntegrationManager.isCuriosLoaded() && CuriosIntegration.isCuriosScreen(screen))) {
-      ContainerScreen<?> containerScreen = (ContainerScreen<?>) screen;
+      AbstractContainerScreen<?> containerScreen = (AbstractContainerScreen<?>) screen;
       evt.addWidget(new DynamicButton(containerScreen,
           containerScreen.getGuiLeft() + DietClientConfig.buttonX,
           containerScreen.height / 2 + DietClientConfig.buttonY, 20, 18, 0, 0, 19, ICONS,
-          (button) -> Minecraft.getInstance().displayGuiScreen(new DietScreen(true))));
+          (button) -> Minecraft.getInstance().setScreen(new DietScreen(true))));
     }
   }
 
@@ -93,22 +95,22 @@ public class DietClientEventsListener {
   @SuppressWarnings("unused")
   public static void tick(final TickEvent.ClientTickEvent evt) {
     Minecraft mc = Minecraft.getInstance();
-    ClientPlayerEntity player = mc.player;
+    LocalPlayer player = mc.player;
 
-    if (player != null && evt.phase == TickEvent.Phase.END && mc.isGameFocused() &&
-        !(mc.currentScreen instanceof DietScreen) && DietKeys.OPEN_GUI.isPressed()) {
-      mc.displayGuiScreen(new DietScreen(mc.currentScreen instanceof InventoryScreen));
+    if (player != null && evt.phase == TickEvent.Phase.END && mc.isWindowActive() &&
+        !(mc.screen instanceof DietScreen) && DietKeys.OPEN_GUI.consumeClick()) {
+      mc.setScreen(new DietScreen(mc.screen instanceof InventoryScreen));
     }
   }
 
   @SubscribeEvent
   @SuppressWarnings("unused")
   public static void tooltip(final ItemTooltipEvent evt) {
-    PlayerEntity player = evt.getPlayer();
-    List<ITextComponent> tooltips = evt.getToolTip();
+    Player player = evt.getPlayer();
+    List<Component> tooltips = evt.getToolTip();
     ItemStack stack = evt.getItemStack();
 
-    if (player != null && player.world != null) {
+    if (player != null && player.level != null) {
 
       if (DietServerConfig.hideTooltipsUntilEaten &&
           DietCapability.get(player).map(tracker -> !tracker.getEaten().contains(stack.getItem()))
@@ -122,30 +124,30 @@ public class DietClientEventsListener {
         boolean specialFood = SPECIAL_FOOD.contains(stack.getItem());
 
         if (!groups.isEmpty()) {
-          List<ITextComponent> groupsTooltips = new ArrayList<>();
-          List<ITextComponent> beneficial = new ArrayList<>();
-          List<ITextComponent> harmful = new ArrayList<>();
+          List<Component> groupsTooltips = new ArrayList<>();
+          List<Component> beneficial = new ArrayList<>();
+          List<Component> harmful = new ArrayList<>();
 
           for (Map.Entry<IDietGroup, Float> entry : groups.entrySet()) {
             float value = entry.getValue();
-            TranslationTextComponent groupName = new TranslationTextComponent(
+            TranslatableComponent groupName = new TranslatableComponent(
                 "groups." + DietMod.MOD_ID + "." + entry.getKey().getName() + ".name");
-            TranslationTextComponent tooltip = null;
+            TranslatableComponent tooltip = null;
 
             if (specialFood) {
-              tooltip = new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName);
+              tooltip = new TranslatableComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName);
             } else if (value > 0.0f) {
-              tooltip = new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".group",
+              tooltip = new TranslatableComponent("tooltip." + DietMod.MOD_ID + ".group",
                   DECIMALFORMAT.format(entry.getValue() * 100), groupName);
             }
 
             if (tooltip != null) {
 
               if (entry.getKey().isBeneficial()) {
-                tooltip.mergeStyle(TextFormatting.GREEN);
+                tooltip.withStyle(ChatFormatting.GREEN);
                 beneficial.add(tooltip);
               } else {
-                tooltip.mergeStyle(TextFormatting.RED);
+                tooltip.withStyle(ChatFormatting.RED);
                 harmful.add(tooltip);
               }
             }
@@ -154,9 +156,9 @@ public class DietClientEventsListener {
           groupsTooltips.addAll(harmful);
 
           if (!groupsTooltips.isEmpty()) {
-            tooltips.add(StringTextComponent.EMPTY);
-            tooltips.add(new TranslationTextComponent("tooltip." + DietMod.MOD_ID + ".eaten")
-                .mergeStyle(TextFormatting.GRAY));
+            tooltips.add(TextComponent.EMPTY);
+            tooltips.add(new TranslatableComponent("tooltip." + DietMod.MOD_ID + ".eaten")
+                .withStyle(ChatFormatting.GRAY));
             tooltips.addAll(groupsTooltips);
           }
         }
@@ -166,31 +168,31 @@ public class DietClientEventsListener {
 
   public static class DynamicButton extends ImageButton {
 
-    private final ContainerScreen<?> containerScreen;
+    private final AbstractContainerScreen<?> containerScreen;
 
-    public DynamicButton(ContainerScreen<?> screenIn, int xIn, int yIn, int widthIn, int heightIn,
+    public DynamicButton(AbstractContainerScreen<?> screenIn, int xIn, int yIn, int widthIn, int heightIn,
                          int xTexStartIn, int yTexStartIn, int yDiffTextIn,
-                         ResourceLocation resourceLocationIn, IPressable onPressIn) {
+                         ResourceLocation resourceLocationIn, OnPress onPressIn) {
       super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn,
           onPressIn);
       containerScreen = screenIn;
     }
 
     @Override
-    public void renderWidget(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY,
+    public void renderButton(@Nonnull PoseStack matrixStack, int mouseX, int mouseY,
                              float partialTicks) {
       x = containerScreen.getGuiLeft() + DietClientConfig.buttonX;
       y = containerScreen.getGuiTop() + DietClientConfig.buttonY + 83;
-      super.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
+      super.renderButton(matrixStack, mouseX, mouseY, partialTicks);
     }
 
     @Override
-    public void renderToolTip(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY) {
-      List<ITextComponent> tooltips = DietTooltip.getEffects();
+    public void renderToolTip(@Nonnull PoseStack matrixStack, int mouseX, int mouseY) {
+      List<Component> tooltips = DietTooltip.getEffects();
 
       if (!tooltips.isEmpty()) {
-        containerScreen.renderWrappedToolTip(matrixStack, tooltips, mouseX, mouseY,
-            Minecraft.getInstance().fontRenderer);
+        containerScreen.renderComponentTooltip(matrixStack, tooltips, mouseX, mouseY,
+            Minecraft.getInstance().font);
       }
     }
   }

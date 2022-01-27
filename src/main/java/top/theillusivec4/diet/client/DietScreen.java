@@ -19,27 +19,28 @@
 package top.theillusivec4.diet.client;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
 import java.awt.Color;
 import java.util.List;
 import javax.annotation.Nonnull;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.LanguageMap;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.GuiUtils;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.api.IDietGroup;
@@ -61,7 +62,7 @@ public class DietScreen extends Screen {
   private final boolean fromInventory;
 
   public DietScreen(boolean fromInventory) {
-    super(new TranslationTextComponent("gui." + DietMod.MOD_ID + ".title"));
+    super(new TranslatableComponent("gui." + DietMod.MOD_ID + ".title"));
     this.xSize = 248;
     this.ySize = DietGroups.get().size() * 20 + 60;
     this.fromInventory = fromInventory;
@@ -70,70 +71,71 @@ public class DietScreen extends Screen {
   @Override
   protected void init() {
     super.init();
-    this.addButton(
+    this.addRenderableWidget(
         new Button(this.width / 2 - 50, (this.height + this.ySize) / 2 - 30,
-            100, 20, new TranslationTextComponent("gui.diet.close"), (p_213002_1_) -> {
+            100, 20, new TranslatableComponent("gui.diet.close"), (p_213002_1_) -> {
           if (this.minecraft != null && this.minecraft.player != null) {
 
             if (fromInventory) {
-              this.minecraft.displayGuiScreen(new InventoryScreen(this.minecraft.player));
+              this.minecraft.setScreen(new InventoryScreen(this.minecraft.player));
             } else {
-              this.closeScreen();
+              this.onClose();
             }
           }
         }));
   }
 
   @Override
-  public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+  public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
     this.renderBackground(matrixStack);
     this.renderForeground(matrixStack, mouseX, mouseY);
     this.renderTitle(matrixStack, mouseX, mouseY);
     super.render(matrixStack, mouseX, mouseY, partialTicks);
   }
 
-  public void renderTitle(MatrixStack matrixStack, int mouseX, int mouseY) {
-    int titleWidth = this.font.getStringWidth(this.title.getString());
+  public void renderTitle(PoseStack matrixStack, int mouseX, int mouseY) {
+    int titleWidth = this.font.width(this.title.getString());
     this.font
-        .drawText(matrixStack, this.title, (float) this.width / 2 - (float) titleWidth / 2,
+        .draw(matrixStack, this.title, (float) this.width / 2 - (float) titleWidth / 2,
             (float) this.height / 2 - (float) this.ySize / 2 + 10, DietClientConfig.textColor);
     List<DietEffectsInfo.AttributeModifier> modifiers = DietScreen.tooltip.getModifiers();
     List<DietEffectsInfo.StatusEffect> effects = DietScreen.tooltip.getEffects();
 
     if (this.minecraft != null && (!modifiers.isEmpty() || !effects.isEmpty())) {
-      this.minecraft.getTextureManager().bindTexture(ICONS);
+      RenderSystem.setShaderTexture(0, ICONS);
       int lowerX = this.width / 2 + titleWidth / 2 + 5;
       int lowerY = this.height / 2 - this.ySize / 2 + 7;
       int upperX = lowerX + 16;
       int upperY = lowerY + 16;
-      AbstractGui
+      GuiComponent
           .blit(matrixStack, lowerX, lowerY,
               16, 16, 0, 37, 16, 16, 256, 256);
 
       if (mouseX >= lowerX && mouseX <= upperX && mouseY >= lowerY && mouseY <= upperY) {
-        List<ITextComponent> tooltips = DietTooltip.getEffects();
-        GuiUtils.drawHoveringText(matrixStack, tooltips, mouseX, mouseY, width, height, -1, font);
+        List<Component> tooltips = DietTooltip.getEffects();
+        this.renderComponentTooltip(matrixStack, tooltips, mouseX, mouseY);
       }
     }
   }
 
-  public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+  public void renderForeground(PoseStack matrixStack, int mouseX, int mouseY) {
 
     if (this.minecraft != null) {
-      ClientPlayerEntity player = this.minecraft.player;
+      LocalPlayer player = this.minecraft.player;
 
       if (player != null) {
         DietCapability.get(player).ifPresent(diet -> {
           int y = this.height / 2 - this.ySize / 2 + 25;
           int x = this.width / 2 - this.xSize / 2 + 10;
-          ITextComponent tooltip = null;
+          Component tooltip = null;
 
           for (IDietGroup group : DietGroups.get()) {
-            this.itemRenderer.renderItemIntoGUI(new ItemStack(group.getIcon()), x, y - 5);
-            TranslationTextComponent text = new TranslationTextComponent(
+            this.itemRenderer.renderGuiItem(new ItemStack(group.getIcon()), x, y - 5);
+            TranslatableComponent text = new TranslatableComponent(
                 "groups." + DietMod.MOD_ID + "." + group.getName() + ".name");
-            this.font.drawText(matrixStack, text, x + 20, y, DietClientConfig.textColor);
-            this.minecraft.getTextureManager().bindTexture(ICONS);
+            this.font.draw(matrixStack, text, x + 20, y, DietClientConfig.textColor);
+            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            RenderSystem.setShaderTexture(0, ICONS);
             Color color = diet.isActive() ? group.getColor() : Color.gray;
             int red = color.getRed();
             int green = color.getGreen();
@@ -151,12 +153,12 @@ public class DietScreen extends Screen {
             }
             int xPos = x + 200;
             int yPos = y + 1;
-            this.font.drawString(matrixStack, percentText, (float) (xPos + 1), (float) yPos, 0);
-            this.font.drawString(matrixStack, percentText, (float) (xPos - 1), (float) yPos, 0);
-            this.font.drawString(matrixStack, percentText, (float) xPos, (float) (yPos + 1), 0);
-            this.font.drawString(matrixStack, percentText, (float) xPos, (float) (yPos - 1), 0);
+            this.font.draw(matrixStack, percentText, (float) (xPos + 1), (float) yPos, 0);
+            this.font.draw(matrixStack, percentText, (float) (xPos - 1), (float) yPos, 0);
+            this.font.draw(matrixStack, percentText, (float) xPos, (float) (yPos + 1), 0);
+            this.font.draw(matrixStack, percentText, (float) xPos, (float) (yPos - 1), 0);
             this.font
-                .drawString(matrixStack, percentText, (float) xPos, (float) yPos, color.getRGB());
+                .draw(matrixStack, percentText, (float) xPos, (float) yPos, color.getRGB());
             int lowerY = y - 5;
             int upperX = x + 16;
             int upperY = lowerY + 16;
@@ -164,17 +166,16 @@ public class DietScreen extends Screen {
             if (mouseX >= x && mouseX <= upperX && mouseY >= lowerY && mouseY <= upperY) {
               String key = "groups." + DietMod.MOD_ID + "." + group.getName() + ".tooltip";
 
-              if (LanguageMap.getInstance().func_230506_b_(key)) {
-                tooltip = new TranslationTextComponent(key);
+              if (Language.getInstance().has(key)) {
+                tooltip = new TranslatableComponent(key);
               }
             }
             y += 20;
           }
 
           if (tooltip != null) {
-            List<ITextComponent> tooltips = Lists.newArrayList(tooltip);
-            GuiUtils.drawHoveringText(matrixStack, tooltips, mouseX, mouseY, width, height, -1,
-                font);
+            List<Component> tooltips = Lists.newArrayList(tooltip);
+            this.renderComponentTooltip(matrixStack, tooltips, mouseX, mouseY);
           }
         });
       }
@@ -182,17 +183,17 @@ public class DietScreen extends Screen {
   }
 
   @Override
-  public void renderBackground(@Nonnull MatrixStack matrixStack) {
+  public void renderBackground(@Nonnull PoseStack matrixStack) {
     super.renderBackground(matrixStack);
 
     if (this.minecraft != null) {
-      this.minecraft.getTextureManager().bindTexture(BACKGROUND);
+      RenderSystem.setShaderTexture(0, BACKGROUND);
       int i = (this.width - this.xSize) / 2;
       int j = (this.height - this.ySize) / 2;
-      AbstractGui.blit(matrixStack, i, j, this.xSize, 4, 0, 0, 248, 4, 256, 256);
-      AbstractGui
+      GuiComponent.blit(matrixStack, i, j, this.xSize, 4, 0, 0, 248, 4, 256, 256);
+      GuiComponent
           .blit(matrixStack, i, j + 4, this.xSize, this.ySize - 8, 0, 4, 248, 24, 256, 256);
-      AbstractGui
+      GuiComponent
           .blit(matrixStack, i, j + this.ySize - 4, this.xSize, 4, 0, 162, 248, 4, 256, 256);
     }
   }
@@ -202,15 +203,15 @@ public class DietScreen extends Screen {
 
     if (this.minecraft != null && this.minecraft.player != null) {
 
-      if (this.minecraft.gameSettings.keyBindInventory.matchesKey(keyCode, scanCode)) {
-        this.minecraft.displayGuiScreen(new InventoryScreen(this.minecraft.player));
+      if (this.minecraft.options.keyInventory.matches(keyCode, scanCode)) {
+        this.minecraft.setScreen(new InventoryScreen(this.minecraft.player));
         return true;
-      } else if (DietKeys.OPEN_GUI.matchesKey(keyCode, scanCode)) {
+      } else if (DietKeys.OPEN_GUI.matches(keyCode, scanCode)) {
 
         if (fromInventory) {
-          this.minecraft.displayGuiScreen(new InventoryScreen(this.minecraft.player));
+          this.minecraft.setScreen(new InventoryScreen(this.minecraft.player));
         } else {
-          this.closeScreen();
+          this.onClose();
         }
         return true;
       }
@@ -223,8 +224,7 @@ public class DietScreen extends Screen {
     return false;
   }
 
-  @SuppressWarnings("deprecation")
-  private static void coloredBlit(MatrixStack matrixStack, int x, int y, int width, int height,
+  private static void coloredBlit(PoseStack matrixStack, int x, int y, int width, int height,
                                   float uOffset, float vOffset, int uWidth, int vHeight,
                                   int textureWidth, int textureHeight, int red, int green, int blue,
                                   int alpha) {
@@ -234,19 +234,18 @@ public class DietScreen extends Screen {
     float maxU = (uOffset + (float) uWidth) / (float) textureWidth;
     float minV = (vOffset + 0.0F) / (float) textureHeight;
     float maxV = (vOffset + (float) vHeight) / (float) textureHeight;
-    Matrix4f matrix = matrixStack.getLast().getMatrix();
-    BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
-    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR_TEX);
-    bufferbuilder.pos(matrix, (float) x, (float) y2, 0).color(red, green, blue, alpha)
-        .tex(minU, maxV).endVertex();
-    bufferbuilder.pos(matrix, (float) x2, (float) y2, 0).color(red, green, blue, alpha)
-        .tex(maxU, maxV).endVertex();
-    bufferbuilder.pos(matrix, (float) x2, (float) y, 0).color(red, green, blue, alpha)
-        .tex(maxU, minV).endVertex();
-    bufferbuilder.pos(matrix, (float) x, (float) y, 0).color(red, green, blue, alpha)
-        .tex(minU, minV).endVertex();
-    bufferbuilder.finishDrawing();
-    RenderSystem.enableAlphaTest();
-    WorldVertexBufferUploader.draw(bufferbuilder);
+    Matrix4f matrix = matrixStack.last().pose();
+    BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+    bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
+    bufferbuilder.vertex(matrix, (float) x, (float) y2, 0).color(red, green, blue, alpha)
+        .uv(minU, maxV).endVertex();
+    bufferbuilder.vertex(matrix, (float) x2, (float) y2, 0).color(red, green, blue, alpha)
+        .uv(maxU, maxV).endVertex();
+    bufferbuilder.vertex(matrix, (float) x2, (float) y, 0).color(red, green, blue, alpha)
+        .uv(maxU, minV).endVertex();
+    bufferbuilder.vertex(matrix, (float) x, (float) y, 0).color(red, green, blue, alpha)
+        .uv(minU, minV).endVertex();
+    bufferbuilder.end();
+    BufferUploader.end(bufferbuilder);
   }
 }

@@ -23,10 +23,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effect;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffect;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.common.integration.IntegrationManager;
 import top.theillusivec4.diet.common.integration.OriginsIntegration;
@@ -60,10 +60,10 @@ public class DietEffect {
   }
 
   public static class DietStatusEffect {
-    public final Effect effect;
+    public final MobEffect effect;
     public final int power;
 
-    public DietStatusEffect(Effect effect, int power) {
+    public DietStatusEffect(MobEffect effect, int power) {
       this.effect = effect;
       this.power = power;
     }
@@ -92,7 +92,7 @@ public class DietEffect {
       this.powersMatch = powersMatch;
     }
 
-    public int getMatches(PlayerEntity player, Map<String, Float> values) {
+    public int getMatches(Player player, Map<String, Float> values) {
 
       if (IntegrationManager.isOriginsLoaded() &&
           (!originsMatch.matches(origins, OriginsIntegration.getOrigins(player)) ||

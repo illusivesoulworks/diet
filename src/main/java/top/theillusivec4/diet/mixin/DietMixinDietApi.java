@@ -9,7 +9,7 @@ import top.theillusivec4.diet.common.impl.DietApiImpl;
 
 @SuppressWarnings("unused")
 @Mixin(DietApi.class)
-public class MixinDietApi {
+public class DietMixinDietApi {
 
   private static final DietApi IMPL = new DietApiImpl();
 

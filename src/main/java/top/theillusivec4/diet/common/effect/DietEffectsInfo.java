@@ -21,13 +21,13 @@ package top.theillusivec4.diet.common.effect;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DietEffectsInfo {
@@ -36,21 +36,21 @@ public class DietEffectsInfo {
   private final List<StatusEffect> effects = new ArrayList<>();
 
   public void addModifier(Attribute attribute,
-                          net.minecraft.entity.ai.attributes.AttributeModifier.Operation operation,
+                          net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation operation,
                           float amount) {
     modifiers.add(new AttributeModifier(attribute, operation, amount));
   }
 
   public void addModifier(Attribute attribute,
-                          net.minecraft.entity.ai.attributes.AttributeModifier modifier) {
+                          net.minecraft.world.entity.ai.attributes.AttributeModifier modifier) {
     modifiers.add(new AttributeModifier(attribute, modifier));
   }
 
-  public void addEffect(Effect effect, int amplifier) {
+  public void addEffect(MobEffect effect, int amplifier) {
     effects.add(new StatusEffect(effect, amplifier));
   }
 
-  public void addEffect(EffectInstance effectInstance) {
+  public void addEffect(MobEffectInstance effectInstance) {
     effects.add(new StatusEffect(effectInstance));
   }
 
@@ -62,22 +62,22 @@ public class DietEffectsInfo {
     return effects;
   }
 
-  public CompoundNBT write() {
-    CompoundNBT tag = new CompoundNBT();
-    ListNBT modifiersList = new ListNBT();
+  public CompoundTag write() {
+    CompoundTag tag = new CompoundTag();
+    ListTag modifiersList = new ListTag();
 
     for (AttributeModifier modifier : modifiers) {
-      CompoundNBT modifierTag = new CompoundNBT();
+      CompoundTag modifierTag = new CompoundTag();
       modifierTag.putString("AttributeName",
           Objects.requireNonNull(modifier.attribute.getRegistryName()).toString());
       modifierTag.putFloat("Amount", modifier.amount);
-      modifierTag.putInt("Operation", modifier.operation.getId());
+      modifierTag.putInt("Operation", modifier.operation.toValue());
       modifiersList.add(modifierTag);
     }
-    ListNBT effectsList = new ListNBT();
+    ListTag effectsList = new ListTag();
 
     for (StatusEffect effect : effects) {
-      CompoundNBT effectTag = new CompoundNBT();
+      CompoundTag effectTag = new CompoundTag();
       effectTag.putString("EffectName",
           Objects.requireNonNull(effect.effect.getRegistryName()).toString());
       effectTag.putInt("Amplifier", effect.amplifier);
@@ -88,12 +88,12 @@ public class DietEffectsInfo {
     return tag;
   }
 
-  public static DietEffectsInfo read(CompoundNBT tag) {
+  public static DietEffectsInfo read(CompoundTag tag) {
     DietEffectsInfo info = new DietEffectsInfo();
-    ListNBT modifiersList = tag.getList("Modifiers", Constants.NBT.TAG_COMPOUND);
+    ListTag modifiersList = tag.getList("Modifiers", Tag.TAG_COMPOUND);
 
     for (int i = 0; i < modifiersList.size(); i++) {
-      CompoundNBT modifierTag = modifiersList.getCompound(i);
+      CompoundTag modifierTag = modifiersList.getCompound(i);
       String name = modifierTag.getString("AttributeName");
       Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(name));
 
@@ -101,17 +101,17 @@ public class DietEffectsInfo {
         continue;
       }
       float amount = modifierTag.getFloat("Amount");
-      net.minecraft.entity.ai.attributes.AttributeModifier.Operation operation =
-          net.minecraft.entity.ai.attributes.AttributeModifier.Operation
-              .byId(modifierTag.getInt("Operation"));
+      net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation operation =
+          net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation
+              .fromValue(modifierTag.getInt("Operation"));
       info.addModifier(attribute, operation, amount);
     }
-    ListNBT effectsList = tag.getList("Effects", Constants.NBT.TAG_COMPOUND);
+    ListTag effectsList = tag.getList("Effects", Tag.TAG_COMPOUND);
 
     for (int i = 0; i < effectsList.size(); i++) {
-      CompoundNBT effectTag = effectsList.getCompound(i);
+      CompoundTag effectTag = effectsList.getCompound(i);
       String name = effectTag.getString("EffectName");
-      Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(name));
+      MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(name));
 
       if (effect == null) {
         continue;
@@ -125,11 +125,11 @@ public class DietEffectsInfo {
   public static final class AttributeModifier {
 
     private final Attribute attribute;
-    private final net.minecraft.entity.ai.attributes.AttributeModifier.Operation operation;
+    private final net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation operation;
     private final float amount;
 
     private AttributeModifier(Attribute attributeIn,
-                              net.minecraft.entity.ai.attributes.AttributeModifier.Operation operationIn,
+                              net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation operationIn,
                               float amountIn) {
       attribute = attributeIn;
       operation = operationIn;
@@ -137,7 +137,7 @@ public class DietEffectsInfo {
     }
 
     private AttributeModifier(Attribute attributeIn,
-                              net.minecraft.entity.ai.attributes.AttributeModifier modifier) {
+                              net.minecraft.world.entity.ai.attributes.AttributeModifier modifier) {
       attribute = attributeIn;
       operation = modifier.getOperation();
       amount = (float) modifier.getAmount();
@@ -147,7 +147,7 @@ public class DietEffectsInfo {
       return attribute;
     }
 
-    public net.minecraft.entity.ai.attributes.AttributeModifier.Operation getOperation() {
+    public net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation getOperation() {
       return operation;
     }
 
@@ -158,20 +158,20 @@ public class DietEffectsInfo {
 
   public static final class StatusEffect {
 
-    private final Effect effect;
+    private final MobEffect effect;
     private final int amplifier;
 
-    private StatusEffect(Effect effectIn, int amplifierIn) {
+    private StatusEffect(MobEffect effectIn, int amplifierIn) {
       effect = effectIn;
       amplifier = amplifierIn;
     }
 
-    private StatusEffect(EffectInstance effectInstance) {
-      effect = effectInstance.getPotion();
+    private StatusEffect(MobEffectInstance effectInstance) {
+      effect = effectInstance.getEffect();
       amplifier = effectInstance.getAmplifier();
     }
 
-    public Effect getEffect() {
+    public MobEffect getEffect() {
       return effect;
     }
 

@@ -10,20 +10,20 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.OnDatapackSyncEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietGroup;
@@ -69,9 +69,9 @@ public class DietValueGenerator {
     Set<IDietGroup> groups = DietGroups.get();
     items:
     for (Item item : ForgeRegistries.ITEMS) {
-      Food food = item.getFood();
+      FoodProperties food = item.getFoodProperties();
 
-      if ((food != null && food.getHealing() > 0) || SPECIAL_FOOD.contains(item)) {
+      if ((food != null && food.getNutrition() > 0) || SPECIAL_FOOD.contains(item)) {
 
         for (IDietGroup group : groups) {
 
@@ -84,17 +84,17 @@ public class DietValueGenerator {
     }
     DietMod.LOGGER.info("Found {} ungrouped food items", ungroupedFood.size());
     DietMod.LOGGER.info("Finding recipes...");
-    Map<Item, IRecipe<?>> recipes = new HashMap<>();
-    List<IRecipe<?>> sortedRecipes =
-        recipeManager.getRecipes().stream().sorted(Comparator.comparing(IRecipe::getId))
+    Map<Item, Recipe<?>> recipes = new HashMap<>();
+    List<Recipe<?>> sortedRecipes =
+        recipeManager.getRecipes().stream().sorted(Comparator.comparing(Recipe::getId))
             .collect(Collectors.toList());
-    Set<IRecipe<?>> processedRecipes = new HashSet<>();
+    Set<Recipe<?>> processedRecipes = new HashSet<>();
 
-    for (IRecipe<?> recipe : sortedRecipes) {
+    for (Recipe<?> recipe : sortedRecipes) {
       ItemStack output = ItemStack.EMPTY;
 
       try {
-        output = recipe.getRecipeOutput();
+        output = recipe.getResultItem();
       } catch (Exception e) {
         DietMod.LOGGER.error("Diet was unable to process recipe: {}", recipe.getId());
       }
@@ -109,7 +109,7 @@ public class DietValueGenerator {
     DietMod.LOGGER.info("Processing items...");
     Set<Item> processedItems = new HashSet<>();
 
-    for (Map.Entry<Item, IRecipe<?>> entry : recipes.entrySet()) {
+    for (Map.Entry<Item, Recipe<?>> entry : recipes.entrySet()) {
       Item item = entry.getKey();
 
       if (!processedItems.contains(item)) {
@@ -120,12 +120,12 @@ public class DietValueGenerator {
     STOPWATCH.stop();
     DietMod.LOGGER.info("Generating diet values took {}", STOPWATCH);
 
-    for (ServerPlayerEntity player : server.getPlayerList().getPlayers()) {
+    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
       DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
     }
   }
 
-  public static void sync(ServerPlayerEntity player) {
+  public static void sync(ServerPlayer player) {
     DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
   }
 
@@ -134,19 +134,19 @@ public class DietValueGenerator {
     GENERATED.putAll(packet.generated);
   }
 
-  private static void traverseRecipes(Set<IRecipe<?>> processed, Map<Item, IRecipe<?>> recipes,
-                                      List<IRecipe<?>> allRecipes, IRecipe<?> recipe) {
+  private static void traverseRecipes(Set<Recipe<?>> processed, Map<Item, Recipe<?>> recipes,
+                                      List<Recipe<?>> allRecipes, Recipe<?> recipe) {
     processed.add(recipe);
 
     for (Ingredient ingredient : recipe.getIngredients()) {
-      Arrays.stream(ingredient.getMatchingStacks())
-          .min(Comparator.comparing(ItemStack::getTranslationKey)).ifPresent(stack -> {
+      Arrays.stream(ingredient.getItems())
+          .min(Comparator.comparing(ItemStack::getDescriptionId)).ifPresent(stack -> {
 
-            for (IRecipe<?> entry : allRecipes) {
+            for (Recipe<?> entry : allRecipes) {
               ItemStack output = ItemStack.EMPTY;
 
               try {
-                output = entry.getRecipeOutput();
+                output = entry.getResultItem();
               } catch (Exception e) {
                 DietMod.LOGGER.error("Diet was unable to process recipe: {}", entry.getId());
               }
@@ -162,7 +162,7 @@ public class DietValueGenerator {
   }
 
   private static Set<IDietGroup> traverseIngredients(Set<Item> processed,
-                                                     Map<Item, IRecipe<?>> recipes,
+                                                     Map<Item, Recipe<?>> recipes,
                                                      Set<IDietGroup> groups, Item item) {
     processed.add(item);
     Set<IDietGroup> result = new HashSet<>();
@@ -176,13 +176,13 @@ public class DietValueGenerator {
     }
 
     if (result.isEmpty()) {
-      IRecipe<?> recipe = recipes.get(item);
+      Recipe<?> recipe = recipes.get(item);
 
       if (recipe != null) {
 
         for (Ingredient ingredient : recipe.getIngredients()) {
-          Arrays.stream(ingredient.getMatchingStacks())
-              .min(Comparator.comparing(ItemStack::getTranslationKey)).ifPresent(stack -> {
+          Arrays.stream(ingredient.getItems())
+              .min(Comparator.comparing(ItemStack::getDescriptionId)).ifPresent(stack -> {
                 Item matchingItem = stack.getItem();
 
                 if (!INGREDIENTS.contains(matchingItem)) {

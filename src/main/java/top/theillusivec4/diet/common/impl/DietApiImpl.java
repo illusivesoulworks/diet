@@ -9,10 +9,10 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.BiFunction;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Triple;
 import top.theillusivec4.diet.api.DietApi;
 import top.theillusivec4.diet.api.IDietGroup;
@@ -26,7 +26,7 @@ import top.theillusivec4.diet.common.util.DietValueGenerator;
 public class DietApiImpl extends DietApi {
 
   @Override
-  public Set<IDietGroup> getGroups(PlayerEntity player, ItemStack input) {
+  public Set<IDietGroup> getGroups(Player player, ItemStack input) {
     Set<IDietGroup> groups = new HashSet<>();
     Set<ItemStack> processed = new HashSet<>();
     List<ItemStack> stacks = new ArrayList<>();
@@ -35,7 +35,7 @@ public class DietApiImpl extends DietApi {
 
     while (!queue.isEmpty()) {
       ItemStack next = queue.poll();
-      BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>> func =
+      BiFunction<Player, ItemStack, Triple<List<ItemStack>, Integer, Float>> func =
           DietOverride.get(next.getItem());
 
       if (func != null) {
@@ -80,7 +80,7 @@ public class DietApiImpl extends DietApi {
   }
 
   @Override
-  public IDietResult get(PlayerEntity player, ItemStack input) {
+  public IDietResult get(Player player, ItemStack input) {
     Set<IDietGroup> groups = getGroups(player, input);
 
     if (groups.isEmpty()) {
@@ -89,8 +89,8 @@ public class DietApiImpl extends DietApi {
     float healing;
     float saturation;
     Item item = input.getItem();
-    Food food = item.getFood();
-    BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>> func =
+    FoodProperties food = item.getFoodProperties();
+    BiFunction<Player, ItemStack, Triple<List<ItemStack>, Integer, Float>> func =
         DietOverride.get(item);
     Float override = DietServerConfig.foodOverrides.get(item);
 
@@ -102,8 +102,8 @@ public class DietApiImpl extends DietApi {
       healing = apply.getMiddle();
       saturation = apply.getRight();
     } else if (food != null) {
-      healing = food.getHealing();
-      saturation = food.getSaturation();
+      healing = food.getNutrition();
+      saturation = food.getSaturationModifier();
 
       if (healing == 0) {
         return DietResult.EMPTY;
@@ -120,7 +120,7 @@ public class DietApiImpl extends DietApi {
   }
 
   @Override
-  public IDietResult get(PlayerEntity player, ItemStack input, int healing, float saturation) {
+  public IDietResult get(Player player, ItemStack input, int healing, float saturation) {
     Set<IDietGroup> groups = DietApi.getInstance().getGroups(player, input);
 
     if (groups.isEmpty()) {

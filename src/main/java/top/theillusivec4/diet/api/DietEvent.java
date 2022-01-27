@@ -18,15 +18,15 @@
 
 package top.theillusivec4.diet.api;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
 
 @SuppressWarnings("unused")
 public class DietEvent extends PlayerEvent {
 
-  public DietEvent(PlayerEntity player) {
+  public DietEvent(Player player) {
     super(player);
   }
 
@@ -35,7 +35,7 @@ public class DietEvent extends PlayerEvent {
 
     private final ItemStack stack;
 
-    public ConsumeItemStack(ItemStack stackIn, PlayerEntity player) {
+    public ConsumeItemStack(ItemStack stackIn, Player player) {
       super(player);
       stack = stackIn;
     }
@@ -48,7 +48,7 @@ public class DietEvent extends PlayerEvent {
   @Cancelable
   public static class ApplyDecay extends DietEvent {
 
-    public ApplyDecay(PlayerEntity player) {
+    public ApplyDecay(Player player) {
       super(player);
     }
   }
@@ -56,7 +56,7 @@ public class DietEvent extends PlayerEvent {
   @Cancelable
   public static class ApplyEffect extends DietEvent {
 
-    public ApplyEffect(PlayerEntity player) {
+    public ApplyEffect(Player player) {
       super(player);
     }
   }

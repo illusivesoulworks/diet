@@ -18,15 +18,14 @@
 
 package top.theillusivec4.diet.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.util.InputMappings;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
+import net.minecraftforge.fmlclient.registry.ClientRegistry;
 
 public class DietKeys {
 
-  public static final KeyBinding OPEN_GUI =
-      new KeyBinding("key.diet.open.desc", InputMappings.INPUT_INVALID.getKeyCode(),
+  public static final KeyMapping OPEN_GUI =
+      new KeyMapping("key.diet.open.desc", InputConstants.UNKNOWN.getValue(),
           "key.diet.category");
 
   public static void setup() {

@@ -20,7 +20,7 @@ package top.theillusivec4.diet.common.config;
 
 import java.util.List;
 import java.util.Map;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import top.theillusivec4.diet.common.config.data.EffectConfig;
 import top.theillusivec4.diet.common.config.data.GroupConfig;
 

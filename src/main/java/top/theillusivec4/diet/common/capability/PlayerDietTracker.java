@@ -24,21 +24,28 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.FoodStats;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.api.DietApi;
 import top.theillusivec4.diet.api.DietEvent;
 import top.theillusivec4.diet.api.IDietGroup;
@@ -54,43 +61,40 @@ import top.theillusivec4.diet.common.util.DietResult;
 
 public class PlayerDietTracker implements IDietTracker {
 
-  private static final Map<Effect, Integer> EFFECT_DURATION = new HashMap<>();
+  private static final Map<MobEffect, Integer> EFFECT_DURATION = new HashMap<>();
 
-  private final PlayerEntity player;
+  private final Player player;
   private final Map<String, Float> values = new HashMap<>();
   private final Map<Attribute, Set<UUID>> activeModifiers = new HashMap<>();
   private final Set<Item> eatenFood = new HashSet<>();
 
   private boolean active = true;
 
-  private int prevFood;
+  private int prevFood = 0;
   private ItemStack captured = ItemStack.EMPTY;
 
   static {
-    EFFECT_DURATION.put(Effects.NIGHT_VISION, 300);
-    EFFECT_DURATION.put(Effects.NAUSEA, 300);
+    EFFECT_DURATION.put(MobEffects.NIGHT_VISION, 300);
+    EFFECT_DURATION.put(MobEffects.CONFUSION, 300);
   }
 
-  public PlayerDietTracker(PlayerEntity playerIn) {
+  public PlayerDietTracker(Player playerIn) {
     player = playerIn;
-    FoodStats stats = playerIn.getFoodStats();
-    prevFood = stats.getFoodLevel();
-    values.clear();
 
     for (IDietGroup group : DietGroups.get()) {
       String name = group.getName();
       float amount = group.getDefaultValue();
-      values.put(name, MathHelper.clamp(amount, 0.0f, 1.0f));
+      values.put(name, Mth.clamp(amount, 0.0f, 1.0f));
     }
   }
 
   @Override
   public void tick() {
 
-    if (player instanceof ServerPlayerEntity) {
+    if (player instanceof ServerPlayer) {
 
       if (!player.isCreative() && active) {
-        int currentFood = player.getFoodStats().getFoodLevel();
+        int currentFood = player.getFoodData().getFoodLevel();
 
         if (currentFood < prevFood &&
             !MinecraftForge.EVENT_BUS.post(new DietEvent.ApplyDecay(player))) {
@@ -99,10 +103,10 @@ public class PlayerDietTracker implements IDietTracker {
         prevFood = currentFood;
       }
 
-      if (player.ticksExisted % 80 == 0) {
+      if (player.tickCount % 80 == 0) {
         for (Map.Entry<Attribute, Set<UUID>> entry : activeModifiers.entrySet()) {
           Set<UUID> uuids = entry.getValue();
-          ModifiableAttributeInstance att = player.getAttribute(entry.getKey());
+          AttributeInstance att = player.getAttribute(entry.getKey());
 
           if (att != null) {
 
@@ -123,7 +127,7 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void consume(ItemStack stack, int healing, float saturationModifier) {
 
-    if (active && prevFood != player.getFoodStats().getFoodLevel() &&
+    if (active && prevFood != player.getFoodData().getFoodLevel() &&
         !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItemStack(stack, player))) {
       IDietResult result = DietApi.getInstance().get(player, stack, healing, saturationModifier);
 
@@ -137,7 +141,7 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void consume(ItemStack stack) {
 
-    if (active && prevFood != player.getFoodStats().getFoodLevel() &&
+    if (active && prevFood != player.getFoodData().getFoodLevel() &&
         !MinecraftForge.EVENT_BUS.post(new DietEvent.ConsumeItemStack(stack, player))) {
       IDietResult result = DietApi.getInstance().get(player, stack);
 
@@ -155,7 +159,7 @@ public class PlayerDietTracker implements IDietTracker {
 
   @Override
   public void setValue(String group, float amount) {
-    values.put(group, MathHelper.clamp(amount, 0.0f, 1.0f));
+    values.put(group, Mth.clamp(amount, 0.0f, 1.0f));
   }
 
   @Override
@@ -191,7 +195,7 @@ public class PlayerDietTracker implements IDietTracker {
   }
 
   @Override
-  public PlayerEntity getPlayer() {
+  public Player getPlayer() {
     return player;
   }
 
@@ -225,13 +229,13 @@ public class PlayerDietTracker implements IDietTracker {
         multiplier = Math.max(1, multiplier);
 
         for (DietEffect.DietAttribute attribute : effect.attributes) {
-          ModifiableAttributeInstance att = player.getAttribute(attribute.attribute);
+          AttributeInstance att = player.getAttribute(attribute.attribute);
           AttributeModifier mod =
               new AttributeModifier(effect.uuid, "Diet group effect", attribute.amount * multiplier,
                   attribute.operation);
 
           if (att != null && !att.hasModifier(mod)) {
-            att.applyPersistentModifier(mod);
+            att.addPermanentModifier(mod);
             activeModifiers.computeIfAbsent(attribute.attribute, k -> new HashSet<>())
                 .add(effect.uuid);
             info.addModifier(attribute.attribute, mod);
@@ -240,17 +244,17 @@ public class PlayerDietTracker implements IDietTracker {
 
         for (DietEffect.DietStatusEffect statusEffect : effect.statusEffects) {
           int duration = EFFECT_DURATION.getOrDefault(statusEffect.effect, 100);
-          EffectInstance instance =
-              new EffectInstance(statusEffect.effect, duration, statusEffect.power * multiplier,
+          MobEffectInstance instance =
+              new MobEffectInstance(statusEffect.effect, duration, statusEffect.power * multiplier,
                   true, false);
-          player.addPotionEffect(instance);
+          player.addEffect(instance);
           info.addEffect(instance);
         }
       }
     }
 
-    if (player instanceof ServerPlayerEntity) {
-      DietNetwork.sendEffectsInfoS2C((ServerPlayerEntity) player, info);
+    if (player instanceof ServerPlayer) {
+      DietNetwork.sendEffectsInfoS2C((ServerPlayer) player, info);
     }
   }
 
@@ -270,7 +274,7 @@ public class PlayerDietTracker implements IDietTracker {
       float decay = (float) (Math.exp(value) * scale * group.getDecayMultiplier() / 100.0f);
 
       if (decay > 0.0f) {
-        value = MathHelper.clamp(value - decay, 0.0f, 1.0f);
+        value = Mth.clamp(value - decay, 0.0f, 1.0f);
         values.replace(name, value);
         updated.put(name, value);
       }
@@ -287,7 +291,7 @@ public class PlayerDietTracker implements IDietTracker {
 
     for (Map.Entry<IDietGroup, Float> entry : entries.entrySet()) {
       String name = entry.getKey().getName();
-      float value = MathHelper.clamp(entry.getValue() + values.get(name), 0.0f, 1.0f);
+      float value = Mth.clamp(entry.getValue() + values.get(name), 0.0f, 1.0f);
       values.replace(name, value);
       applied.put(name, value);
     }
@@ -306,22 +310,22 @@ public class PlayerDietTracker implements IDietTracker {
 
   private void sync(Set<Item> values) {
 
-    if (player instanceof ServerPlayerEntity) {
-      DietNetwork.sendEatenS2C((ServerPlayerEntity) player, values);
+    if (player instanceof ServerPlayer) {
+      DietNetwork.sendEatenS2C((ServerPlayer) player, values);
     }
   }
 
   private void sync(Map<String, Float> values) {
 
-    if (player instanceof ServerPlayerEntity) {
-      DietNetwork.sendDietS2C((ServerPlayerEntity) player, values);
+    if (player instanceof ServerPlayer) {
+      DietNetwork.sendDietS2C((ServerPlayer) player, values);
     }
   }
 
   private void sync(boolean flag) {
 
-    if (player instanceof ServerPlayerEntity) {
-      DietNetwork.sendActivationS2C((ServerPlayerEntity) player, flag);
+    if (player instanceof ServerPlayer) {
+      DietNetwork.sendActivationS2C((ServerPlayer) player, flag);
     }
   }
 
@@ -350,5 +354,96 @@ public class PlayerDietTracker implements IDietTracker {
   public void setEaten(Set<Item> foods) {
     eatenFood.clear();
     eatenFood.addAll(foods);
+  }
+
+  @Override
+  public void save(CompoundTag tag) {
+    Map<String, Float> values = this.getValues();
+
+    if (values != null) {
+
+      for (Map.Entry<String, Float> group : values.entrySet()) {
+        tag.putFloat(group.getKey(), group.getValue());
+      }
+    }
+    ListTag list = new ListTag();
+    Map<Attribute, Set<UUID>> modifiers = this.getModifiers();
+
+    if (modifiers != null) {
+
+      for (Map.Entry<Attribute, Set<UUID>> modifier : modifiers.entrySet()) {
+        CompoundTag attributeTag = new CompoundTag();
+        attributeTag.put("AttributeName", StringTag.valueOf(
+            Objects.requireNonNull(modifier.getKey().getRegistryName()).toString()));
+        ListTag uuids = new ListTag();
+
+        for (UUID uuid : modifier.getValue()) {
+          uuids.add(StringTag.valueOf(uuid.toString()));
+        }
+        attributeTag.put("UUIDs", uuids);
+        list.add(attributeTag);
+      }
+    }
+    tag.put("Modifiers", list);
+    list = new ListTag();
+    Set<Item> eaten = this.getEaten();
+
+    if (eaten != null) {
+
+      for (Item item : eaten) {
+        ResourceLocation rl = item.getRegistryName();
+
+        if (rl != null) {
+          list.add(StringTag.valueOf(rl.toString()));
+        }
+      }
+    }
+    tag.put("Eaten", list);
+    tag.putBoolean("Active", this.isActive());
+  }
+
+  @Override
+  public void load(CompoundTag tag) {
+    Map<String, Float> groups = new HashMap<>();
+
+    for (IDietGroup group : DietGroups.get()) {
+      String name = group.getName();
+      float amount = tag.contains(name) ? tag.getFloat(name) : group.getDefaultValue();
+      groups.put(name, Mth.clamp(amount, 0.0f, 1.0f));
+    }
+    ListTag list = tag.getList("Modifiers", Tag.TAG_COMPOUND);
+    Map<Attribute, Set<UUID>> modifiers = new HashMap<>();
+
+    for (int i = 0; i < list.size(); i++) {
+      CompoundTag attributeTag = list.getCompound(i);
+      Attribute att = ForgeRegistries.ATTRIBUTES
+          .getValue(new ResourceLocation(attributeTag.getString("AttributeName")));
+
+      if (att != null) {
+        Set<UUID> uuids = new HashSet<>();
+        ListTag uuidList = attributeTag.getList("UUIDs", Tag.TAG_STRING);
+
+        for (int j = 0; j < uuidList.size(); j++) {
+          uuids.add(UUID.fromString(uuidList.getString(j)));
+        }
+        modifiers.put(att, uuids);
+      }
+    }
+    list = tag.getList("Eaten", Tag.TAG_STRING);
+    Set<Item> eaten = new HashSet<>();
+
+    for (int i = 0; i < list.size(); i++) {
+      String s = list.getString(i);
+      ResourceLocation rl = new ResourceLocation(s);
+      Item item = ForgeRegistries.ITEMS.getValue(rl);
+
+      if (item != null) {
+        eaten.add(item);
+      }
+    }
+    this.setEaten(eaten);
+    this.setModifiers(modifiers);
+    this.setValues(groups);
+    this.setActive(!tag.contains("Active") || tag.getBoolean("Active"));
   }
 }

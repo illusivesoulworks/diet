@@ -6,28 +6,28 @@ import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.minecraft.data.BlockTagsProvider;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.data.TagsProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.tags.ITag;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import top.theillusivec4.diet.DietMod;
 
 public class DietTagsProvider extends ItemTagsProvider {
 
-  protected TagsProvider.Builder<Item> fruits;
-  protected TagsProvider.Builder<Item> grains;
-  protected TagsProvider.Builder<Item> proteins;
-  protected TagsProvider.Builder<Item> sugars;
-  protected TagsProvider.Builder<Item> vegetables;
-  protected TagsProvider.Builder<Item> specialFood;
-  protected TagsProvider.Builder<Item> ingredients;
+  protected TagsProvider.TagAppender<Item> fruits;
+  protected TagsProvider.TagAppender<Item> grains;
+  protected TagsProvider.TagAppender<Item> proteins;
+  protected TagsProvider.TagAppender<Item> sugars;
+  protected TagsProvider.TagAppender<Item> vegetables;
+  protected TagsProvider.TagAppender<Item> specialFood;
+  protected TagsProvider.TagAppender<Item> ingredients;
 
   public DietTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagProvider,
                           @Nullable ExistingFileHelper existingFileHelper) {
@@ -35,17 +35,17 @@ public class DietTagsProvider extends ItemTagsProvider {
   }
 
   protected void init() {
-    this.fruits = this.getOrCreateBuilder(tag("fruits"));
-    this.grains = this.getOrCreateBuilder(tag("grains"));
-    this.proteins = this.getOrCreateBuilder(tag("proteins"));
-    this.sugars = this.getOrCreateBuilder(tag("sugars"));
-    this.vegetables = this.getOrCreateBuilder(tag("vegetables"));
-    this.specialFood = this.getOrCreateBuilder(tag("special_food"));
-    this.ingredients = this.getOrCreateBuilder(tag("ingredients"));
+    this.fruits = this.tag(tag("fruits"));
+    this.grains = this.tag(tag("grains"));
+    this.proteins = this.tag(tag("proteins"));
+    this.sugars = this.tag(tag("sugars"));
+    this.vegetables = this.tag(tag("vegetables"));
+    this.specialFood = this.tag(tag("special_food"));
+    this.ingredients = this.tag(tag("ingredients"));
   }
 
   @Override
-  protected void registerTags() {
+  protected void addTags() {
     this.init();
     List<Item> elements = createList(
         Items.APPLE,
@@ -54,7 +54,8 @@ public class DietTagsProvider extends ItemTagsProvider {
         Items.GOLDEN_APPLE,
         Items.MELON,
         Items.MELON_SLICE,
-        Items.SWEET_BERRIES
+        Items.SWEET_BERRIES,
+        Items.GLOW_BERRIES
     );
 
     for (Item element : elements) {
@@ -1627,15 +1628,15 @@ public class DietTagsProvider extends ItemTagsProvider {
     return "Diet Item Tags";
   }
 
-  protected void add(TagsProvider.Builder<Item> builder, Item item) {
-    builder.addItemEntry(item);
+  protected void add(TagsProvider.TagAppender<Item> builder, Item item) {
+    builder.add(item);
   }
 
-  protected void addTag(TagsProvider.Builder<Item> builder, ITag.INamedTag<Item> tag) {
+  protected void addTag(TagsProvider.TagAppender<Item> builder, Tag.Named<Item> tag) {
     builder.addTag(tag);
   }
 
-  protected void addOptional(TagsProvider.Builder<Item> builder, String name) {
+  protected void addOptional(TagsProvider.TagAppender<Item> builder, String name) {
 
     if (name.startsWith("#")) {
       throw new IllegalArgumentException(
@@ -1645,8 +1646,8 @@ public class DietTagsProvider extends ItemTagsProvider {
     builder.addOptional(new ResourceLocation(name));
   }
 
-  protected ITag.INamedTag<Item> tag(String name) {
-    return ItemTags.makeWrapperTag(DietMod.id(name));
+  protected Tag.Named<Item> tag(String name) {
+    return ItemTags.bind(DietMod.id(name));
   }
 
   @SafeVarargs

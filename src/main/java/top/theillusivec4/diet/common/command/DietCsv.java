@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
@@ -24,7 +24,7 @@ import top.theillusivec4.diet.api.IDietGroup;
 
 public class DietCsv {
 
-  public static void write(PlayerEntity player, String modId) {
+  public static void write(Player player, String modId) {
     List<String[]> data = new ArrayList<>();
 
     for (Item item : ForgeRegistries.ITEMS) {
@@ -41,22 +41,22 @@ public class DietCsv {
     write(data);
   }
 
-  public static void writeGroup(PlayerEntity player, IDietGroup group) {
+  public static void writeGroup(Player player, IDietGroup group) {
     List<String[]> data = new ArrayList<>();
 
-    for (Item item : group.getTag().getAllElements()) {
+    for (Item item : group.getTag().getValues()) {
       writeStack(player, item.getDefaultInstance(), data);
     }
     write(data);
   }
 
-  public static void writeUncategorized(PlayerEntity player) {
+  public static void writeUncategorized(Player player) {
     List<String[]> data = new ArrayList<>();
 
     for (Item item : ForgeRegistries.ITEMS) {
-      Food food = item.getFood();
+      FoodProperties food = item.getFoodProperties();
 
-      if (food != null && food.getHealing() > 0 &&
+      if (food != null && food.getNutrition() > 0 &&
           DietApi.getInstance().getGroups(player, item.getDefaultInstance()).isEmpty()) {
         data.add(new String[] {Objects.requireNonNull(item.getRegistryName()).toString()});
       }
@@ -64,7 +64,7 @@ public class DietCsv {
     write(data);
   }
 
-  private static void writeStack(PlayerEntity player, ItemStack stack, List<String[]> data) {
+  private static void writeStack(Player player, ItemStack stack, List<String[]> data) {
     Map<IDietGroup, Float> result = DietApi.getInstance().get(player, stack).get();
     List<Map.Entry<IDietGroup, Float>> list = Lists.newArrayList(result.entrySet());
 

@@ -21,10 +21,11 @@ package top.theillusivec4.diet.api;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public interface IDietTracker {
 
@@ -50,7 +51,7 @@ public interface IDietTracker {
 
   void setActive(boolean active);
 
-  PlayerEntity getPlayer();
+  Player getPlayer();
 
   void sync();
 
@@ -63,4 +64,8 @@ public interface IDietTracker {
   Set<Item> getEaten();
 
   void setEaten(Set<Item> foods);
+
+  void save(CompoundTag tag);
+
+  void load(CompoundTag tag);
 }

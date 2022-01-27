@@ -10,9 +10,9 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.TranslatableComponent;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
@@ -22,14 +22,14 @@ public class DietGroupArgument implements ArgumentType<IDietGroup> {
 
   public static final DynamicCommandExceptionType
       GROUP_UNKNOWN = new DynamicCommandExceptionType(
-      (group) -> new TranslationTextComponent("commands." + DietMod.MOD_ID + ".group.unknown",
+      (group) -> new TranslatableComponent("commands." + DietMod.MOD_ID + ".group.unknown",
           group));
 
   public static DietGroupArgument group() {
     return new DietGroupArgument();
   }
 
-  public static IDietGroup getGroup(CommandContext<CommandSource> context, String name) {
+  public static IDietGroup getGroup(CommandContext<CommandSourceStack> context, String name) {
     return context.getArgument(name, IDietGroup.class);
   }
 
@@ -47,7 +47,7 @@ public class DietGroupArgument implements ArgumentType<IDietGroup> {
 
   public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> ctx,
                                                             SuggestionsBuilder builder) {
-    return ISuggestionProvider.suggest(DietGroups.get().stream().map(IDietGroup::getName), builder);
+    return SharedSuggestionProvider.suggest(DietGroups.get().stream().map(IDietGroup::getName), builder);
   }
 
   public Collection<String> getExamples() {

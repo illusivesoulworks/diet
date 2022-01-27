@@ -1,14 +1,12 @@
 package top.theillusivec4.diet.common.network.server;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.function.Supplier;
-import net.minecraft.item.Item;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.client.DietClientPacketReceiver;
 
@@ -20,7 +18,7 @@ public class SPacketEaten {
     this.items = items;
   }
 
-  public static void encode(SPacketEaten msg, PacketBuffer buf) {
+  public static void encode(SPacketEaten msg, FriendlyByteBuf buf) {
 
     for (Item item : msg.items) {
       ResourceLocation rl = item.getRegistryName();
@@ -31,7 +29,7 @@ public class SPacketEaten {
     }
   }
 
-  public static SPacketEaten decode(PacketBuffer buf) {
+  public static SPacketEaten decode(FriendlyByteBuf buf) {
     Set<Item> items = new HashSet<>();
 
     while (buf.isReadable()) {

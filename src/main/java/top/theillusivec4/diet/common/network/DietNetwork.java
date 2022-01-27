@@ -23,14 +23,14 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
@@ -64,30 +64,30 @@ public class DietNetwork {
     register(SPacketEaten.class, SPacketEaten::encode, SPacketEaten::decode, SPacketEaten::handle);
   }
 
-  public static void sendEffectsInfoS2C(ServerPlayerEntity player, DietEffectsInfo info) {
+  public static void sendEffectsInfoS2C(ServerPlayer player, DietEffectsInfo info) {
     INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SPacketEffectsInfo(info));
   }
 
-  public static void sendDietS2C(ServerPlayerEntity player, Map<String, Float> groups) {
+  public static void sendDietS2C(ServerPlayer player, Map<String, Float> groups) {
     INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SPacketDiet(groups));
   }
 
-  public static void sendActivationS2C(ServerPlayerEntity player, boolean flag) {
+  public static void sendActivationS2C(ServerPlayer player, boolean flag) {
     INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SPacketActivate(flag));
   }
 
-  public static void sendGeneratedValuesS2C(ServerPlayerEntity player,
+  public static void sendGeneratedValuesS2C(ServerPlayer player,
                                             Map<Item, Set<IDietGroup>> generated) {
     INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
         new SPacketGeneratedValues(generated));
   }
 
-  public static void sendEatenS2C(ServerPlayerEntity player, Set<Item> items) {
+  public static void sendEatenS2C(ServerPlayer player, Set<Item> items) {
     INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SPacketEaten(items));
   }
 
-  private static <M> void register(Class<M> messageType, BiConsumer<M, PacketBuffer> encoder,
-                                   Function<PacketBuffer, M> decoder,
+  private static <M> void register(Class<M> messageType, BiConsumer<M, FriendlyByteBuf> encoder,
+                                   Function<FriendlyByteBuf, M> decoder,
                                    BiConsumer<M, Supplier<NetworkEvent.Context>> messageConsumer) {
     INSTANCE.registerMessage(id++, messageType, encoder, decoder, messageConsumer);
   }

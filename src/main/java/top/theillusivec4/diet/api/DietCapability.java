@@ -18,26 +18,24 @@
 
 package top.theillusivec4.diet.api;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.util.LazyOptional;
 import top.theillusivec4.diet.DietMod;
 
 public class DietCapability {
 
-  @CapabilityInject(IDietTracker.class)
-  public static final Capability<IDietTracker> DIET_TRACKER;
+  public static final Capability<IDietTracker> DIET_TRACKER =
+      CapabilityManager.get(new CapabilityToken<>() {
+      });
 
   public static final ResourceLocation DIET_TRACKER_ID =
       new ResourceLocation(DietMod.MOD_ID, "diet_tracker");
 
-  static {
-    DIET_TRACKER = null;
-  }
-
-  public static LazyOptional<IDietTracker> get(PlayerEntity player) {
+  public static LazyOptional<IDietTracker> get(Player player) {
     return player != null ? player.getCapability(DIET_TRACKER) : LazyOptional.empty();
   }
 }

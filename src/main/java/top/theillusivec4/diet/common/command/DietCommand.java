@@ -23,14 +23,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.server.command.ModIdArgument;
@@ -49,10 +49,10 @@ public class DietCommand {
     DietCommand.register(evt.getDispatcher());
   }
 
-  public static void register(CommandDispatcher<CommandSource> dispatcher) {
+  public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
     final int opPermissionLevel = 2;
-    LiteralArgumentBuilder<CommandSource> dietCommand =
-        Commands.literal("diet").requires(player -> player.hasPermissionLevel(opPermissionLevel));
+    LiteralArgumentBuilder<CommandSourceStack> dietCommand =
+        Commands.literal("diet").requires(player -> player.hasPermission(opPermissionLevel));
 
     dietCommand.then(Commands.literal("get")
         .then(Commands.argument("player", EntityArgument.player())
@@ -104,7 +104,7 @@ public class DietCommand {
         .then(Commands.argument("player", EntityArgument.player())
             .executes(ctx -> clear(ctx.getSource(), EntityArgument.getPlayer(ctx, "player")))));
 
-    LiteralArgumentBuilder<CommandSource> exportArg =
+    LiteralArgumentBuilder<CommandSourceStack> exportArg =
         Commands.literal("export").executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.ALL));
 
     exportArg.then(Commands.literal("group").then(
@@ -124,27 +124,27 @@ public class DietCommand {
     dispatcher.register(dietCommand);
   }
 
-  private static int get(CommandSource sender, ServerPlayerEntity player, IDietGroup group) {
+  private static int get(CommandSourceStack sender, ServerPlayer player, IDietGroup group) {
     DietCapability.get(player).ifPresent(diet -> {
       float amount = diet.getValue(group.getName());
-      sender.sendFeedback(
-          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".get.success",
-              new TranslationTextComponent(
+      sender.sendSuccess(
+          new TranslatableComponent("commands." + DietMod.MOD_ID + ".get.success",
+              new TranslatableComponent(
                   "groups." + DietMod.MOD_ID + "." + group.getName() + ".name"), amount * 100,
               player.getName()), true);
     });
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int set(CommandSource sender, ServerPlayerEntity player, float value,
+  private static int set(CommandSourceStack sender, ServerPlayer player, float value,
                          IDietGroup group) {
     DietCapability.get(player).ifPresent(diet -> {
       if (diet.getValues().containsKey(group.getName())) {
         diet.setValue(group.getName(), value);
         diet.sync();
-        sender.sendFeedback(
-            new TranslationTextComponent("commands." + DietMod.MOD_ID + ".set.success",
-                new TranslationTextComponent(
+        sender.sendSuccess(
+            new TranslatableComponent("commands." + DietMod.MOD_ID + ".set.success",
+                new TranslatableComponent(
                     "groups." + DietMod.MOD_ID + "." + group.getName() + ".name"), value * 100,
                 player.getName()), true);
       }
@@ -152,7 +152,7 @@ public class DietCommand {
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int modify(CommandSource sender, ServerPlayerEntity player, float amount,
+  private static int modify(CommandSourceStack sender, ServerPlayer player, float amount,
                             IDietGroup group) {
 
     if (amount != 0) {
@@ -161,9 +161,9 @@ public class DietCommand {
           diet.setValue(group.getName(), diet.getValue(group.getName()) + amount);
           diet.sync();
           String arg = amount > 0 ? "add" : "remove";
-          sender.sendFeedback(
-              new TranslationTextComponent("commands." + DietMod.MOD_ID + "." + arg + ".success",
-                  new TranslationTextComponent(
+          sender.sendSuccess(
+              new TranslatableComponent("commands." + DietMod.MOD_ID + "." + arg + ".success",
+                  new TranslatableComponent(
                       "groups." + DietMod.MOD_ID + "." + group.getName() + ".name"), amount * 100,
                   player.getName()), true);
         }
@@ -172,66 +172,65 @@ public class DietCommand {
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int reset(CommandSource sender, ServerPlayerEntity player) {
+  private static int reset(CommandSourceStack sender, ServerPlayer player) {
     DietCapability.get(player).ifPresent(diet -> {
       for (IDietGroup group : DietGroups.get()) {
         diet.setValue(group.getName(), group.getDefaultValue());
       }
       diet.sync();
-      sender.sendFeedback(
-          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".reset.success",
+      sender.sendSuccess(
+          new TranslatableComponent("commands." + DietMod.MOD_ID + ".reset.success",
               player.getName()), true);
     });
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int active(CommandSource sender, ServerPlayerEntity player, boolean flag) {
+  private static int active(CommandSourceStack sender, ServerPlayer player, boolean flag) {
     DietCapability.get(player).ifPresent(diet -> {
       diet.setActive(flag);
       diet.sync();
       String arg = flag ? "resume" : "pause";
-      sender.sendFeedback(
-          new TranslationTextComponent("commands." + DietMod.MOD_ID + "." + arg + ".success",
+      sender.sendSuccess(
+          new TranslatableComponent("commands." + DietMod.MOD_ID + "." + arg + ".success",
               player.getName()), true);
     });
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int clear(CommandSource sender, ServerPlayerEntity player) {
+  private static int clear(CommandSourceStack sender, ServerPlayer player) {
 
-    for (ModifiableAttributeInstance instance : player.getAttributeManager().getInstances()) {
+    for (AttributeInstance instance : player.getAttributes().getDirtyAttributes()) {
 
-      for (AttributeModifier attributeModifier : instance.getModifierListCopy()) {
+      for (AttributeModifier attributeModifier : instance.getModifiers()) {
 
         if (attributeModifier.getName().equals("Diet group effect")) {
-          instance.removeModifier(attributeModifier.getID());
+          instance.removeModifier(attributeModifier.getId());
         }
       }
     }
-    sender.sendFeedback(
-        new TranslationTextComponent("commands." + DietMod.MOD_ID + ".clear.success",
+    sender.sendSuccess(
+        new TranslatableComponent("commands." + DietMod.MOD_ID + ".clear.success",
             player.getName()), true);
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int export(CommandSource sender, IDietGroup group) {
+  private static int export(CommandSourceStack sender, IDietGroup group) {
 
-    if (sender.getEntity() instanceof PlayerEntity) {
-      sender.sendFeedback(
-          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".export.started"), true);
-      DietCsv.writeGroup((PlayerEntity) sender.getEntity(), group);
-      sender.sendFeedback(
-          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".export.finished"), true);
+    if (sender.getEntity() instanceof Player) {
+      sender.sendSuccess(
+          new TranslatableComponent("commands." + DietMod.MOD_ID + ".export.started"), true);
+      DietCsv.writeGroup((Player) sender.getEntity(), group);
+      sender.sendSuccess(
+          new TranslatableComponent("commands." + DietMod.MOD_ID + ".export.finished"), true);
     }
     return Command.SINGLE_SUCCESS;
   }
 
-  private static int export(CommandSource sender, DietCsv.ExportMode mode, String... args) {
+  private static int export(CommandSourceStack sender, DietCsv.ExportMode mode, String... args) {
 
-    if (sender.getEntity() instanceof PlayerEntity) {
-      PlayerEntity player = (PlayerEntity) sender.getEntity();
-      sender.sendFeedback(
-          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".export.started"), true);
+    if (sender.getEntity() instanceof Player player) {
+      sender.sendSuccess(
+          new TranslatableComponent("commands." + DietMod.MOD_ID + ".export.started"), true);
 
       if (mode == DietCsv.ExportMode.ALL) {
         DietCsv.write(player, "");
@@ -240,8 +239,8 @@ public class DietCommand {
       } else if (mode == DietCsv.ExportMode.UNCATEGORIZED) {
         DietCsv.writeUncategorized(player);
       }
-      sender.sendFeedback(
-          new TranslationTextComponent("commands." + DietMod.MOD_ID + ".export.finished"), true);
+      sender.sendSuccess(
+          new TranslatableComponent("commands." + DietMod.MOD_ID + ".export.finished"), true);
     }
     return Command.SINGLE_SUCCESS;
   }

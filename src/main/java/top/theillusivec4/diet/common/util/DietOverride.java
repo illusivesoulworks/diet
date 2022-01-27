@@ -23,34 +23,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.InterModComms;
 import org.apache.commons.lang3.tuple.Triple;
 
 public class DietOverride {
 
-  private static final Map<Item, BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>>>
+  private static final Map<Item, BiFunction<Player, ItemStack, Triple<List<ItemStack>, Integer, Float>>>
       items = new HashMap<>();
 
   @SuppressWarnings("unchecked")
   public static void process(Stream<InterModComms.IMCMessage> messages) {
     messages.forEach(message -> {
-      String method = message.getMethod();
-      Object object = message.getMessageSupplier().get();
+      String method = message.method();
+      Object object = message.messageSupplier().get();
 
       if (method.equals(Type.ITEM.id)) {
-        Tuple<Item, BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>>>
+        Tuple<Item, BiFunction<Player, ItemStack, Triple<List<ItemStack>, Integer, Float>>>
             value =
-            (Tuple<Item, BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>>>) object;
+            (Tuple<Item, BiFunction<Player, ItemStack, Triple<List<ItemStack>, Integer, Float>>>) object;
         items.put(value.getA(), value.getB());
       }
     });
   }
 
-  public static BiFunction<PlayerEntity, ItemStack, Triple<List<ItemStack>, Integer, Float>> get(
+  public static BiFunction<Player, ItemStack, Triple<List<ItemStack>, Integer, Float>> get(
       Item item) {
     return items.get(item);
   }

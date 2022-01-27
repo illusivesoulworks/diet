@@ -24,10 +24,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.common.config.data.EffectConfig;
@@ -123,7 +123,7 @@ public class DietEffects {
             DietMod.LOGGER.error("Found missing name for status effect config, skipping...");
             continue;
           }
-          Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(
+          MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(
               statusEffectConfig.name));
 
           if (effect == null) {

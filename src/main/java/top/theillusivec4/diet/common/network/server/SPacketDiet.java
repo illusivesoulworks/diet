@@ -21,8 +21,8 @@ package top.theillusivec4.diet.common.network.server;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import top.theillusivec4.diet.client.DietClientPacketReceiver;
 
 public class SPacketDiet {
@@ -33,19 +33,19 @@ public class SPacketDiet {
     this.groups = groups;
   }
 
-  public static void encode(SPacketDiet msg, PacketBuffer buf) {
+  public static void encode(SPacketDiet msg, FriendlyByteBuf buf) {
 
     for (Map.Entry<String, Float> entry : msg.groups.entrySet()) {
-      buf.writeString(entry.getKey());
+      buf.writeUtf(entry.getKey());
       buf.writeFloat(entry.getValue());
     }
   }
 
-  public static SPacketDiet decode(PacketBuffer buf) {
+  public static SPacketDiet decode(FriendlyByteBuf buf) {
     Map<String, Float> groups = new TreeMap<>();
 
     while (buf.isReadable()) {
-      String name = buf.readString();
+      String name = buf.readUtf();
       float value = buf.readFloat();
       groups.put(name, value);
     }

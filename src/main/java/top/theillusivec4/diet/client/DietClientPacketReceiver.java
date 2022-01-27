@@ -20,8 +20,8 @@ package top.theillusivec4.diet.client;
 
 import java.util.Map;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import top.theillusivec4.diet.api.DietCapability;
 import top.theillusivec4.diet.common.network.server.SPacketActivate;
 import top.theillusivec4.diet.common.network.server.SPacketDiet;
@@ -30,7 +30,7 @@ import top.theillusivec4.diet.common.network.server.SPacketEaten;
 public class DietClientPacketReceiver {
 
   public static void handleActivate(SPacketActivate msg) {
-    PlayerEntity player = Minecraft.getInstance().player;
+    Player player = Minecraft.getInstance().player;
 
     if (player != null) {
       DietCapability.get(player).ifPresent(diet -> diet.setActive(msg.flag));
@@ -38,7 +38,7 @@ public class DietClientPacketReceiver {
   }
 
   public static void handleDiet(SPacketDiet msg) {
-    PlayerEntity player = Minecraft.getInstance().player;
+    Player player = Minecraft.getInstance().player;
 
     if (player != null) {
       DietCapability.get(player).ifPresent(diet -> {
@@ -50,7 +50,7 @@ public class DietClientPacketReceiver {
   }
 
   public static void handleEaten(SPacketEaten msg) {
-    PlayerEntity player = Minecraft.getInstance().player;
+    Player player = Minecraft.getInstance().player;
 
     if (player != null) {
       DietCapability.get(player).ifPresent(diet -> {

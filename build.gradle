@@ -2,6 +2,7 @@ buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
         maven { url = 'https://plugins.gradle.org/m2/' }
+		maven { url = 'https://maven.parchmentmc.org' }
         maven {
             url = 'https://repo.spongepowered.org/repository/maven-public/'
             content { includeGroup 'org.spongepowered' }
@@ -9,32 +10,35 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+		classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.matthewprenger.cursegradle'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 version = "${mod_version}"
-group = "${mod_group}"
-archivesBaseName = "${mod_id}-forge"
+group = "top.theillusivec4.diet"
+archivesBaseName = "diet-forge"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 minecraft {
-    mappings channel: 'snapshot', version: "${version_mcp}".toString()
+    mappings channel: 'parchment', version: '2021.12.12-1.17.1'
 
     runs {
         client {
             workingDirectory project.file('run')
 
-            arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            arg "-mixin.config=diet.mixins.json"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
                 diet {
@@ -46,10 +50,11 @@ minecraft {
         server {
             workingDirectory project.file('run')
 
-            arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            arg "-mixin.config=diet.mixins.json"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
                 diet {
@@ -61,10 +66,11 @@ minecraft {
         data {
             workingDirectory project.file('run')
 
-            arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            arg "-mixin.config=diet.mixins.json"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             args '--mod', 'diet', '--all', '--output', file('src/generated/resources/')
 
@@ -78,7 +84,7 @@ minecraft {
 }
 
 mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
+    add sourceSets.main, "diet.refmap.json"
 }
 
 repositories {
@@ -93,15 +99,15 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${version_forge}"
+    minecraft "net.minecraftforge:forge:${forge_version}"
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
-    compileOnly fg.deobf("curse.maven:origins-474438:${version_origins}")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    compileOnly fg.deobf("curse.maven:origins-474438:${origins_file}")
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:3345971")
-    runtimeOnly fg.deobf("curse.maven:appleskin-248787:3395800")
+    runtimeOnly fg.deobf("curse.maven:jei-238222:3596034")
+    runtimeOnly fg.deobf("curse.maven:appleskin-248787:3512373")
 }
 
 sourceSets {
@@ -115,15 +121,31 @@ sourceSets {
 
 jar {
     manifest {
-        attributes(["Specification-Title"     : "${mod_name}",
-                    "Specification-Vendor"    : "${mod_author}",
-                    "Specification-Version"   : "${getArchiveVersion()}",
-                    "Implementation-Title"    : "${mod_name}",
+        attributes(["Specification-Title"     : "Diet",
+                    "Specification-Vendor"    : "C4",
+                    "Specification-Version"   : "1",
+                    "Implementation-Title"    : "Diet",
                     "Implementation-Version"  : "${getArchiveVersion()}",
-                    "Implementation-Vendor"   : "${mod_author}",
+                    "Implementation-Vendor"   : "C4",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    "MixinConfigs"            : "${mod_id}.mixins.json"])
+                    "MixinConfigs"            : "diet.mixins.json"])
     }
+}
+
+def replaceResources = tasks.register("replaceResources", Copy) {
+    it.outputs.upToDateWhen { false }
+
+    it.from(sourceSets.main.resources) {
+        include "META-INF/mods.toml"
+        expand 'version': version, 'mc_version_range': mc_version_range, 'forge_version_range': forge_version_range, "loader_version": loader_version
+    }
+    it.into "$buildDir/resources/main/"
+}
+
+processResources {
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
+    exclude('META-INF/mods.toml')
+    configure { finalizedBy(replaceResources) }
 }
 
 task sourcesJar(type: Jar) {
@@ -131,30 +153,23 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
 }
 
-tasks.build.dependsOn sourcesJar
-
-processResources {
-    exclude '.cache'
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META-INF/mods.toml'
-        expand 'version': project.version, 'mod_id': mod_id, 'mod_name': mod_name, 'mod_url': mod_url, 'mod_author': mod_author, 'mod_description': mod_description, 'mod_icon': mod_icon
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META-INF/mods.toml'
-    }
+artifacts {
+    archives sourcesJar
 }
 
+jar.finalizedBy('reobfJar')
 
 curseforge {
 
     project {
         apiKey = findProperty('curseKey') ?: 0
-        id = "${curse_id}"
+        id = "443570"
         releaseType = "${curse_release}"
         changelogType = 'markdown'
         changelog = file('docs/CHANGELOG.md')
         addArtifact(sourcesJar)
+        "${curse_versions}".split(',').each {
+            addGameVersion "${it}"
+        }
     }
 }

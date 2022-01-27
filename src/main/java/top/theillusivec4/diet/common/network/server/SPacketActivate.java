@@ -19,8 +19,8 @@
 package top.theillusivec4.diet.common.network.server;
 
 import java.util.function.Supplier;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import top.theillusivec4.diet.client.DietClientPacketReceiver;
 
 public class SPacketActivate {
@@ -31,11 +31,11 @@ public class SPacketActivate {
     this.flag = flag;
   }
 
-  public static void encode(SPacketActivate msg, PacketBuffer buf) {
+  public static void encode(SPacketActivate msg, FriendlyByteBuf buf) {
     buf.writeBoolean(msg.flag);
   }
 
-  public static SPacketActivate decode(PacketBuffer buf) {
+  public static SPacketActivate decode(FriendlyByteBuf buf) {
     return new SPacketActivate(buf.readBoolean());
   }
 

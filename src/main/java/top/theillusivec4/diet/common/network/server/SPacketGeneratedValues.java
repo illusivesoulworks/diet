@@ -5,17 +5,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.function.Supplier;
-import net.minecraft.item.Item;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.api.IDietGroup;
 import top.theillusivec4.diet.common.group.DietGroups;
@@ -29,22 +27,22 @@ public class SPacketGeneratedValues {
     this.generated = generated;
   }
 
-  public static void encode(SPacketGeneratedValues msg, PacketBuffer buf) {
-    CompoundNBT compoundNBT = new CompoundNBT();
+  public static void encode(SPacketGeneratedValues msg, FriendlyByteBuf buf) {
+    CompoundTag compoundNBT = new CompoundTag();
 
     for (Map.Entry<Item, Set<IDietGroup>> entry : msg.generated.entrySet()) {
-      ListNBT listNBT = new ListNBT();
+      ListTag listNBT = new ListTag();
 
       for (IDietGroup group : entry.getValue()) {
-        listNBT.add(StringNBT.valueOf(group.getName()));
+        listNBT.add(StringTag.valueOf(group.getName()));
       }
       compoundNBT.put(Objects.requireNonNull(entry.getKey().getRegistryName()).toString(), listNBT);
     }
-    buf.writeCompoundTag(compoundNBT);
+    buf.writeNbt(compoundNBT);
   }
 
-  public static SPacketGeneratedValues decode(PacketBuffer buf) {
-    CompoundNBT compoundNBT = buf.readCompoundTag();
+  public static SPacketGeneratedValues decode(FriendlyByteBuf buf) {
+    CompoundTag compoundNBT = buf.readNbt();
     Map<Item, Set<IDietGroup>> generated = new HashMap<>();
     Map<String, IDietGroup> groups = new HashMap<>();
 
@@ -54,15 +52,15 @@ public class SPacketGeneratedValues {
 
     if (compoundNBT != null) {
 
-      for (String name : compoundNBT.keySet()) {
+      for (String name : compoundNBT.getAllKeys()) {
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
 
         if (item != null) {
-          ListNBT listNBT = compoundNBT.getList(name, Constants.NBT.TAG_STRING);
+          ListTag listNBT = compoundNBT.getList(name, Tag.TAG_STRING);
           Set<IDietGroup> found = new HashSet<>();
 
-          for (INBT nbt : listNBT) {
-            String entry = nbt.getString();
+          for (Tag nbt : listNBT) {
+            String entry = nbt.getAsString();
             IDietGroup group = groups.get(entry);
 
             if (group != null) {

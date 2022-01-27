@@ -1,9 +1,8 @@
 package top.theillusivec4.diet.api;
 
 import java.awt.Color;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.Tags;
 
 public interface IDietGroup {
