@@ -150,6 +150,15 @@ public class DietValueGenerator {
               } catch (Exception e) {
                 DietMod.LOGGER.error("Diet was unable to process recipe: {}", entry.getId());
               }
+
+              // This shouldn't be necessary but some mods are violating the non-null contract, so
+              // we have to check for it anyways
+              if (output == null) {
+                DietMod.LOGGER.error("Diet was unable to process recipe due to null output: {}",
+                    entry.getId());
+                return;
+              }
+
               Item item = output.getItem();
 
               if (item == stack.getItem() && !processed.contains(entry)) {

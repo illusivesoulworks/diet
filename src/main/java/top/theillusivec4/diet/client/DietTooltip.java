@@ -117,7 +117,7 @@ public class DietTooltip {
 
   private static class AttributeTooltip {
 
-    int added = 0;
+    float added = 0;
     float baseMultiplier = 0.0f;
     float totalMultiplier = 1.0f;
 
