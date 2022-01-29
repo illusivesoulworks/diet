@@ -22,16 +22,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 
 public class DietTooltip {
@@ -79,7 +79,8 @@ public class DietTooltip {
             new TranslatableComponent("potion.withAmplifier", iformattabletextcomponent,
                 new TranslatableComponent("potion.potency." + effect.getValue()));
       }
-      tooltips.add(iformattabletextcomponent.withStyle(effect1.getCategory().getTooltipFormatting()));
+      tooltips.add(
+          iformattabletextcomponent.withStyle(effect1.getCategory().getTooltipFormatting()));
     }
     return tooltips;
   }
@@ -117,7 +118,7 @@ public class DietTooltip {
 
   private static class AttributeTooltip {
 
-    int added = 0;
+    float added = 0;
     float baseMultiplier = 0.0f;
     float totalMultiplier = 1.0f;
 
