@@ -17,6 +17,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -149,6 +150,13 @@ public class DietValueGenerator {
                 output = entry.getResultItem();
               } catch (Exception e) {
                 DietMod.LOGGER.error("Diet was unable to process recipe: {}", entry.getId());
+              }
+
+              // This shouldn't be necessary but some mods are violating the non-null contract, so
+              // we have to check for it anyways
+              if (output == null) {
+                DietMod.LOGGER.error("Diet was unable to process recipe due to null output: {}", entry.getId());
+                return;
               }
               Item item = output.getItem();
 
