@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -73,6 +74,10 @@ public class DietClientEventsListener {
 
   private static final ResourceLocation ICONS =
       new ResourceLocation(DietMod.MOD_ID, "textures/gui/icons.png");
+
+  private static List<Component> tooltip = null;
+  private static int tooltipX = 0;
+  private static int tooltipY = 0;
 
   @SubscribeEvent
   @SuppressWarnings("unused")
@@ -165,6 +170,21 @@ public class DietClientEventsListener {
     }
   }
 
+  @SubscribeEvent
+  @SuppressWarnings("unused")
+  public static void renderTooltip(TickEvent.RenderTickEvent event) {
+
+    if(event.phase == TickEvent.Phase.END && tooltip != null) {
+      Minecraft mc = Minecraft.getInstance();
+      Screen screen = mc.screen;
+
+      if (screen != null) {
+        screen.renderTooltip(new PoseStack(), tooltip, Optional.empty(), tooltipX, tooltipY);
+      }
+      tooltip = null;
+    }
+  }
+
   public static class DynamicButton extends ImageButton {
 
     private final AbstractContainerScreen<?> containerScreen;
@@ -191,8 +211,9 @@ public class DietClientEventsListener {
       List<Component> tooltips = DietTooltip.getEffects();
 
       if (!tooltips.isEmpty()) {
-        containerScreen.renderComponentTooltip(matrixStack, tooltips, mouseX, mouseY,
-            Minecraft.getInstance().font);
+        DietClientEventsListener.tooltip = tooltips;
+        DietClientEventsListener.tooltipX = mouseX;
+        DietClientEventsListener.tooltipY = mouseY;
       }
     }
   }
