@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-1.0.2.1] - 2022.01.28
+### Fixed
+- Fixed fractional add amounts in attribute modifiers not being shown in the tooltip correctly
+
 ## [1.16.5-1.0.2.0] - 2022.01.17
 ### Added
 - Added 5-food-group support for:
