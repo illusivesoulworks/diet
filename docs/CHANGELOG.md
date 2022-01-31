@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.1-1.2.0.2] - 2022.01.31
+### Fixed
+- Fixed NPE crash [#111](https://github.com/TheIllusiveC4/Diet/issues/111)
+- Fixed Diet preventing certain blocks from being placed/activated [#110](https://github.com/TheIllusiveC4/Diet/issues/110)
+
 ## [1.18.1-1.2.0.1] - 2022.01.28
 ### Fixed
 - Fixed NPE crash [#107](https://github.com/TheIllusiveC4/Diet/issues/107)
