@@ -59,7 +59,6 @@ public class DietCapabilityEventsListener {
       final IDietTracker tracker = new PlayerDietTracker(player);
       final LazyOptional<IDietTracker> capability = LazyOptional.of(() -> tracker);
       evt.addCapability(DietCapability.DIET_TRACKER_ID, new Provider(tracker, capability));
-      evt.addListener(capability::invalidate);
     }
   }
 
@@ -68,8 +67,10 @@ public class DietCapabilityEventsListener {
   public static void playerClone(final PlayerEvent.Clone evt) {
 
     if (evt.getPlayer() instanceof ServerPlayer player) {
+      Player original = evt.getOriginal();
+      original.reviveCaps();
       DietCapability.get(player)
-          .ifPresent(diet -> DietCapability.get(evt.getOriginal()).ifPresent(originalDiet -> {
+          .ifPresent(diet -> DietCapability.get(original).ifPresent(originalDiet -> {
             Map<String, Float> originalValues = originalDiet.getValues();
 
             for (IDietGroup group : DietGroups.get()) {
@@ -102,6 +103,7 @@ public class DietCapabilityEventsListener {
               diet.setModifiers(originalDiet.getModifiers());
             }
           }));
+      original.invalidateCaps();
     }
   }
 
