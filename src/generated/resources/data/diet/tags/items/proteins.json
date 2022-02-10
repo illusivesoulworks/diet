@@ -981,6 +981,10 @@
       "required": false
     },
     {
+      "id": "minecolonies:raw_pumpkin_pie",
+      "required": false
+    },
+    {
       "id": "mowziesmobs:glowing_jelly",
       "required": false
     },
@@ -1374,6 +1378,10 @@
     },
     {
       "id": "terraincognita:hazelnut",
+      "required": false
+    },
+    {
+      "id": "thermal:peanut",
       "required": false
     },
     {

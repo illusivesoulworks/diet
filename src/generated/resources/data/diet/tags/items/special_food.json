@@ -171,6 +171,30 @@
       "required": false
     },
     {
+      "id": "thermal:carrot_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:cheese_wheel",
+      "required": false
+    },
+    {
+      "id": "thermal:chocolate_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:potion_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:spice_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:stuffed_pumpkin",
+      "required": false
+    },
+    {
       "id": "vanillacookbook:berry_cake",
       "required": false
     },

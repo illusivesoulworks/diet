@@ -913,6 +913,14 @@
       "required": false
     },
     {
+      "id": "thermal:frost_melon_slice",
+      "required": false
+    },
+    {
+      "id": "thermal:strawberry",
+      "required": false
+    },
+    {
       "id": "undergarden:blisterberry",
       "required": false
     },

@@ -391,7 +391,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "rankine:pineapple",
         "rankine:banana_yucca",
         "rankine:juniper_berries",
-        "rankine:coconut"
+        "rankine:coconut",
+        "thermal:strawberry",
+        "thermal:frost_melon_slice"
     );
 
     for (String element : optionalElements) {
@@ -560,7 +562,18 @@ public class DietTagsProvider extends ItemTagsProvider {
         "rankine:wheat_flour",
         "rankine:corn_flour",
         "rankine:pancake_batter",
-        "rankine:cake_slice"
+        "rankine:cake_slice",
+        "thermal:rice",
+        "thermal:carrot_cake",
+        "thermal:chocolate_cake",
+        "thermal:spice_cake",
+        "minecolonies:bread_dough",
+        "minecolonies:cookie_dough",
+        "minecolonies:cake_batter",
+        "minecolonies:milky_bread",
+        "minecolonies:sugary_bread",
+        "minecolonies:golden_bread",
+        "minecolonies:chorus_bread"
     );
 
     for (String element : optionalElements) {
@@ -965,7 +978,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "rankine:black_walnut",
         "rankine:cheese",
         "rankine:aged_cheese",
-        "rankine:unaged_cheese"
+        "rankine:unaged_cheese",
+        "thermal:peanut",
+        "minecolonies:raw_pumpkin_pie"
     );
 
     for (String element : optionalElements) {
@@ -1183,7 +1198,15 @@ public class DietTagsProvider extends ItemTagsProvider {
         "create_confectionery:ruby_chocolate_glazed_berries",
         "create_confectionery:caramel_glazed_berries",
         "rankine:maple_syrup",
-        "rankine:cake_slice"
+        "rankine:cake_slice",
+        "thermal:carrot_cake",
+        "thermal:chocolate_cake",
+        "thermal:potion_cake",
+        "thermal:spice_cake",
+        "thermal:syrup_bottle",
+        "minecolonies:cookie_dough",
+        "minecolonies:cake_batter",
+        "minecolonies:raw_pumpkin_pie"
     );
 
     for (String element : optionalElements) {
@@ -1501,7 +1524,17 @@ public class DietTagsProvider extends ItemTagsProvider {
         "habitat:dried_ball_cactus",
         "rankine:aloe",
         "rankine:asparagus",
-        "rankine:corn_ear"
+        "rankine:corn_ear",
+        "thermal:corn",
+        "thermal:onion",
+        "thermal:radish",
+        "thermal:spinach",
+        "thermal:bell_pepper",
+        "thermal:eggplant",
+        "thermal:green_bean",
+        "thermal:tomato",
+        "thermal:coffee",
+        "minecolonies:raw_pumpkin_pie"
     );
 
     for (String element : optionalElements) {
@@ -1614,7 +1647,13 @@ public class DietTagsProvider extends ItemTagsProvider {
         "xercamod:item_apple_pie",
         "xercamod:sweet_berry_pie",
         "rankine:aged_cheese",
-        "rankine:unaged_cheese"
+        "rankine:unaged_cheese",
+        "thermal:cheese_wheel",
+        "thermal:stuffed_pumpkin",
+        "thermal:carrot_cake",
+        "thermal:chocolate_cake",
+        "thermal:potion_cake",
+        "thermal:spice_cake"
     );
     for (String element : optionalElements) {
       addOptional(this.specialFood, element);
