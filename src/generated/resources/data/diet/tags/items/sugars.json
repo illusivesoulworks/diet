@@ -299,6 +299,18 @@
       "required": false
     },
     {
+      "id": "minecolonies:cake_batter",
+      "required": false
+    },
+    {
+      "id": "minecolonies:cookie_dough",
+      "required": false
+    },
+    {
+      "id": "minecolonies:raw_pumpkin_pie",
+      "required": false
+    },
+    {
       "id": "neapolitan:adzuki_cake",
       "required": false
     },
@@ -572,6 +584,26 @@
     },
     {
       "id": "the_bumblezone:sugar_water_bottle",
+      "required": false
+    },
+    {
+      "id": "thermal:carrot_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:chocolate_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:potion_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:spice_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:syrup_bottle",
       "required": false
     },
     {

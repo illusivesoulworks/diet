@@ -531,6 +531,10 @@
       "required": false
     },
     {
+      "id": "minecolonies:raw_pumpkin_pie",
+      "required": false
+    },
+    {
       "id": "mysticalworld:aubergine",
       "required": false
     },
@@ -1040,6 +1044,42 @@
     },
     {
       "id": "terraincognita:notch_carrot",
+      "required": false
+    },
+    {
+      "id": "thermal:bell_pepper",
+      "required": false
+    },
+    {
+      "id": "thermal:coffee",
+      "required": false
+    },
+    {
+      "id": "thermal:corn",
+      "required": false
+    },
+    {
+      "id": "thermal:eggplant",
+      "required": false
+    },
+    {
+      "id": "thermal:green_bean",
+      "required": false
+    },
+    {
+      "id": "thermal:onion",
+      "required": false
+    },
+    {
+      "id": "thermal:radish",
+      "required": false
+    },
+    {
+      "id": "thermal:spinach",
+      "required": false
+    },
+    {
+      "id": "thermal:tomato",
       "required": false
     },
     {

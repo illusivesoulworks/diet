@@ -164,6 +164,34 @@
       "required": false
     },
     {
+      "id": "minecolonies:bread_dough",
+      "required": false
+    },
+    {
+      "id": "minecolonies:cake_batter",
+      "required": false
+    },
+    {
+      "id": "minecolonies:chorus_bread",
+      "required": false
+    },
+    {
+      "id": "minecolonies:cookie_dough",
+      "required": false
+    },
+    {
+      "id": "minecolonies:golden_bread",
+      "required": false
+    },
+    {
+      "id": "minecolonies:milky_bread",
+      "required": false
+    },
+    {
+      "id": "minecolonies:sugary_bread",
+      "required": false
+    },
+    {
       "id": "neapolitan:adzuki_cake",
       "required": false
     },
@@ -409,6 +437,22 @@
     },
     {
       "id": "survivalplus:sponge_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:carrot_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:chocolate_cake",
+      "required": false
+    },
+    {
+      "id": "thermal:rice",
+      "required": false
+    },
+    {
+      "id": "thermal:spice_cake",
       "required": false
     },
     {
