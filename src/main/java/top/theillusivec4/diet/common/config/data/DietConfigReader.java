@@ -96,9 +96,14 @@ public class DietConfigReader {
     private final ForgeConfigSpec.IntValue buttonX;
     private final ForgeConfigSpec.IntValue buttonY;
     private final ForgeConfigSpec.ConfigValue<String> textColor;
+    private final ForgeConfigSpec.BooleanValue addButton;
 
     public Client(ForgeConfigSpec.Builder builder) {
       builder.push("gui");
+
+      addButton =
+          builder.comment("True to add the Diet button to the inventory GUI, false otherwise")
+              .translation(CONFIG_PREFIX + "addButton").define("addButton", true);
 
       buttonX =
           builder.comment("The x-position of the GUI button").translation(CONFIG_PREFIX + "buttonX")
@@ -265,6 +270,7 @@ public class DietConfigReader {
     DietClientConfig.buttonX = CLIENT.buttonX.get();
     DietClientConfig.buttonY = CLIENT.buttonY.get();
     DietClientConfig.textColor = Color.decode(CLIENT.textColor.get()).getRGB();
+    DietClientConfig.addButton = CLIENT.addButton.get();
   }
 
   private static void createCustomServerConfig(ForgeConfigSpec spec, String name) {

@@ -84,13 +84,16 @@ public class DietClientEventsListener {
   public static void initGui(final ScreenEvent.InitScreenEvent.Post evt) {
     Screen screen = evt.getScreen();
 
-    if (screen instanceof InventoryScreen ||
-        (IntegrationManager.isCuriosLoaded() && CuriosIntegration.isCuriosScreen(screen))) {
-      AbstractContainerScreen<?> containerScreen = (AbstractContainerScreen<?>) screen;
-      evt.addListener(new DynamicButton(containerScreen,
-          containerScreen.getGuiLeft() + DietClientConfig.buttonX,
-          containerScreen.height / 2 + DietClientConfig.buttonY, 20, 18, 0, 0, 19, ICONS,
-          (button) -> Minecraft.getInstance().setScreen(new DietScreen(true))));
+    if (DietClientConfig.addButton) {
+
+      if (screen instanceof InventoryScreen ||
+          (IntegrationManager.isCuriosLoaded() && CuriosIntegration.isCuriosScreen(screen))) {
+        AbstractContainerScreen<?> containerScreen = (AbstractContainerScreen<?>) screen;
+        evt.addListener(new DynamicButton(containerScreen,
+            containerScreen.getGuiLeft() + DietClientConfig.buttonX,
+            containerScreen.height / 2 + DietClientConfig.buttonY, 20, 18, 0, 0, 19, ICONS,
+            (button) -> Minecraft.getInstance().setScreen(new DietScreen(true))));
+      }
     }
   }
 
