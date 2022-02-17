@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-1.0.2.3] - 2022.02.16
+### Added
+- Added config option `addButton` to `diet-client.toml` for enabling/disabling the Diet button in the inventory screen
+
 ## [1.16.5-1.0.2.2] - 2022.02.10
 ### Added
 - Added 5-food-group support for:
