@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import top.theillusivec4.diet.DietMod;
@@ -1671,7 +1671,7 @@ public class DietTagsProvider extends ItemTagsProvider {
     builder.add(item);
   }
 
-  protected void addTag(TagsProvider.TagAppender<Item> builder, Tag.Named<Item> tag) {
+  protected void addTag(TagsProvider.TagAppender<Item> builder, TagKey<Item> tag) {
     builder.addTag(tag);
   }
 
@@ -1685,8 +1685,8 @@ public class DietTagsProvider extends ItemTagsProvider {
     builder.addOptional(new ResourceLocation(name));
   }
 
-  protected Tag.Named<Item> tag(String name) {
-    return ItemTags.bind(DietMod.id(name));
+  protected TagKey<Item> tag(String name) {
+    return ItemTags.create(new ResourceLocation(DietMod.MOD_ID, name));
   }
 
   @SafeVarargs

@@ -10,10 +10,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +22,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -35,10 +35,10 @@ public class DietValueGenerator {
 
   private static final Map<Item, Set<IDietGroup>> GENERATED = new HashMap<>();
   private static final Stopwatch STOPWATCH = Stopwatch.createUnstarted();
-  private static final Tags.IOptionalNamedTag<Item> INGREDIENTS =
-      ItemTags.createOptional(new ResourceLocation(DietMod.id("ingredients")));
-  private static final Tags.IOptionalNamedTag<Item> SPECIAL_FOOD =
-      ItemTags.createOptional(new ResourceLocation(DietMod.id("special_food")));
+  private static final TagKey<Item> INGREDIENTS =
+      TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(DietMod.id("ingredients")));
+  private static final TagKey<Item> SPECIAL_FOOD =
+      TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(DietMod.id("special_food")));
 
   public static void setup() {
     MinecraftForge.EVENT_BUS.addListener(DietValueGenerator::onDatapackSync);
@@ -71,7 +71,8 @@ public class DietValueGenerator {
     for (Item item : ForgeRegistries.ITEMS) {
       FoodProperties food = item.getFoodProperties();
 
-      if ((food != null && food.getNutrition() > 0) || SPECIAL_FOOD.contains(item)) {
+      if ((food != null && food.getNutrition() > 0) ||
+          item.builtInRegistryHolder().is(SPECIAL_FOOD)) {
 
         for (IDietGroup group : groups) {
 
@@ -201,7 +202,7 @@ public class DietValueGenerator {
               .min(Comparator.comparing(ItemStack::getDescriptionId)).ifPresent(stack -> {
                 Item matchingItem = stack.getItem();
 
-                if (!INGREDIENTS.contains(matchingItem)) {
+                if (!matchingItem.builtInRegistryHolder().is(INGREDIENTS)) {
                   Set<IDietGroup> fallback = GENERATED.get(matchingItem);
 
                   if (fallback != null) {

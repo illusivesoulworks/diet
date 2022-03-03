@@ -1,6 +1,7 @@
 package top.theillusivec4.diet.api;
 
 import java.awt.Color;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.Tags;
@@ -23,7 +24,7 @@ public interface IDietGroup {
 
   boolean isBeneficial();
 
-  Tags.IOptionalNamedTag<Item> getTag();
+  TagKey<Item> getTag();
 
   boolean contains(ItemStack stack);
 }

@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
@@ -44,8 +46,8 @@ public class DietCsv {
   public static void writeGroup(Player player, IDietGroup group) {
     List<String[]> data = new ArrayList<>();
 
-    for (Item item : group.getTag().getValues()) {
-      writeStack(player, item.getDefaultInstance(), data);
+    for (Holder<Item> item : Registry.ITEM.getTagOrEmpty(group.getTag())) {
+      writeStack(player, item.value().getDefaultInstance(), data);
     }
     write(data);
   }

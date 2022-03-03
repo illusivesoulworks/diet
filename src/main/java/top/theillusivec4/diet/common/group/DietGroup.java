@@ -20,11 +20,11 @@ package top.theillusivec4.diet.common.group;
 
 import java.awt.Color;
 import java.util.Objects;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.Tags;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietGroup;
 
@@ -38,7 +38,7 @@ public final class DietGroup implements IDietGroup {
   private final double gainMultiplier;
   private final double decayMultiplier;
   private final boolean beneficial;
-  private final Tags.IOptionalNamedTag<Item> tag;
+  private final TagKey<Item> tag;
 
   public DietGroup(String name, Item icon, Color color, float defaultValue, int order,
                    double gainMultiplier, double decayMultiplier, boolean beneficial) {
@@ -50,7 +50,7 @@ public final class DietGroup implements IDietGroup {
     this.gainMultiplier = gainMultiplier;
     this.decayMultiplier = decayMultiplier;
     this.beneficial = beneficial;
-    this.tag = ItemTags.createOptional(new ResourceLocation(DietMod.id(name)));
+    this.tag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(DietMod.id(name)));
   }
 
   @Override
@@ -94,13 +94,13 @@ public final class DietGroup implements IDietGroup {
   }
 
   @Override
-  public Tags.IOptionalNamedTag<Item> getTag() {
+  public TagKey<Item> getTag() {
     return tag;
   }
 
   @Override
   public boolean contains(ItemStack stack) {
-    return tag.contains(stack.getItem());
+    return stack.is(this.tag);
   }
 
   @Override

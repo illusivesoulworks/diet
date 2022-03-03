@@ -22,7 +22,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -36,22 +35,21 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.common.ForgeTagHandler;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietApi;
 import top.theillusivec4.diet.api.DietCapability;
@@ -66,9 +64,8 @@ import top.theillusivec4.diet.common.util.DietResult;
 @Mod.EventBusSubscriber(modid = DietMod.MOD_ID, value = Dist.CLIENT)
 public class DietClientEventsListener {
 
-  private static final Tags.IOptionalNamedTag<Item> SPECIAL_FOOD =
-      ForgeTagHandler.createOptionalTag(ForgeRegistries.ITEMS,
-          new ResourceLocation(DietMod.MOD_ID, "special_food"), new HashSet<>());
+  private static final TagKey<Item> SPECIAL_FOOD =
+      TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(DietMod.MOD_ID, "special_food"));
   private static final DecimalFormat DECIMALFORMAT = Util.make(new DecimalFormat("#.#"),
       (num) -> num.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT)));
 
@@ -127,7 +124,7 @@ public class DietClientEventsListener {
 
       if (result != DietResult.EMPTY) {
         Map<IDietGroup, Float> groups = result.get();
-        boolean specialFood = SPECIAL_FOOD.contains(stack.getItem());
+        boolean specialFood = stack.is(SPECIAL_FOOD);
 
         if (!groups.isEmpty()) {
           List<Component> groupsTooltips = new ArrayList<>();
@@ -177,7 +174,7 @@ public class DietClientEventsListener {
   @SuppressWarnings("unused")
   public static void renderTooltip(TickEvent.RenderTickEvent event) {
 
-    if(event.phase == TickEvent.Phase.END && tooltip != null) {
+    if (event.phase == TickEvent.Phase.END && tooltip != null) {
       Minecraft mc = Minecraft.getInstance();
       Screen screen = mc.screen;
 
