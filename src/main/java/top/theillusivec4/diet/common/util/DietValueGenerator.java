@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -59,79 +60,81 @@ public class DietValueGenerator {
   }
 
   public static void reload(MinecraftServer server) {
-    DietMod.LOGGER.info("Generating diet values...");
-    STOPWATCH.reset();
-    STOPWATCH.start();
-    DietMod.LOGGER.info("Finding ungrouped food items...");
-    GENERATED.clear();
-    RecipeManager recipeManager = server.getRecipeManager();
-    Set<Item> ungroupedFood = new HashSet<>();
-    Set<IDietGroup> groups = DietGroups.get();
-    items:
-    for (Item item : ForgeRegistries.ITEMS) {
-      FoodProperties food = item.getFoodProperties();
+    CompletableFuture.runAsync(() -> {
+      DietMod.LOGGER.info("Generating diet values...");
+      STOPWATCH.reset();
+      STOPWATCH.start();
+      DietMod.LOGGER.info("Finding ungrouped food items...");
+      GENERATED.clear();
+      RecipeManager recipeManager = server.getRecipeManager();
+      Set<Item> ungroupedFood = new HashSet<>();
+      Set<IDietGroup> groups = DietGroups.get();
+      items:
+      for (Item item : ForgeRegistries.ITEMS) {
+        FoodProperties food = item.getFoodProperties();
 
-      if ((food != null && food.getNutrition() > 0) ||
-          item.builtInRegistryHolder().is(SPECIAL_FOOD)) {
+        if ((food != null && food.getNutrition() > 0) ||
+            item.builtInRegistryHolder().is(SPECIAL_FOOD)) {
 
-        for (IDietGroup group : groups) {
+          for (IDietGroup group : groups) {
 
-          if (group.contains(new ItemStack(item))) {
-            continue items;
+            if (group.contains(new ItemStack(item))) {
+              continue items;
+            }
           }
+          ungroupedFood.add(item);
         }
-        ungroupedFood.add(item);
       }
-    }
-    DietMod.LOGGER.info("Found {} ungrouped food items", ungroupedFood.size());
-    DietMod.LOGGER.info("Finding recipes...");
-    Map<Item, Recipe<?>> recipes = new HashMap<>();
-    List<Recipe<?>> sortedRecipes =
-        recipeManager.getRecipes().stream().sorted(Comparator.comparing(Recipe::getId))
-            .collect(Collectors.toList());
-    Set<Recipe<?>> processedRecipes = new HashSet<>();
+      DietMod.LOGGER.info("Found {} ungrouped food items", ungroupedFood.size());
+      DietMod.LOGGER.info("Finding recipes...");
+      Map<Item, Recipe<?>> recipes = new HashMap<>();
+      List<Recipe<?>> sortedRecipes =
+          recipeManager.getRecipes().stream().sorted(Comparator.comparing(Recipe::getId))
+              .collect(Collectors.toList());
+      Set<Recipe<?>> processedRecipes = new HashSet<>();
 
-    for (Recipe<?> recipe : sortedRecipes) {
-      ItemStack output = ItemStack.EMPTY;
+      for (Recipe<?> recipe : sortedRecipes) {
+        ItemStack output = ItemStack.EMPTY;
 
-      try {
-        output = recipe.getResultItem();
-      } catch (Exception e) {
-        DietMod.LOGGER.error("Diet was unable to process recipe: {}", recipe.getId());
+        try {
+          output = recipe.getResultItem();
+        } catch (Exception e) {
+          DietMod.LOGGER.error("Diet was unable to process recipe: {}", recipe.getId());
+        }
+
+        // This shouldn't be necessary but some mods are violating the non-null contract, so
+        // we have to check for it anyways
+        if (output == null) {
+          DietMod.LOGGER.debug("Diet was unable to process recipe due to null output: {}",
+              recipe.getId());
+          continue;
+        }
+        Item item = output.getItem();
+
+        if (ungroupedFood.contains(item) && !processedRecipes.contains(recipe)) {
+          recipes.putIfAbsent(item, recipe);
+          traverseRecipes(processedRecipes, recipes, sortedRecipes, recipe);
+        }
       }
+      DietMod.LOGGER.info("Found {} recipes to process", recipes.size());
+      DietMod.LOGGER.info("Processing items...");
+      Set<Item> processedItems = new HashSet<>();
 
-      // This shouldn't be necessary but some mods are violating the non-null contract, so
-      // we have to check for it anyways
-      if (output == null) {
-        DietMod.LOGGER.debug("Diet was unable to process recipe due to null output: {}",
-            recipe.getId());
-        continue;
+      for (Map.Entry<Item, Recipe<?>> entry : recipes.entrySet()) {
+        Item item = entry.getKey();
+
+        if (!processedItems.contains(item)) {
+          traverseIngredients(processedItems, recipes, groups, item);
+        }
       }
-      Item item = output.getItem();
+      DietMod.LOGGER.info("Processed {} items", processedItems.size());
+      STOPWATCH.stop();
+      DietMod.LOGGER.info("Generating diet values took {}", STOPWATCH);
 
-      if (ungroupedFood.contains(item) && !processedRecipes.contains(recipe)) {
-        recipes.putIfAbsent(item, recipe);
-        traverseRecipes(processedRecipes, recipes, sortedRecipes, recipe);
+      for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+        DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
       }
-    }
-    DietMod.LOGGER.info("Found {} recipes to process", recipes.size());
-    DietMod.LOGGER.info("Processing items...");
-    Set<Item> processedItems = new HashSet<>();
-
-    for (Map.Entry<Item, Recipe<?>> entry : recipes.entrySet()) {
-      Item item = entry.getKey();
-
-      if (!processedItems.contains(item)) {
-        traverseIngredients(processedItems, recipes, groups, item);
-      }
-    }
-    DietMod.LOGGER.info("Processed {} items", processedItems.size());
-    STOPWATCH.stop();
-    DietMod.LOGGER.info("Generating diet values took {}", STOPWATCH);
-
-    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-      DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
-    }
+    });
   }
 
   public static void sync(ServerPlayer player) {
