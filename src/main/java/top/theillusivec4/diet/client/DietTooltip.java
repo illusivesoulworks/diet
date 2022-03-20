@@ -32,6 +32,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.diet.api.DietApi;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 
 public class DietTooltip {
@@ -56,11 +57,22 @@ public class DietTooltip {
     for (Map.Entry<Attribute, AttributeTooltip> attribute : mergedAttributes.entrySet()) {
       AttributeTooltip info = attribute.getValue();
       Attribute key = attribute.getKey();
-      addAttributeTooltip(tooltips, info.added, AttributeModifier.Operation.ADDITION, key);
-      addAttributeTooltip(tooltips, info.baseMultiplier, AttributeModifier.Operation.MULTIPLY_BASE,
-          key);
-      addAttributeTooltip(tooltips, info.totalMultiplier - 1.0f,
-          AttributeModifier.Operation.MULTIPLY_TOTAL, key);
+
+      if (key == DietApi.getInstance().getNaturalRegeneration()) {
+        float val = (info.added + info.added * info.baseMultiplier) * info.totalMultiplier;
+
+        if (val < 1.0f) {
+          tooltips.add(new TranslatableComponent("attribute.diet.modifier.disabled",
+              new TranslatableComponent(key.getDescriptionId())).withStyle(ChatFormatting.RED));
+        }
+      } else {
+        addAttributeTooltip(tooltips, info.added, AttributeModifier.Operation.ADDITION, key);
+        addAttributeTooltip(tooltips, info.baseMultiplier,
+            AttributeModifier.Operation.MULTIPLY_BASE,
+            key);
+        addAttributeTooltip(tooltips, info.totalMultiplier - 1.0f,
+            AttributeModifier.Operation.MULTIPLY_TOTAL, key);
+      }
     }
     Map<MobEffect, Integer> mergedEffects = new HashMap<>();
 

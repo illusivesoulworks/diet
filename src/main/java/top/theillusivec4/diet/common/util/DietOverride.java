@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.InterModComms;
 import org.apache.commons.lang3.tuple.Triple;
 
