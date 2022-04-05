@@ -21,7 +21,12 @@ package top.theillusivec4.diet;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -61,6 +66,8 @@ public class DietMod {
     eventBus.addListener(this::clientSetup);
     eventBus.addListener(this::process);
     eventBus.addListener(this::gatherData);
+    eventBus.addGenericListener(Attribute.class, this::registerAttributes);
+    eventBus.addListener(this::modifyAttributes);
     DietConfigReader.setup();
   }
 
@@ -80,6 +87,15 @@ public class DietMod {
 
   private void process(final InterModProcessEvent evt) {
     DietOverride.process(evt.getIMCStream());
+  }
+
+  private void registerAttributes(final RegistryEvent.Register<Attribute> evt) {
+    evt.getRegistry().register(DietApi.getInstance().getNaturalRegeneration()
+        .setRegistryName(new ResourceLocation(DietMod.MOD_ID, "natural_regeneration")));
+  }
+
+  private void modifyAttributes(final EntityAttributeModificationEvent evt) {
+    evt.add(EntityType.PLAYER, DietApi.getInstance().getNaturalRegeneration());
   }
 
   private void gatherData(final GatherDataEvent evt) {

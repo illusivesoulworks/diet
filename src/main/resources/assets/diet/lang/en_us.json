@@ -22,5 +22,7 @@
   "commands.diet.export.started": "Exporting diet information, please wait...",
   "commands.diet.export.finished": "Finished exporting diet information to logs/diet.csv",
   "key.diet.category": "Diet",
-  "key.diet.open.desc": "Open Diet Screen"
+  "key.diet.open.desc": "Open Diet Screen",
+  "attribute.diet.modifier.disabled": "No %s",
+  "diet.naturalRegeneration": "Natural Regeneration"
 }

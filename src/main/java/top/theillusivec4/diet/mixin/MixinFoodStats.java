@@ -6,9 +6,11 @@ import net.minecraft.util.FoodStats;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietCapability;
+import top.theillusivec4.diet.common.util.DietRegeneration;
 import top.theillusivec4.diet.common.util.PlayerSensitive;
 
 @SuppressWarnings("unused")
@@ -32,6 +34,15 @@ public class MixinFoodStats implements PlayerSensitive {
         tracker.captureStack(ItemStack.EMPTY);
       }
     });
+  }
+
+  @ModifyVariable(
+      at = @At(
+          value = "INVOKE_ASSIGN",
+          target = "net/minecraft/world/GameRules.getBoolean(Lnet/minecraft/world/GameRules$RuleKey;)Z"),
+      method = "tick(Lnet/minecraft/entity/player/PlayerEntity;)V")
+  public boolean diet$tick(boolean flag) {
+    return diet_player != null ? DietRegeneration.hasRegen(diet_player, flag) : flag;
   }
 
   @Override

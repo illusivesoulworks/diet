@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.BiFunction;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
@@ -24,6 +26,9 @@ import top.theillusivec4.diet.common.util.DietResult;
 import top.theillusivec4.diet.common.util.DietValueGenerator;
 
 public class DietApiImpl extends DietApi {
+
+  private static final Attribute NATURAL_REGEN =
+      new RangedAttribute("diet.naturalRegeneration", 1.0d, 0.0d, 2.0d).setShouldWatch(true);
 
   @Override
   public Set<IDietGroup> getGroups(PlayerEntity player, ItemStack input) {
@@ -142,5 +147,10 @@ public class DietApiImpl extends DietApi {
       result.put(group, value);
     }
     return result;
+  }
+
+  @Override
+  public Attribute getNaturalRegeneration() {
+    return NATURAL_REGEN;
   }
 }

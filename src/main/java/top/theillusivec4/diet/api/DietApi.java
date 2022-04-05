@@ -3,6 +3,7 @@ package top.theillusivec4.diet.api;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
@@ -46,5 +47,17 @@ public abstract class DietApi {
    */
   public IDietResult get(PlayerEntity player, ItemStack stack, int food, float saturation) {
     return HashMap::new;
+  }
+
+  /**
+   * Retrieves the attribute that controls player natural regeneration from high food and saturation
+   * levels.
+   * Values >= 1 allows natural regeneration to work as normal as per the gamerule
+   * Values < 1 disables natural regeneration
+   *
+   * @return The registered attribute
+   */
+  public Attribute getNaturalRegeneration() {
+    return null;
   }
 }
