@@ -26,11 +26,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.server.command.ModIdArgument;
@@ -118,6 +118,9 @@ public class DietCommand {
 
     exportArg.then(Commands.literal("uncategorized")
         .executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.UNCATEGORIZED)));
+
+    exportArg.then(Commands.literal("trails")
+        .executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.TRAILS)));
 
     dietCommand.then(exportArg);
 
@@ -238,6 +241,8 @@ public class DietCommand {
         DietCsv.write(player, args[0]);
       } else if (mode == DietCsv.ExportMode.UNCATEGORIZED) {
         DietCsv.writeUncategorized(player);
+      } else if (mode == DietCsv.ExportMode.TRAILS) {
+        DietCsv.writeTrails(player);
       }
       sender.sendSuccess(
           new TranslatableComponent("commands." + DietMod.MOD_ID + ".export.finished"), true);
