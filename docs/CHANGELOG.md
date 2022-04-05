@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.2-1.2.1.0] - 2022.04.04
+### Added
+- Added `diet:natural_regeneration` attribute for controlling natural regeneration through Diet effects [#122](https://github.com/TheIllusiveC4/Diet/issues/122)
+- Added `/diet export trails` command to export data about which items are being used to generate food groups for all
+  items
+### Changed
+- Revamped Diet value generation algorithm to be more performant and address more edge-case issues. Be aware of changes
+  to food groups for existing items and report discrepancies to the issue tracker
+  [#120](https://github.com/TheIllusiveC4/Diet/issues/120)
+  [#83](https://github.com/TheIllusiveC4/Diet/issues/83)
+
 ## [1.18.2-1.2.0.5] - 2022.03.02
 ### Changed
 - Updated to Minecraft 1.18.2
