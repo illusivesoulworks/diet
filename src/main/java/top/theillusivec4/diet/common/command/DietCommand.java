@@ -119,6 +119,9 @@ public class DietCommand {
     exportArg.then(Commands.literal("uncategorized")
         .executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.UNCATEGORIZED)));
 
+    exportArg.then(Commands.literal("trails")
+        .executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.TRAILS)));
+
     dietCommand.then(exportArg);
 
     dispatcher.register(dietCommand);
@@ -239,6 +242,8 @@ public class DietCommand {
         DietCsv.write(player, args[0]);
       } else if (mode == DietCsv.ExportMode.UNCATEGORIZED) {
         DietCsv.writeUncategorized(player);
+      } else if (mode == DietCsv.ExportMode.TRAILS) {
+        DietCsv.writeTrails(player);
       }
       sender.sendFeedback(
           new TranslationTextComponent("commands." + DietMod.MOD_ID + ".export.finished"), true);

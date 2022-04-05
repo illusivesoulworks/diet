@@ -1,15 +1,19 @@
 package top.theillusivec4.diet.data;
 
 import com.google.common.collect.Lists;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.data.TagsProvider;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ITag;
@@ -17,6 +21,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 
 public class DietTagsProvider extends ItemTagsProvider {
@@ -71,6 +76,7 @@ public class DietTagsProvider extends ItemTagsProvider {
     }
 
     addTag(this.proteins, ItemTags.FISHES);
+    addTag(this.proteins, Tags.Items.SLIMEBALLS);
     elements = createList(
         Items.BEEF,
         Items.BONE,
@@ -139,10 +145,67 @@ public class DietTagsProvider extends ItemTagsProvider {
     }
     addTag(this.vegetables, ItemTags.FLOWERS);
     addTag(this.vegetables, ItemTags.LEAVES);
+    addTag(this.vegetables, Tags.Items.MUSHROOMS);
 
     add(this.specialFood, Items.CAKE);
+
     addTag(this.ingredients, Tags.Items.DYES);
+//    addTag(this.ingredients, Tags.Items.BARRELS);
+    addTag(this.ingredients, Tags.Items.BOOKSHELVES);
+    addTag(this.ingredients, Tags.Items.CHESTS);
+    addTag(this.ingredients, Tags.Items.COBBLESTONE);
+    addTag(this.ingredients, Tags.Items.DUSTS);
+    addTag(this.ingredients, Tags.Items.END_STONES);
+    addTag(this.ingredients, Tags.Items.ENDER_PEARLS);
+    addTag(this.ingredients, Tags.Items.FEATHERS);
+    addTag(this.ingredients, Tags.Items.FENCE_GATES);
+    addTag(this.ingredients, Tags.Items.GEMS);
+    addTag(this.ingredients, Tags.Items.GLASS);
+    addTag(this.ingredients, Tags.Items.GLASS_PANES);
+    addTag(this.ingredients, Tags.Items.GRAVEL);
+    addTag(this.ingredients, Tags.Items.GUNPOWDER);
+    addTag(this.ingredients, Tags.Items.HEADS);
+    addTag(this.ingredients, Tags.Items.INGOTS);
+    addTag(this.ingredients, Tags.Items.LEATHER);
+    addTag(this.ingredients, Tags.Items.NETHER_STARS);
+    addTag(this.ingredients, Tags.Items.NETHERRACK);
+    addTag(this.ingredients, Tags.Items.NUGGETS);
+    addTag(this.ingredients, Tags.Items.OBSIDIAN);
+    addTag(this.ingredients, Tags.Items.ORES);
+    addTag(this.ingredients, Tags.Items.RODS);
+    addTag(this.ingredients, Tags.Items.SAND);
+    addTag(this.ingredients, Tags.Items.SHEARS);
+    addTag(this.ingredients, Tags.Items.STAINED_GLASS);
+    addTag(this.ingredients, Tags.Items.STONE);
+    addTag(this.ingredients, Tags.Items.STORAGE_BLOCKS);
+    addTag(this.ingredients, Tags.Items.STRING);
+    addTag(this.ingredients, ItemTags.WOOL);
+    addTag(this.ingredients, ItemTags.PLANKS);
+    addTag(this.ingredients, ItemTags.STONE_BRICKS);
+    addTag(this.ingredients, ItemTags.BUTTONS);
+    addTag(this.ingredients, ItemTags.CARPETS);
+    addTag(this.ingredients, ItemTags.WOODEN_PRESSURE_PLATES);
+    addTag(this.ingredients, ItemTags.DOORS);
+    addTag(this.ingredients, ItemTags.LOGS);
+    addTag(this.ingredients, ItemTags.BANNERS);
+    addTag(this.ingredients, ItemTags.SAND);
+    addTag(this.ingredients, ItemTags.STAIRS);
+    addTag(this.ingredients, ItemTags.SLABS);
+    addTag(this.ingredients, ItemTags.FENCES);
+    addTag(this.ingredients, ItemTags.BOATS);
+    addTag(this.ingredients, ItemTags.SIGNS);
+    addTag(this.ingredients, ItemTags.MUSIC_DISCS);
+    addTag(this.ingredients, ItemTags.COALS);
+    addTag(this.ingredients, ItemTags.ARROWS);
+    addTag(this.ingredients, ItemTags.LECTERN_BOOKS);
     add(this.ingredients, Items.WATER_BUCKET);
+    add(this.ingredients, Items.GLASS_BOTTLE);
+    add(this.ingredients, Items.ICE);
+    add(this.ingredients, Items.PACKED_ICE);
+    add(this.ingredients, Items.BLUE_ICE);
+    add(this.ingredients, Items.PAPER);
+    add(this.ingredients, Items.POTION);
+    add(this.ingredients, Items.SHULKER_SHELL);
 
     List<String> optionalElements = createList(
         "ars_nouveau:mana_berry",
@@ -1586,7 +1649,8 @@ public class DietTagsProvider extends ItemTagsProvider {
         "vanillafoodpantry:sunbutter_jar",
         "vanillafoodpantry:portion_milk",
         "vanillafoodpantry:foodpowder_jerky_mix",
-        "simplefarming:ginger"
+        "simplefarming:ginger",
+        "simplefarming:olive_oil"
     );
 
     for (String element : optionalElements) {

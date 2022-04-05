@@ -21,6 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.DietApi;
 import top.theillusivec4.diet.api.IDietGroup;
+import top.theillusivec4.diet.common.util.DietValueGenerator;
 
 public class DietCsv {
 
@@ -58,7 +59,27 @@ public class DietCsv {
 
       if (food != null && food.getHealing() > 0 &&
           DietApi.getInstance().getGroups(player, item.getDefaultInstance()).isEmpty()) {
-        data.add(new String[] {Objects.requireNonNull(item.getRegistryName()).toString()});
+        data.add(new String[] {getName(item)});
+      }
+    }
+    write(data);
+  }
+
+  public static void writeTrails(PlayerEntity player) {
+    List<String[]> data = new ArrayList<>();
+
+    for (Item item : ForgeRegistries.ITEMS) {
+
+      if (!DietApi.getInstance().getGroups(player, item.getDefaultInstance()).isEmpty()) {
+        List<Item> trail = DietValueGenerator.getTrail(item);
+
+        if (!trail.isEmpty()) {
+          data.add(new String[] {getName(item), getName(trail.get(0))});
+
+          for (int i = 1; i < trail.size(); i++) {
+            data.add(new String[] {"", getName(trail.get(i))});
+          }
+        }
       }
     }
     write(data);
@@ -70,8 +91,8 @@ public class DietCsv {
 
     if (!list.isEmpty()) {
       Map.Entry<IDietGroup, Float> entry = list.get(0);
-      data.add(new String[] {Objects.requireNonNull(stack.getItem().getRegistryName()).toString(),
-          entry.getKey().getName(), entry.getValue().toString()});
+      data.add(new String[] {getName(stack.getItem()), entry.getKey().getName(),
+          entry.getValue().toString()});
 
       for (int i = 1; i < list.size(); i++) {
         Map.Entry<IDietGroup, Float> entry2 = list.get(i);
@@ -99,8 +120,13 @@ public class DietCsv {
     return String.join(",", data);
   }
 
+  private static String getName(Item item) {
+    return Objects.requireNonNull(item.getRegistryName()).toString();
+  }
+
   public enum ExportMode {
     ALL("all"),
+    TRAILS("trails"),
     MOD_ID("mod_id"),
     GROUP("group"),
     UNCATEGORIZED("uncategorized");
