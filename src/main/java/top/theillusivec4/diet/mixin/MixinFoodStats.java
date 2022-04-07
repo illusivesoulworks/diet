@@ -14,7 +14,9 @@ import top.theillusivec4.diet.common.util.DietRegeneration;
 import top.theillusivec4.diet.common.util.PlayerSensitive;
 
 @SuppressWarnings("unused")
-@Mixin(FoodStats.class)
+// Priority is slightly higher to inject into Tough as Nail's @Overwrite in the same class
+// https://github.com/TheIllusiveC4/Diet/issues/123
+@Mixin(value = FoodStats.class, priority = 1100)
 public class MixinFoodStats implements PlayerSensitive {
 
   PlayerEntity diet_player;

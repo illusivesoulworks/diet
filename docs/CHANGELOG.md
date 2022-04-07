@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-1.0.3.1] - 2022.04.06
+### Fixed
+- Fixed mixin crash when loaded with Tough as Nails [#123](https://github.com/TheIllusiveC4/Diet/issues/123)
+
 ## [1.16.5-1.0.3.0] - 2022.04.04
 ### Added
 - Added `diet:natural_regeneration` attribute for controlling natural regeneration through Diet effects [#122](https://github.com/TheIllusiveC4/Diet/issues/122)
