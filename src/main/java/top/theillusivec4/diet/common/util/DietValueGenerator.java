@@ -233,7 +233,8 @@ public class DietValueGenerator {
     Set<Item> result = new HashSet<>();
     items:
     for (Item item : ForgeRegistries.ITEMS) {
-      FoodProperties food = item.getFoodProperties();
+      ItemStack stack = item.getDefaultInstance();
+      FoodProperties food = stack.getFoodProperties(null);
 
       if ((food != null && food.getNutrition() > 0) ||
           (ITEM_TAGS != null && ITEM_TAGS.getTag(SPECIAL_FOOD).contains(item))) {

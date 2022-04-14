@@ -150,7 +150,7 @@ public class DietCapabilityEventsListener {
     LivingEntity livingEntity = evt.getEntityLiving();
 
     if (!livingEntity.level.isClientSide && livingEntity instanceof Player) {
-      FoodProperties food = stack.getItem().getFoodProperties();
+      FoodProperties food = stack.getFoodProperties(livingEntity);
 
       if (food != null) {
         DietCapability.get((Player) livingEntity).ifPresent(diet -> diet.consume(stack));

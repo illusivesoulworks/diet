@@ -94,7 +94,7 @@ public class DietApiImpl extends DietApi {
     float healing;
     float saturation;
     Item item = input.getItem();
-    FoodProperties food = item.getFoodProperties();
+    FoodProperties food = input.getFoodProperties(player);
     BiFunction<Player, ItemStack, Triple<List<ItemStack>, Integer, Float>> func =
         DietOverride.get(item);
     Float override = DietServerConfig.foodOverrides.get(item);
