@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.2-1.3.0.0] - 2022.04.14
+### Added
+- Added 5-food-group support for:
+  - Goat Food [#125](https://github.com/TheIllusiveC4/Diet/issues/125)
+- [API] Added `IDietTracker#consume(List, int, float)` for directly adding values to a player's diet through a list of
+representative or component stacks and food values
+### Changed
+- Updated to and requires Forge 40.0.47+
+
 ## [1.18.2-1.2.1.0] - 2022.04.04
 ### Added
 - Added `diet:natural_regeneration` attribute for controlling natural regeneration through Diet effects [#122](https://github.com/TheIllusiveC4/Diet/issues/122)
