@@ -926,6 +926,10 @@
       "required": false
     },
     {
+      "id": "goat_meat_mod:rawchevon",
+      "required": false
+    },
+    {
       "id": "greekfantasy:gorgon_blood",
       "required": false
     },

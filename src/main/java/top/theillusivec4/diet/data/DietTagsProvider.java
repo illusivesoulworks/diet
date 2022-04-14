@@ -1039,7 +1039,8 @@ public class DietTagsProvider extends ItemTagsProvider {
         "rankine:aged_cheese",
         "rankine:unaged_cheese",
         "thermal:peanut",
-        "minecolonies:raw_pumpkin_pie"
+        "minecolonies:raw_pumpkin_pie",
+        "goat_meat_mod:rawchevon"
     );
 
     for (String element : optionalElements) {
