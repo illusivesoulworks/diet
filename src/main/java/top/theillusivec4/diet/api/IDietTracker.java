@@ -18,6 +18,7 @@
 
 package top.theillusivec4.diet.api;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -34,6 +35,8 @@ public interface IDietTracker {
   void consume(ItemStack stack);
 
   void consume(ItemStack stack, int healing, float saturationModifier);
+
+  void consume(List<ItemStack> stacks, int healing, float saturationModifier);
 
   float getValue(String group);
 

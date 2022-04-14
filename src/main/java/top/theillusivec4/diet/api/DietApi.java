@@ -2,6 +2,7 @@ package top.theillusivec4.diet.api;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
@@ -46,6 +47,19 @@ public abstract class DietApi {
    * @return A diet result
    */
   public IDietResult get(Player player, ItemStack stack, int food, float saturation) {
+    return HashMap::new;
+  }
+
+  /**
+   * Retrieves a diet result from a given player, ItemStack list, food, and saturation.
+   *
+   * @param player     The player involved
+   * @param stacks     The ItemStacks involved
+   * @param food       The amount of food gain
+   * @param saturation The saturation modifier
+   * @return A diet result
+   */
+  public IDietResult get(Player player, List<ItemStack> stacks, int food, float saturation) {
     return HashMap::new;
   }
 

@@ -2,6 +2,7 @@ package top.theillusivec4.diet.common.impl;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -126,12 +127,21 @@ public class DietApiImpl extends DietApi {
 
   @Override
   public IDietResult get(Player player, ItemStack input, int healing, float saturation) {
-    Set<IDietGroup> groups = DietApi.getInstance().getGroups(player, input);
+    return get(player, Collections.singletonList(input), healing, saturation);
+  }
+
+  @Override
+  public IDietResult get(Player player, List<ItemStack> stacks, int food, float saturation) {
+    Set<IDietGroup> groups = new HashSet<>();
+
+    for (ItemStack stack : stacks) {
+      groups.addAll(getGroups(player, stack));
+    }
 
     if (groups.isEmpty()) {
       return DietResult.EMPTY;
     }
-    return new DietResult(calculate(healing, saturation, groups));
+    return new DietResult(calculate(food, saturation, groups));
   }
 
   private static Map<IDietGroup, Float> calculate(float healing, float saturation,

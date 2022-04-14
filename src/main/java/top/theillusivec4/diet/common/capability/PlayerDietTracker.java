@@ -41,7 +41,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -133,6 +132,18 @@ public class PlayerDietTracker implements IDietTracker {
 
       if (result != DietResult.EMPTY) {
         addEaten(stack.getItem());
+        apply(result);
+      }
+    }
+  }
+
+  @Override
+  public void consume(List<ItemStack> stacks, int healing, float saturationModifier) {
+
+    if (active && prevFood != player.getFoodData().getFoodLevel()) {
+      IDietResult result = DietApi.getInstance().get(player, stacks, healing, saturationModifier);
+
+      if (result != DietResult.EMPTY) {
         apply(result);
       }
     }
