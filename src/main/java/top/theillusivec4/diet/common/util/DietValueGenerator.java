@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -69,25 +68,23 @@ public class DietValueGenerator {
   }
 
   public static void reload(MinecraftServer server) {
-    CompletableFuture.runAsync(() -> {
-      DietMod.LOGGER.info("Generating diet values...");
-      Stopwatch stopwatch = Stopwatch.createUnstarted();
-      stopwatch.reset();
-      stopwatch.start();
-      GENERATED.clear();
-      TRAILS.clear();
-      Set<IDietGroup> groups = DietGroups.get();
-      findUngroupedFoods(groups);
-      RecipeManager recipeManager = server.getRecipeManager();
-      findAllRecipesForItems(recipeManager);
-      processItems(groups);
-      stopwatch.stop();
-      DietMod.LOGGER.info("Generating diet values took {}", stopwatch);
+    DietMod.LOGGER.info("Generating diet values...");
+    Stopwatch stopwatch = Stopwatch.createUnstarted();
+    stopwatch.reset();
+    stopwatch.start();
+    GENERATED.clear();
+    TRAILS.clear();
+    Set<IDietGroup> groups = DietGroups.get();
+    findUngroupedFoods(groups);
+    RecipeManager recipeManager = server.getRecipeManager();
+    findAllRecipesForItems(recipeManager);
+    processItems(groups);
+    stopwatch.stop();
+    DietMod.LOGGER.info("Generating diet values took {}", stopwatch);
 
-      for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-        DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
-      }
-    });
+    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+      DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
+    }
   }
 
   private static void processItems(Set<IDietGroup> groups) {
