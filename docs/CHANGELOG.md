@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-1.0.3.2] - 2022.04.17
+### Fixed
+- Fixed Bread sometimes dropping out of the default Grains group [#126](https://github.com/TheIllusiveC4/Diet/issues/126)
+- Fixed possible NoClassDefFoundError crashes at the cost of potentially (marginally) longer load times [#127](https://github.com/TheIllusiveC4/Diet/issues/127)
+
 ## [1.16.5-1.0.3.1] - 2022.04.06
 ### Fixed
 - Fixed mixin crash when loaded with Tough as Nails [#123](https://github.com/TheIllusiveC4/Diet/issues/123)

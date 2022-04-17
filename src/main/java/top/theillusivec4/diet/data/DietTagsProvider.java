@@ -68,7 +68,8 @@ public class DietTagsProvider extends ItemTagsProvider {
 
     elements = createList(
         Items.WHEAT,
-        Items.CAKE
+        Items.CAKE,
+        Items.BREAD
     );
 
     for (Item element : elements) {
