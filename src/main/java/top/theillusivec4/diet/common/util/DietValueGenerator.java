@@ -84,10 +84,10 @@ public class DietValueGenerator {
       processItems(groups);
       stopwatch.stop();
       DietMod.LOGGER.info("Generating diet values took {}", stopwatch);
+    }
 
-      for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-        DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
-      }
+    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+      DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
     }
   }
 
