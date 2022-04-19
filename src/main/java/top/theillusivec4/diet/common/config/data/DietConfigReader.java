@@ -131,6 +131,7 @@ public class DietConfigReader {
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> foodOverrides;
 
     public final ForgeConfigSpec.BooleanValue hideTooltipsUntilEaten;
+    public final ForgeConfigSpec.BooleanValue generateGroupsForEmptyItems;
 
     public General(ForgeConfigSpec.Builder builder) {
       builder.push("death_penalty");
@@ -146,10 +147,11 @@ public class DietConfigReader {
               .defineInRange("deathPenaltyLoss", 1.0f, 0.0f, 1.0f);
 
       deathPenaltyMethod = builder
-          .comment("The method to apply for losses due to death penalties." +
-              "\nAMOUNT = Reduce by a flat percentage amount" +
-              "\nPERCENT = Reduce by a percent of the current value" +
-              "\nRESET = Reset value to defaults")
+          .comment("""
+              The method to apply for losses due to death penalties.
+              AMOUNT = Reduce by a flat percentage amount
+              PERCENT = Reduce by a percent of the current value
+              RESET = Reset value to defaults""")
           .translation(CONFIG_PREFIX + "deathPenaltyMethod")
           .defineEnum("deathPenaltyMethod", DietServerConfig.DeathPenaltyMethod.AMOUNT);
 
@@ -172,6 +174,11 @@ public class DietConfigReader {
                   "\nFormat: \"modid:name;quality\"")
           .translation(CONFIG_PREFIX + "foodOverrides")
           .defineList("foodOverrides", new ArrayList<>(), s -> s instanceof String);
+
+      generateGroupsForEmptyItems = builder.comment(
+              "Set to true to assign food groups to unclassified items based on its component items")
+          .translation(CONFIG_PREFIX + "generateGroupsForEmptyItems")
+          .define("generateGroupsForEmptyItems", true);
 
       builder.pop();
 
@@ -237,6 +244,7 @@ public class DietConfigReader {
     DietServerConfig.decayPenaltyPerGroup = GENERAL.decayPenaltyPerGroup.get().floatValue();
     DietServerConfig.gainPenaltyPerGroup = GENERAL.gainPenaltyPerGroup.get().floatValue();
     DietServerConfig.hideTooltipsUntilEaten = GENERAL.hideTooltipsUntilEaten.get();
+    DietServerConfig.generateGroupsForEmptyItems = GENERAL.generateGroupsForEmptyItems.get();
     DietServerConfig.foodOverrides = new HashMap<>();
 
     for (String s : GENERAL.foodOverrides.get()) {
