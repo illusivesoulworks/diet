@@ -129,6 +129,7 @@ public class DietConfigReader {
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> foodOverrides;
 
     public final ForgeConfigSpec.BooleanValue hideTooltipsUntilEaten;
+    public final ForgeConfigSpec.BooleanValue generateGroupsForEmptyItems;
 
     public General(ForgeConfigSpec.Builder builder) {
       builder.push("death_penalty");
@@ -170,6 +171,11 @@ public class DietConfigReader {
                   "\nFormat: \"modid:name;quality\"")
           .translation(CONFIG_PREFIX + "foodOverrides")
           .defineList("foodOverrides", new ArrayList<>(), s -> s instanceof String);
+
+      generateGroupsForEmptyItems = builder.comment(
+              "Set to true to assign food groups to unclassified items based on its component items")
+          .translation(CONFIG_PREFIX + "generateGroupsForEmptyItems")
+          .define("generateGroupsForEmptyItems", true);
 
       builder.pop();
 
@@ -235,6 +241,7 @@ public class DietConfigReader {
     DietServerConfig.decayPenaltyPerGroup = GENERAL.decayPenaltyPerGroup.get().floatValue();
     DietServerConfig.gainPenaltyPerGroup = GENERAL.gainPenaltyPerGroup.get().floatValue();
     DietServerConfig.hideTooltipsUntilEaten = GENERAL.hideTooltipsUntilEaten.get();
+    DietServerConfig.generateGroupsForEmptyItems = GENERAL.generateGroupsForEmptyItems.get();
     DietServerConfig.foodOverrides = new HashMap<>();
 
     for (String s : GENERAL.foodOverrides.get()) {

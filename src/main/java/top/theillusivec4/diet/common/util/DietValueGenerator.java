@@ -28,6 +28,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.api.IDietGroup;
+import top.theillusivec4.diet.common.config.DietServerConfig;
 import top.theillusivec4.diet.common.group.DietGroups;
 import top.theillusivec4.diet.common.network.DietNetwork;
 import top.theillusivec4.diet.common.network.server.SPacketGeneratedValues;
@@ -66,19 +67,22 @@ public class DietValueGenerator {
   }
 
   public static void reload(MinecraftServer server) {
-    DietMod.LOGGER.info("Generating diet values...");
-    Stopwatch stopwatch = Stopwatch.createUnstarted();
-    stopwatch.reset();
-    stopwatch.start();
     GENERATED.clear();
     TRAILS.clear();
-    Set<IDietGroup> groups = DietGroups.get();
-    findUngroupedFoods(groups);
-    RecipeManager recipeManager = server.getRecipeManager();
-    findAllRecipesForItems(recipeManager);
-    processItems(groups);
-    stopwatch.stop();
-    DietMod.LOGGER.info("Generating diet values took {}", stopwatch);
+
+    if (DietServerConfig.generateGroupsForEmptyItems) {
+      DietMod.LOGGER.info("Generating diet values...");
+      Stopwatch stopwatch = Stopwatch.createUnstarted();
+      stopwatch.reset();
+      stopwatch.start();
+      Set<IDietGroup> groups = DietGroups.get();
+      findUngroupedFoods(groups);
+      RecipeManager recipeManager = server.getRecipeManager();
+      findAllRecipesForItems(recipeManager);
+      processItems(groups);
+      stopwatch.stop();
+      DietMod.LOGGER.info("Generating diet values took {}", stopwatch);
+    }
 
     for (ServerPlayerEntity player : server.getPlayerList().getPlayers()) {
       DietNetwork.sendGeneratedValuesS2C(player, GENERATED);
