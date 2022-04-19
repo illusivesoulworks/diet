@@ -143,7 +143,7 @@ public class DietValueGenerator {
                 keys.add(item);
               }
 
-              if (ITEM_TAGS == null || !ITEM_TAGS.getTag(INGREDIENTS).contains(targetItem)) {
+              if (ITEM_TAGS == null || !ITEM_TAGS.getTag(INGREDIENTS).contains(item)) {
                 Set<IDietGroup> fallback = GENERATED.get(item);
                 boolean addTrail = false;
 
