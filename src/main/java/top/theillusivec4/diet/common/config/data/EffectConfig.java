@@ -30,11 +30,13 @@ public class EffectConfig {
     public String name;
     public String operation;
     public Double amount;
+    public Double increment;
   }
 
   public static class StatusEffectConfig {
     public String name;
     public Integer power;
+    public Integer increment;
   }
 
   public static class ConditionConfig {

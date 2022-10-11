@@ -241,9 +241,8 @@ public class PlayerDietTracker implements IDietTracker {
 
         for (DietEffect.DietAttribute attribute : effect.attributes) {
           AttributeInstance att = player.getAttribute(attribute.attribute);
-          AttributeModifier mod =
-              new AttributeModifier(effect.uuid, "Diet group effect", attribute.amount * multiplier,
-                  attribute.operation);
+          AttributeModifier mod = new AttributeModifier(effect.uuid, "Diet group effect",
+              attribute.amount + ((multiplier - 1) * attribute.increment), attribute.operation);
 
           if (att != null && !att.hasModifier(mod)) {
             att.addPermanentModifier(mod);
@@ -256,8 +255,8 @@ public class PlayerDietTracker implements IDietTracker {
         for (DietEffect.DietStatusEffect statusEffect : effect.statusEffects) {
           int duration = EFFECT_DURATION.getOrDefault(statusEffect.effect, 100);
           MobEffectInstance instance =
-              new MobEffectInstance(statusEffect.effect, duration, statusEffect.power * multiplier,
-                  true, false);
+              new MobEffectInstance(statusEffect.effect, duration,
+                  statusEffect.power + ((multiplier - 1) * statusEffect.increment), true, false);
           player.addEffect(instance);
           info.addEffect(instance);
         }

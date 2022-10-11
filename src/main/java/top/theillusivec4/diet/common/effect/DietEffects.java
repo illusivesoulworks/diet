@@ -24,10 +24,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.diet.DietMod;
 import top.theillusivec4.diet.common.config.data.EffectConfig;
@@ -113,7 +113,9 @@ public class DietEffects {
             continue;
           }
           AttributeModifier.Operation operation = getOperation(attributeConfig.operation);
-          attributes.add(new DietEffect.DietAttribute(att, operation, attributeConfig.amount));
+          double amount = attributeConfig.amount;
+          double increment = attributeConfig.increment != null ? attributeConfig.increment : amount;
+          attributes.add(new DietEffect.DietAttribute(att, operation, amount, increment));
         }
         List<DietEffect.DietStatusEffect> statusEffects = new ArrayList<>();
 
@@ -132,7 +134,9 @@ public class DietEffects {
             continue;
           }
           int power = statusEffectConfig.power != null ? statusEffectConfig.power : 1;
-          statusEffects.add(new DietEffect.DietStatusEffect(effect, power));
+          int increment =
+              statusEffectConfig.increment != null ? statusEffectConfig.increment : power;
+          statusEffects.add(new DietEffect.DietStatusEffect(effect, power, increment));
         }
         UUID uuid = UUID.nameUUIDFromBytes((UUID_PREFIX + uuidSuffix).getBytes());
         uuidSuffix++;

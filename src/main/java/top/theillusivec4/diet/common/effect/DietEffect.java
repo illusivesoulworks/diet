@@ -49,22 +49,35 @@ public class DietEffect {
     public final Attribute attribute;
     public final AttributeModifier.Operation operation;
     public final double amount;
+    public final double increment;
 
     public DietAttribute(Attribute attribute, AttributeModifier.Operation operation,
                          double amount) {
+      this(attribute, operation, amount, amount);
+    }
+
+    public DietAttribute(Attribute attribute, AttributeModifier.Operation operation,
+                         double amount, double increment) {
       this.attribute = attribute;
       this.operation = operation;
       this.amount = amount;
+      this.increment = increment;
     }
   }
 
   public static class DietStatusEffect {
     public final MobEffect effect;
     public final int power;
+    public final int increment;
 
     public DietStatusEffect(MobEffect effect, int power) {
+      this(effect, power, power);
+    }
+
+    public DietStatusEffect(MobEffect effect, int power, int increment) {
       this.effect = effect;
       this.power = power;
+      this.increment = increment;
     }
   }
 
