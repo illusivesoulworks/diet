@@ -362,6 +362,10 @@
       "required": false
     },
     {
+      "id": "culturaldelights:avocado",
+      "required": false
+    },
+    {
       "id": "cyclic:apple_diamond",
       "required": false
     },
@@ -379,6 +383,14 @@
     },
     {
       "id": "druidcraft:elderberries",
+      "required": false
+    },
+    {
+      "id": "ecologics:coconut_slice",
+      "required": false
+    },
+    {
+      "id": "ecologics:prickly_pear",
       "required": false
     },
     {

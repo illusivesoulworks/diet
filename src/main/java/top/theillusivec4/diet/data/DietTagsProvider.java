@@ -453,7 +453,10 @@ public class DietTagsProvider extends ItemTagsProvider {
         "rankine:juniper_berries",
         "rankine:coconut",
         "thermal:strawberry",
-        "thermal:frost_melon_slice"
+        "thermal:frost_melon_slice",
+        "ecologics:coconut_slice",
+        "ecologics:prickly_pear",
+        "culturaldelights:avocado"
     );
 
     for (String element : optionalElements) {
@@ -1041,7 +1044,23 @@ public class DietTagsProvider extends ItemTagsProvider {
         "rankine:unaged_cheese",
         "thermal:peanut",
         "minecolonies:raw_pumpkin_pie",
-        "goat_meat_mod:rawchevon"
+        "goat_meat_mod:rawchevon",
+        "ecologics:crab_meat",
+        "ecologics:walnut",
+        "alexsdelight:raw_bison",
+        "alexsdelight:raw_bunfungus",
+        "alexsdelight:cooked_centipede_leg",
+        "butchersdelight:beefribs",
+        "butchersdelight:legcow",
+        "butchersdelight:beeftenderloin",
+        "butchersdelight:sheepshank",
+        "butchersdelight:sheeprack",
+        "butchersdelight:sheeploin",
+        "butchersdelight:ham",
+        "butchersdelight:porkloin",
+        "butchersdelight:porkribs",
+        "culturaldelights:squid",
+        "culturaldelights:glow_squid"
     );
 
     for (String element : optionalElements) {
@@ -1595,7 +1614,15 @@ public class DietTagsProvider extends ItemTagsProvider {
         "thermal:green_bean",
         "thermal:tomato",
         "thermal:coffee",
-        "minecolonies:raw_pumpkin_pie"
+        "minecolonies:raw_pumpkin_pie",
+        "butchersdelight:black_pepper",
+        "butchersdelight:garlic",
+        "corn_delight:corn",
+        "corn_delight:nachos_bowl",
+        "culturaldelights:cucumber",
+        "culturaldelights:pickle",
+        "culturaldelights:eggplant",
+        "culturaldelights:white_eggplant"
     );
 
     for (String element : optionalElements) {
@@ -1648,7 +1675,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "vanillafoodpantry:portion_milk",
         "vanillafoodpantry:foodpowder_jerky_mix",
         "simplefarming:ginger",
-        "simplefarming:olive_oil"
+        "simplefarming:olive_oil",
+        "butchersdelight:black_pepper",
+        "butchersdelight:garlic"
     );
 
     for (String element : optionalElements) {

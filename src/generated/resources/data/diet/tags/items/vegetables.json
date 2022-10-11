@@ -100,6 +100,14 @@
       "required": false
     },
     {
+      "id": "butchersdelight:black_pepper",
+      "required": false
+    },
+    {
+      "id": "butchersdelight:garlic",
+      "required": false
+    },
+    {
       "id": "byg:black_puff",
       "required": false
     },
@@ -153,6 +161,14 @@
     },
     {
       "id": "conjurerscookbook:mandrake_root",
+      "required": false
+    },
+    {
+      "id": "corn_delight:corn",
+      "required": false
+    },
+    {
+      "id": "corn_delight:nachos_bowl",
       "required": false
     },
     {
@@ -377,6 +393,22 @@
     },
     {
       "id": "croptopia:zucchini",
+      "required": false
+    },
+    {
+      "id": "culturaldelights:cucumber",
+      "required": false
+    },
+    {
+      "id": "culturaldelights:eggplant",
+      "required": false
+    },
+    {
+      "id": "culturaldelights:pickle",
+      "required": false
+    },
+    {
+      "id": "culturaldelights:white_eggplant",
       "required": false
     },
     {

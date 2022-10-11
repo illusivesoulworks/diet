@@ -58,6 +58,14 @@
     "minecraft:potion",
     "minecraft:shulker_shell",
     {
+      "id": "butchersdelight:black_pepper",
+      "required": false
+    },
+    {
+      "id": "butchersdelight:garlic",
+      "required": false
+    },
+    {
       "id": "croptopia:butter",
       "required": false
     },

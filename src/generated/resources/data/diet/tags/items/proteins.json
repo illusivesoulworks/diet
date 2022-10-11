@@ -18,6 +18,18 @@
     "minecraft:suspicious_stew",
     "minecraft:turtle_egg",
     {
+      "id": "alexsdelight:cooked_centipede_leg",
+      "required": false
+    },
+    {
+      "id": "alexsdelight:raw_bison",
+      "required": false
+    },
+    {
+      "id": "alexsdelight:raw_bunfungus",
+      "required": false
+    },
+    {
       "id": "alexsmobs:blobfish",
       "required": false
     },
@@ -234,6 +246,42 @@
       "required": false
     },
     {
+      "id": "butchersdelight:beefribs",
+      "required": false
+    },
+    {
+      "id": "butchersdelight:beeftenderloin",
+      "required": false
+    },
+    {
+      "id": "butchersdelight:ham",
+      "required": false
+    },
+    {
+      "id": "butchersdelight:legcow",
+      "required": false
+    },
+    {
+      "id": "butchersdelight:porkloin",
+      "required": false
+    },
+    {
+      "id": "butchersdelight:porkribs",
+      "required": false
+    },
+    {
+      "id": "butchersdelight:sheeploin",
+      "required": false
+    },
+    {
+      "id": "butchersdelight:sheeprack",
+      "required": false
+    },
+    {
+      "id": "butchersdelight:sheepshank",
+      "required": false
+    },
+    {
       "id": "charcoal_pit:calamari",
       "required": false
     },
@@ -418,6 +466,14 @@
       "required": false
     },
     {
+      "id": "culturaldelights:glow_squid",
+      "required": false
+    },
+    {
+      "id": "culturaldelights:squid",
+      "required": false
+    },
+    {
       "id": "dropthemeat:piglin_porkchop",
       "required": false
     },
@@ -495,6 +551,14 @@
     },
     {
       "id": "dropthemeat:villager_nose",
+      "required": false
+    },
+    {
+      "id": "ecologics:crab_meat",
+      "required": false
+    },
+    {
+      "id": "ecologics:walnut",
       "required": false
     },
     {
