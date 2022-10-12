@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
   - Corn Delight [#140](https://github.com/TheIllusiveC4/Diet/issues/140)
 - Added `increment` field to Diet status effects and attribute modifiers configurations to control how much to increment
 amounts when used with the `every` match method
+- Added Swedish `sv_se` localization (thanks Regnander!) [#132](https://github.com/TheIllusiveC4/Diet/pull/132)
 ### Changed
 - When used with the `every` match method, status effects now increment at least one level for each match even if the
 power is initially set to 0 [#139](https://github.com/TheIllusiveC4/Diet/issues/139)
