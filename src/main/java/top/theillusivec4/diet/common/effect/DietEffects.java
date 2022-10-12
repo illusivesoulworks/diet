@@ -134,8 +134,8 @@ public class DietEffects {
             continue;
           }
           int power = statusEffectConfig.power != null ? statusEffectConfig.power : 1;
-          int increment =
-              statusEffectConfig.increment != null ? statusEffectConfig.increment : power;
+          int increment = Math.max(1,
+              statusEffectConfig.increment != null ? statusEffectConfig.increment : power);
           statusEffects.add(new DietEffect.DietStatusEffect(effect, power, increment));
         }
         UUID uuid = UUID.nameUUIDFromBytes((UUID_PREFIX + uuidSuffix).getBytes());
