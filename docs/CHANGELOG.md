@@ -3,6 +3,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.2-1.3.2.0] - 2022.10.11
+### Added
+- Added 5-food-group support for:
+  - Ecologics [#129](https://github.com/TheIllusiveC4/Diet/issues/129)
+  - Alex's Delight [#130](https://github.com/TheIllusiveC4/Diet/issues/130)
+  - Butcher's Delight [#131](https://github.com/TheIllusiveC4/Diet/issues/131)
+  - Cultural Delights [#141](https://github.com/TheIllusiveC4/Diet/issues/141)
+  - Corn Delight [#140](https://github.com/TheIllusiveC4/Diet/issues/140)
+- Added `increment` field to Diet status effects and attribute modifiers configurations to control how much to increment
+amounts when used with the `every` match method
+### Changed
+- When used with the `every` match method, status effects now increment at least one level for each match even if the
+power is initially set to 0 [#139](https://github.com/TheIllusiveC4/Diet/issues/139)
+
 ## [1.18.2-1.3.1.0] - 2022.04.18
 ### Added
 - Added `generateGroupsForEmptyItems` configuration option for enabling and disabling Diet generating food groups for
