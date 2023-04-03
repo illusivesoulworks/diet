@@ -30,7 +30,7 @@ public class DietCsv {
     List<String[]> data = new ArrayList<>();
 
     for (Item item : ForgeRegistries.ITEMS) {
-      ResourceLocation rl = item.getRegistryName();
+      ResourceLocation rl = item.builtInRegistryHolder().key().location();;
 
       if (rl != null) {
 
@@ -125,7 +125,8 @@ public class DietCsv {
   }
 
   private static String getName(Item item) {
-    return Objects.requireNonNull(item.getRegistryName()).toString();
+    return Objects.requireNonNull(item
+        .builtInRegistryHolder().key().location()).toString();
   }
 
   public enum ExportMode {

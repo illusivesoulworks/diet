@@ -21,7 +21,7 @@ public class SPacketEaten {
   public static void encode(SPacketEaten msg, FriendlyByteBuf buf) {
 
     for (Item item : msg.items) {
-      ResourceLocation rl = item.getRegistryName();
+      ResourceLocation rl = item.builtInRegistryHolder().key().location();;
 
       if (rl != null) {
         buf.writeResourceLocation(rl);

@@ -37,8 +37,9 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
@@ -78,7 +79,7 @@ public class DietClientEventsListener {
 
   @SubscribeEvent
   @SuppressWarnings("unused")
-  public static void initGui(final ScreenEvent.InitScreenEvent.Post evt) {
+  public static void initGui(final ScreenEvent.Init.Post evt) {
     Screen screen = evt.getScreen();
 
     if (DietClientConfig.addButton) {
@@ -109,7 +110,7 @@ public class DietClientEventsListener {
   @SubscribeEvent
   @SuppressWarnings("unused")
   public static void tooltip(final ItemTooltipEvent evt) {
-    Player player = evt.getPlayer();
+    Player player = evt.getEntity();
     List<Component> tooltips = evt.getToolTip();
     ItemStack stack = evt.getItemStack();
 
@@ -133,16 +134,16 @@ public class DietClientEventsListener {
 
           for (Map.Entry<IDietGroup, Float> entry : groups.entrySet()) {
             float value = entry.getValue();
-            TranslatableComponent groupName = new TranslatableComponent(
-                "groups." + DietMod.MOD_ID + "." + entry.getKey().getName() + ".name");
-            TranslatableComponent tooltip = null;
+            MutableComponent groupName =MutableComponent.create(new TranslatableContents(
+                "groups." + DietMod.MOD_ID + "." + entry.getKey().getName() + ".name"));
+            MutableComponent tooltip = null;
 
             if (specialFood) {
               tooltip =
-                  new TranslatableComponent("tooltip." + DietMod.MOD_ID + ".group_", groupName);
+                  MutableComponent.create(new TranslatableContents("tooltip." + DietMod.MOD_ID + ".group_", groupName));
             } else if (value > 0.0f) {
-              tooltip = new TranslatableComponent("tooltip." + DietMod.MOD_ID + ".group",
-                  DECIMALFORMAT.format(entry.getValue() * 100), groupName);
+              tooltip = MutableComponent.create(new TranslatableContents("tooltip." + DietMod.MOD_ID + ".group",
+                  DECIMALFORMAT.format(entry.getValue() * 100), groupName));
             }
 
             if (tooltip != null) {
@@ -160,8 +161,8 @@ public class DietClientEventsListener {
           groupsTooltips.addAll(harmful);
 
           if (!groupsTooltips.isEmpty()) {
-            tooltips.add(TextComponent.EMPTY);
-            tooltips.add(new TranslatableComponent("tooltip." + DietMod.MOD_ID + ".eaten")
+            tooltips.add(MutableComponent.create(ComponentContents.EMPTY));
+            tooltips.add(MutableComponent.create(new TranslatableContents("tooltip." + DietMod.MOD_ID + ".eaten"))
                 .withStyle(ChatFormatting.GRAY));
             tooltips.addAll(groupsTooltips);
           }

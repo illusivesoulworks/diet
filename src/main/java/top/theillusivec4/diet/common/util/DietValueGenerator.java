@@ -274,8 +274,8 @@ public class DietValueGenerator {
 
     @Override
     public int compare(ItemStack o1, ItemStack o2) {
-      ResourceLocation rl1 = o1.getItem().getRegistryName();
-      ResourceLocation rl2 = o2.getItem().getRegistryName();
+      ResourceLocation rl1 = o1.getItem().builtInRegistryHolder().key().location();;
+      ResourceLocation rl2 = o2.getItem().builtInRegistryHolder().key().location();
 
       if (rl1 == null) {
         return 1;

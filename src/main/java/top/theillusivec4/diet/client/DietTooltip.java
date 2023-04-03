@@ -15,18 +15,13 @@
  * If not, see <https://www.gnu.org/licenses/>.
  *
  */
-
 package top.theillusivec4.diet.client;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -35,115 +30,120 @@ import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.diet.api.DietApi;
 import top.theillusivec4.diet.common.effect.DietEffectsInfo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class DietTooltip {
 
-  public static List<Component> getEffects() {
-    List<DietEffectsInfo.AttributeModifier> modifiers = DietScreen.tooltip.getModifiers();
-    List<DietEffectsInfo.StatusEffect> effects = DietScreen.tooltip.getEffects();
+    public static List<Component> getEffects() {
+        List<DietEffectsInfo.AttributeModifier> modifiers = DietScreen.tooltip.getModifiers();
+        List<DietEffectsInfo.StatusEffect> effects = DietScreen.tooltip.getEffects();
 
-    if (modifiers.isEmpty() && effects.isEmpty()) {
-      return new ArrayList<>();
-    }
-    List<Component> tooltips = new ArrayList<>();
-    tooltips.add(new TranslatableComponent("tooltip.diet.effects"));
-    tooltips.add(TextComponent.EMPTY);
-    Map<Attribute, AttributeTooltip> mergedAttributes = new HashMap<>();
-
-    for (DietEffectsInfo.AttributeModifier modifier : modifiers) {
-      mergedAttributes.computeIfAbsent(modifier.getAttribute(), (k) -> new AttributeTooltip())
-          .merge(modifier);
-    }
-
-    for (Map.Entry<Attribute, AttributeTooltip> attribute : mergedAttributes.entrySet()) {
-      AttributeTooltip info = attribute.getValue();
-      Attribute key = attribute.getKey();
-
-      if (key == DietApi.getInstance().getNaturalRegeneration()) {
-        float val = (info.added + info.added * info.baseMultiplier) * info.totalMultiplier;
-
-        if (val < 1.0f) {
-          tooltips.add(new TranslatableComponent("attribute.diet.modifier.disabled",
-              new TranslatableComponent(key.getDescriptionId())).withStyle(ChatFormatting.RED));
+        if (modifiers.isEmpty() && effects.isEmpty()) {
+            return new ArrayList<>();
         }
-      } else {
-        addAttributeTooltip(tooltips, info.added, AttributeModifier.Operation.ADDITION, key);
-        addAttributeTooltip(tooltips, info.baseMultiplier,
-            AttributeModifier.Operation.MULTIPLY_BASE,
-            key);
-        addAttributeTooltip(tooltips, info.totalMultiplier - 1.0f,
-            AttributeModifier.Operation.MULTIPLY_TOTAL, key);
-      }
+        List<Component> tooltips = new ArrayList<>();
+        tooltips.add(MutableComponent.create(new TranslatableContents("tooltip.diet.effects")));
+        tooltips.add(MutableComponent.create(ComponentContents.EMPTY));
+        Map<Attribute, AttributeTooltip> mergedAttributes = new HashMap<>();
+
+        for (DietEffectsInfo.AttributeModifier modifier : modifiers) {
+            mergedAttributes.computeIfAbsent(modifier.getAttribute(), (k) -> new AttributeTooltip())
+                .merge(modifier);
+        }
+
+        for (Map.Entry<Attribute, AttributeTooltip> attribute : mergedAttributes.entrySet()) {
+            AttributeTooltip info = attribute.getValue();
+            Attribute key = attribute.getKey();
+
+            if (key == DietApi.getInstance().getNaturalRegeneration()) {
+                float val = (info.added + info.added * info.baseMultiplier) * info.totalMultiplier;
+
+                if (val < 1.0f) {
+                    tooltips.add(MutableComponent.create(new TranslatableContents("attribute.diet.modifier.disabled",
+                        MutableComponent.create(new TranslatableContents(key.getDescriptionId())).withStyle(ChatFormatting.RED))));
+                }
+            } else {
+                addAttributeTooltip(tooltips, info.added, AttributeModifier.Operation.ADDITION, key);
+                addAttributeTooltip(tooltips, info.baseMultiplier,
+                    AttributeModifier.Operation.MULTIPLY_BASE,
+                    key);
+                addAttributeTooltip(tooltips, info.totalMultiplier - 1.0f,
+                    AttributeModifier.Operation.MULTIPLY_TOTAL, key);
+            }
+        }
+        Map<MobEffect, Integer> mergedEffects = new HashMap<>();
+
+        for (DietEffectsInfo.StatusEffect effect : effects) {
+            mergedEffects.compute(effect.getEffect(),
+                (k, v) -> v == null ? effect.getAmplifier() : Math.max(v, effect.getAmplifier()));
+        }
+
+        for (Map.Entry<MobEffect, Integer> effect : mergedEffects.entrySet()) {
+            MobEffect effect1 = effect.getKey();
+            MutableComponent iformattabletextcomponent =
+                MutableComponent.create(new TranslatableContents(effect1.getDescriptionId()));
+
+            if (effect.getValue() > 0) {
+                iformattabletextcomponent =
+                    MutableComponent.create(new TranslatableContents("potion.withAmplifier", iformattabletextcomponent,
+                        MutableComponent.create(new TranslatableContents("potion.potency." + effect.getValue()))));
+            }
+            tooltips.add(
+                iformattabletextcomponent.withStyle(effect1.getCategory().getTooltipFormatting()));
+        }
+        return tooltips;
     }
-    Map<MobEffect, Integer> mergedEffects = new HashMap<>();
 
-    for (DietEffectsInfo.StatusEffect effect : effects) {
-      mergedEffects.compute(effect.getEffect(),
-          (k, v) -> v == null ? effect.getAmplifier() : Math.max(v, effect.getAmplifier()));
+    private static void addAttributeTooltip(List<Component> tooltips, float amount,
+                                            AttributeModifier.Operation operation,
+                                            Attribute attribute) {
+        double formattedAmount;
+
+        if (operation != AttributeModifier.Operation.MULTIPLY_BASE &&
+            operation != AttributeModifier.Operation.MULTIPLY_TOTAL) {
+
+            if (attribute.equals(Attributes.KNOCKBACK_RESISTANCE)) {
+                formattedAmount = amount * 10.0D;
+            } else {
+                formattedAmount = amount;
+            }
+        } else {
+            formattedAmount = amount * 100.0D;
+        }
+
+        if (amount > 0.0D) {
+            tooltips.add((MutableComponent.create(new TranslatableContents("attribute.modifier.plus." + operation.toValue(),
+                    ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(formattedAmount),
+                    MutableComponent.create(new TranslatableContents(attribute.getDescriptionId()))))
+                .withStyle(ChatFormatting.BLUE)));
+        } else if (amount < 0.0D) {
+            formattedAmount = formattedAmount * -1.0D;
+            tooltips.add((MutableComponent.create(new TranslatableContents("attribute.modifier.take." + operation.toValue(),
+                    ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(formattedAmount),
+                    MutableComponent.create(new TranslatableContents(attribute.getDescriptionId()))))
+                .withStyle(ChatFormatting.RED)));
+        }
     }
 
-    for (Map.Entry<MobEffect, Integer> effect : mergedEffects.entrySet()) {
-      MobEffect effect1 = effect.getKey();
-      MutableComponent iformattabletextcomponent =
-          new TranslatableComponent(effect1.getDescriptionId());
+    private static class AttributeTooltip {
 
-      if (effect.getValue() > 0) {
-        iformattabletextcomponent =
-            new TranslatableComponent("potion.withAmplifier", iformattabletextcomponent,
-                new TranslatableComponent("potion.potency." + effect.getValue()));
-      }
-      tooltips.add(
-          iformattabletextcomponent.withStyle(effect1.getCategory().getTooltipFormatting()));
+        float added = 0;
+        float baseMultiplier = 0.0f;
+        float totalMultiplier = 1.0f;
+
+        void merge(DietEffectsInfo.AttributeModifier modifier) {
+            float amount = modifier.getAmount();
+
+            if (modifier.getOperation() == AttributeModifier.Operation.MULTIPLY_BASE) {
+                baseMultiplier += amount;
+            } else if (modifier.getOperation() == AttributeModifier.Operation.MULTIPLY_TOTAL) {
+                totalMultiplier *= 1.0f + amount;
+            } else {
+                added += amount;
+            }
+        }
     }
-    return tooltips;
-  }
-
-  private static void addAttributeTooltip(List<Component> tooltips, float amount,
-                                          AttributeModifier.Operation operation,
-                                          Attribute attribute) {
-    double formattedAmount;
-
-    if (operation != AttributeModifier.Operation.MULTIPLY_BASE &&
-        operation != AttributeModifier.Operation.MULTIPLY_TOTAL) {
-
-      if (attribute.equals(Attributes.KNOCKBACK_RESISTANCE)) {
-        formattedAmount = amount * 10.0D;
-      } else {
-        formattedAmount = amount;
-      }
-    } else {
-      formattedAmount = amount * 100.0D;
-    }
-
-    if (amount > 0.0D) {
-      tooltips.add((new TranslatableComponent("attribute.modifier.plus." + operation.toValue(),
-          ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(formattedAmount),
-          new TranslatableComponent(attribute.getDescriptionId())))
-          .withStyle(ChatFormatting.BLUE));
-    } else if (amount < 0.0D) {
-      formattedAmount = formattedAmount * -1.0D;
-      tooltips.add((new TranslatableComponent("attribute.modifier.take." + operation.toValue(),
-          ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(formattedAmount),
-          new TranslatableComponent(attribute.getDescriptionId())))
-          .withStyle(ChatFormatting.RED));
-    }
-  }
-
-  private static class AttributeTooltip {
-
-    float added = 0;
-    float baseMultiplier = 0.0f;
-    float totalMultiplier = 1.0f;
-
-    void merge(DietEffectsInfo.AttributeModifier modifier) {
-      float amount = modifier.getAmount();
-
-      if (modifier.getOperation() == AttributeModifier.Operation.MULTIPLY_BASE) {
-        baseMultiplier += amount;
-      } else if (modifier.getOperation() == AttributeModifier.Operation.MULTIPLY_TOTAL) {
-        totalMultiplier *= 1.0f + amount;
-      } else {
-        added += amount;
-      }
-    }
-  }
 }

@@ -69,7 +69,7 @@ public class DietEffectsInfo {
     for (AttributeModifier modifier : modifiers) {
       CompoundTag modifierTag = new CompoundTag();
       modifierTag.putString("AttributeName",
-          Objects.requireNonNull(modifier.attribute.getRegistryName()).toString());
+          Objects.requireNonNull(ForgeRegistries.ATTRIBUTES.getKey(modifier.attribute).getNamespace().toString()));
       modifierTag.putFloat("Amount", modifier.amount);
       modifierTag.putInt("Operation", modifier.operation.toValue());
       modifiersList.add(modifierTag);
@@ -79,7 +79,7 @@ public class DietEffectsInfo {
     for (StatusEffect effect : effects) {
       CompoundTag effectTag = new CompoundTag();
       effectTag.putString("EffectName",
-          Objects.requireNonNull(effect.effect.getRegistryName()).toString());
+          Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect.effect).getNamespace().toString()));
       effectTag.putInt("Amplifier", effect.amplifier);
       effectsList.add(effectTag);
     }

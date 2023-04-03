@@ -66,7 +66,7 @@ public class DietCapabilityEventsListener {
   @SuppressWarnings("unused")
   public static void playerClone(final PlayerEvent.Clone evt) {
 
-    if (evt.getPlayer() instanceof ServerPlayer player) {
+    if (evt.getEntity() instanceof ServerPlayer player) {
       Player original = evt.getOriginal();
       original.reviveCaps();
       DietCapability.get(player)
@@ -111,7 +111,7 @@ public class DietCapabilityEventsListener {
   @SuppressWarnings("unused")
   public static void playerRespawned(final PlayerEvent.PlayerRespawnEvent evt) {
 
-    if (evt.getPlayer() instanceof ServerPlayer player) {
+    if (evt.getEntity() instanceof ServerPlayer player) {
       DietCapability.get(player).ifPresent(IDietTracker::sync);
     }
   }
@@ -120,7 +120,7 @@ public class DietCapabilityEventsListener {
   @SuppressWarnings("unused")
   public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent evt) {
 
-    if (evt.getPlayer() instanceof ServerPlayer player) {
+    if (evt.getEntity() instanceof ServerPlayer player) {
       DietCapability.get(player).ifPresent(IDietTracker::sync);
     }
   }
@@ -129,7 +129,7 @@ public class DietCapabilityEventsListener {
   @SuppressWarnings("unused")
   public static void playerDimensionTravel(final PlayerEvent.PlayerChangedDimensionEvent evt) {
 
-    if (evt.getPlayer() instanceof ServerPlayer player) {
+    if (evt.getEntity() instanceof ServerPlayer player) {
       DietCapability.get(player).ifPresent(IDietTracker::sync);
     }
   }
@@ -147,7 +147,7 @@ public class DietCapabilityEventsListener {
   @SuppressWarnings("unused")
   public static void finishItemUse(final LivingEntityUseItemEvent.Finish evt) {
     ItemStack stack = evt.getItem();
-    LivingEntity livingEntity = evt.getEntityLiving();
+    LivingEntity livingEntity = evt.getEntity();
 
     if (!livingEntity.level.isClientSide && livingEntity instanceof Player) {
       FoodProperties food = stack.getFoodProperties(livingEntity);

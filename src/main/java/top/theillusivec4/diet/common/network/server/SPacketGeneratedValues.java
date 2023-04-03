@@ -36,7 +36,7 @@ public class SPacketGeneratedValues {
       for (IDietGroup group : entry.getValue()) {
         listNBT.add(StringTag.valueOf(group.getName()));
       }
-      compoundNBT.put(Objects.requireNonNull(entry.getKey().getRegistryName()).toString(), listNBT);
+      compoundNBT.put(Objects.requireNonNull(entry.getKey().builtInRegistryHolder().key().location()).toString(), listNBT);
     }
     buf.writeNbt(compoundNBT);
   }

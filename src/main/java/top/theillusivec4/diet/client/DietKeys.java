@@ -15,20 +15,25 @@
  * If not, see <https://www.gnu.org/licenses/>.
  *
  */
-
 package top.theillusivec4.diet.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import top.theillusivec4.diet.DietMod;
 
+@Mod.EventBusSubscriber(modid = DietMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class DietKeys {
 
-  public static final KeyMapping OPEN_GUI =
-      new KeyMapping("key.diet.open.desc", InputConstants.UNKNOWN.getValue(),
-          "key.diet.category");
+    public static final KeyMapping OPEN_GUI =
+        new KeyMapping("key.diet.open.desc", InputConstants.UNKNOWN.getValue(),
+            "key.diet.category");
 
-  public static void setup() {
-    ClientRegistry.registerKeyBinding(OPEN_GUI);
-  }
+    @SubscribeEvent
+    public static void setup(RegisterKeyMappingsEvent event) {
+        event.register(OPEN_GUI);
+    }
 }

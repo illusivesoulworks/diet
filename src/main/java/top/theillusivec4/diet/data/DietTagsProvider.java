@@ -11,6 +11,7 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -180,7 +181,7 @@ public class DietTagsProvider extends ItemTagsProvider {
     addTag(this.ingredients, ItemTags.PLANKS);
     addTag(this.ingredients, ItemTags.STONE_BRICKS);
     addTag(this.ingredients, ItemTags.BUTTONS);
-    addTag(this.ingredients, ItemTags.CARPETS);
+    addTag(this.ingredients, ItemTags.WOOL_CARPETS);
     addTag(this.ingredients, ItemTags.WOODEN_PRESSURE_PLATES);
     addTag(this.ingredients, ItemTags.DOORS);
     addTag(this.ingredients, ItemTags.LOGS);
@@ -1791,7 +1792,7 @@ public class DietTagsProvider extends ItemTagsProvider {
   }
 
   protected static List<Item> createList(Item... items) {
-    return createList(Comparator.comparing(e -> Objects.requireNonNull(e.getRegistryName())),
+    return createList(Comparator.comparing(e -> Objects.requireNonNull(e.builtInRegistryHolder().key().location())),
         items);
   }
 }
