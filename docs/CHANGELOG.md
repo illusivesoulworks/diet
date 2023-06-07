@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-1.0.4.1] - 2023.06.06
+### Fixed
+- Fixed Refined Pipes extractor attachments being unable to be placed while Diet is installed [#110](https://github.com/TheIllusiveC4/Diet/issues/110)
+
 ## [1.16.5-1.0.4.0] - 2022.04.18
 ### Added
 - Added `generateGroupsForEmptyItems` configuration option for enabling and disabling Diet generating food groups for
