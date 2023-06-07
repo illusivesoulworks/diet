@@ -374,6 +374,14 @@
       "required": false
     },
     {
+      "id": "delightful:cantaloupe",
+      "required": false
+    },
+    {
+      "id": "delightful:salmonberries",
+      "required": false
+    },
+    {
       "id": "druidcraft:blueberries",
       "required": false
     },

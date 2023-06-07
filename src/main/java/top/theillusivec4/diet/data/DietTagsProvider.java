@@ -456,7 +456,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "thermal:frost_melon_slice",
         "ecologics:coconut_slice",
         "ecologics:prickly_pear",
-        "culturaldelights:avocado"
+        "culturaldelights:avocado",
+        "delightful:salmonberries",
+        "delightful:cantaloupe"
     );
 
     for (String element : optionalElements) {
@@ -636,7 +638,8 @@ public class DietTagsProvider extends ItemTagsProvider {
         "minecolonies:milky_bread",
         "minecolonies:sugary_bread",
         "minecolonies:golden_bread",
-        "minecolonies:chorus_bread"
+        "minecolonies:chorus_bread",
+        "largemeals:omurice"
     );
 
     for (String element : optionalElements) {
@@ -1060,7 +1063,16 @@ public class DietTagsProvider extends ItemTagsProvider {
         "butchersdelight:porkloin",
         "butchersdelight:porkribs",
         "culturaldelights:squid",
-        "culturaldelights:glow_squid"
+        "culturaldelights:glow_squid",
+        "delightful:acorn",
+        "delightful:animal_fat",
+        "delightful:raw_goat",
+        "delightful:venison_chops",
+        "delightful:honey_glazed_walnut",
+        "delightful:crab_rangoon",
+        "largemeals:omurice",
+        "endersdelight:mite_crust",
+        "endersdelight:shulker_mollusk"
     );
 
     for (String element : optionalElements) {
@@ -1286,7 +1298,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "thermal:syrup_bottle",
         "minecolonies:cookie_dough",
         "minecolonies:cake_batter",
-        "minecolonies:raw_pumpkin_pie"
+        "minecolonies:raw_pumpkin_pie",
+        "delightful:rock_candy",
+        "delightful:honey_glazed_walnut"
     );
 
     for (String element : optionalElements) {
@@ -1622,7 +1636,9 @@ public class DietTagsProvider extends ItemTagsProvider {
         "culturaldelights:cucumber",
         "culturaldelights:pickle",
         "culturaldelights:eggplant",
-        "culturaldelights:white_eggplant"
+        "culturaldelights:white_eggplant",
+        "delightful:green_tea_leaf",
+        "largemeals:omurice"
     );
 
     for (String element : optionalElements) {

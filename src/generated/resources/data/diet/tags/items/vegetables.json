@@ -412,6 +412,10 @@
       "required": false
     },
     {
+      "id": "delightful:green_tea_leaf",
+      "required": false
+    },
+    {
       "id": "eidolon:fungus_sprouts",
       "required": false
     },
@@ -561,6 +565,10 @@
     },
     {
       "id": "inspirations:heartbeet",
+      "required": false
+    },
+    {
+      "id": "largemeals:omurice",
       "required": false
     },
     {

@@ -474,6 +474,30 @@
       "required": false
     },
     {
+      "id": "delightful:acorn",
+      "required": false
+    },
+    {
+      "id": "delightful:animal_fat",
+      "required": false
+    },
+    {
+      "id": "delightful:crab_rangoon",
+      "required": false
+    },
+    {
+      "id": "delightful:honey_glazed_walnut",
+      "required": false
+    },
+    {
+      "id": "delightful:raw_goat",
+      "required": false
+    },
+    {
+      "id": "delightful:venison_chops",
+      "required": false
+    },
+    {
       "id": "dropthemeat:piglin_porkchop",
       "required": false
     },
@@ -631,6 +655,14 @@
     },
     {
       "id": "ediblebugs:woodtermite",
+      "required": false
+    },
+    {
+      "id": "endersdelight:mite_crust",
+      "required": false
+    },
+    {
+      "id": "endersdelight:shulker_mollusk",
       "required": false
     },
     {
@@ -1047,6 +1079,10 @@
     },
     {
       "id": "krayscandles:soybean",
+      "required": false
+    },
+    {
+      "id": "largemeals:omurice",
       "required": false
     },
     {

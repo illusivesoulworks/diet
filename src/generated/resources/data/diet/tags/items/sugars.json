@@ -219,6 +219,14 @@
       "required": false
     },
     {
+      "id": "delightful:honey_glazed_walnut",
+      "required": false
+    },
+    {
+      "id": "delightful:rock_candy",
+      "required": false
+    },
+    {
       "id": "druidcraft:blueberry_muffin",
       "required": false
     },
