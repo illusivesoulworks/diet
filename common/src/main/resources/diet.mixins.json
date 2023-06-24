@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.illusivesoulworks.diet.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "refmap": "diet.refmap.json",
+  "mixins": [
+    "DietMixinDietApi",
+    "DietMixinFoodData",
+    "DietMixinPlayer",
+    "DietMixinServerPlayerGameMode"
+  ],
+  "minVersion": "0.8"
+}

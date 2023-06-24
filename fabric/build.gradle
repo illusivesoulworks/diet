@@ -1,0 +1,106 @@
+plugins {
+    id 'fabric-loom' version '0.12-SNAPSHOT'
+    id 'maven-publish'
+    id 'idea'
+	id 'com.matthewprenger.cursegradle' version '1.4.0'
+}
+
+archivesBaseName = "${mod_id}-fabric"
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings(loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_mc_version}:${parchment_version}@zip")
+    })
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    implementation project(":common")
+}
+
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+
+processResources {
+    from project(":common").sourceSets.main.resources
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand 'version': project.version, 'fabric_mc_version_range': project.fabric_mc_version_range, 'license': project.license,
+                'mod_id': project.mod_id, 'mod_author': project.mod_author, 'mod_description': project.mod_description,
+                'mod_name': project.mod_name, 'issue_tracker': project.issue_tracker
+    }
+
+    filesMatching("pack.mcmeta") {
+        expand 'mod_name': project.mod_name
+    }
+
+    filesMatching('*.mixins.json') {
+        expand "refmap_target": "${archivesBaseName}-"
+    }
+}
+
+tasks.withType(JavaCompile) {
+    source(project(":common").sourceSets.main.allSource)
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
+        }
+    }
+}
+
+curseforge {
+    project {
+        apiKey = findProperty('curseKey') ?: 0
+        id = "${cf_id}"
+        releaseType = "${release_type}"
+        changelogType = 'markdown'
+        changelog = file("../CHANGELOG_LATEST.md")
+        addGameVersion "Java 17"
+        addGameVersion "Fabric"
+        "${release_versions}".split(',').each {
+            addGameVersion "${it}"
+        }
+        addArtifact(sourcesJar)
+        mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
+
+        relations {
+            requiredDependency 'fabric-api'
+        }
+
+        afterEvaluate {
+            uploadTask.dependsOn(remapJar)
+        }
+    }
+    options {
+        forgeGradleIntegration = false
+    }
+}
