@@ -19,7 +19,7 @@
 package com.illusivesoulworks.diet.client.screen;
 
 import com.illusivesoulworks.diet.api.DietApi;
-import com.illusivesoulworks.diet.common.impl.effect.DietEffectsInfo;
+import com.illusivesoulworks.diet.common.data.effect.DietEffectsInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.illusivesoulworks.diet.common.command;
 
 import com.illusivesoulworks.diet.DietConstants;
 import com.illusivesoulworks.diet.api.type.IDietGroup;
-import com.illusivesoulworks.diet.common.impl.group.DietGroups;
+import com.illusivesoulworks.diet.common.data.group.DietGroups;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -13,11 +13,9 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 
 public class DietGroupArgument implements ArgumentType<IDietGroup> {
   private static final Collection<String> EXAMPLES = Arrays.asList("fruits", "vegetables");

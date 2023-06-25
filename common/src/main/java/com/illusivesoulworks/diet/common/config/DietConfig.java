@@ -52,14 +52,6 @@ public class DietConfig {
     SERVER = generalPair.getLeft();
   }
 
-  public static void setup() {
-    SpectreConfigLoader.add(SpectreConfig.Type.CLIENT, CLIENT_SPEC, DietConstants.MOD_ID);
-    SpectreConfig cfg =
-        SpectreConfigLoader.add(SpectreConfig.Type.SERVER, SERVER_SPEC, DietConstants.MOD_ID);
-    cfg.addLoadListener(config -> SERVER.initializedFoodOverrides = false);
-    cfg.addReloadListener(config -> SERVER.initializedFoodOverrides = false);
-  }
-
   public static class Client {
 
     public final SpectreConfigSpec.IntValue buttonX;
@@ -125,7 +117,7 @@ public class DietConfig {
       decayPenaltyPerGroup = builder
           .comment("The percentage reduction in total decay for each diet group decayed at once.")
           .translation(CONFIG_PREFIX + "decayPenaltyPerGroup")
-          .defineInRange("decayPenaltyPerGroup", 15, 100, 100);
+          .defineInRange("decayPenaltyPerGroup", 15, 0, 100);
 
       foodOverrides = builder.comment(
               "List of food quality overrides for diet gain values." +
@@ -145,7 +137,7 @@ public class DietConfig {
     }
 
     private final Map<Item, Float> overrideMap = new HashMap<>();
-    private boolean initializedFoodOverrides = false;
+    boolean initializedFoodOverrides = false;
 
     public Float getFoodOverride(Item item) {
 

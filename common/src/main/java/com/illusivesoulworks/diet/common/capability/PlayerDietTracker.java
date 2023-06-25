@@ -29,9 +29,9 @@ import com.illusivesoulworks.diet.api.type.IDietResult;
 import com.illusivesoulworks.diet.api.type.IDietStatusEffect;
 import com.illusivesoulworks.diet.api.type.IDietTracker;
 import com.illusivesoulworks.diet.common.config.DietConfig;
-import com.illusivesoulworks.diet.common.impl.effect.DietEffect;
-import com.illusivesoulworks.diet.common.impl.effect.DietEffectsInfo;
-import com.illusivesoulworks.diet.common.impl.suite.DietSuites;
+import com.illusivesoulworks.diet.common.data.effect.DietEffect;
+import com.illusivesoulworks.diet.common.data.effect.DietEffectsInfo;
+import com.illusivesoulworks.diet.common.data.suite.DietSuites;
 import com.illusivesoulworks.diet.common.util.DietResult;
 import com.illusivesoulworks.diet.platform.Services;
 import java.util.HashMap;
@@ -310,7 +310,7 @@ public class PlayerDietTracker implements IDietTracker {
       return;
     }
     float scale = ((float) foodDiff) / size;
-    scale *= Math.pow(1.0f - DietConfig.SERVER.decayPenaltyPerGroup.get(), size - 1);
+    scale *= Math.pow(1.0f - DietConfig.SERVER.decayPenaltyPerGroup.get() / 100f, size - 1);
     float finalScale = scale;
     DietSuites.getSuite(this.player.getLevel(), this.suite).ifPresent(suite -> {
 

@@ -1,8 +1,6 @@
 package com.illusivesoulworks.diet.common.network.server;
 
 import com.illusivesoulworks.diet.client.DietClientPacketReceiver;
-import com.illusivesoulworks.diet.common.impl.group.DietGroups;
-import com.illusivesoulworks.diet.common.util.DietValueGenerator;
 import com.illusivesoulworks.diet.platform.Services;
 import java.util.HashMap;
 import java.util.HashSet;

@@ -1,0 +1,1028 @@
+{
+  "values": [
+    "minecraft:apple",
+    "minecraft:chorus_fruit",
+    "minecraft:enchanted_golden_apple",
+    "minecraft:glow_berries",
+    "minecraft:golden_apple",
+    "minecraft:melon",
+    "minecraft:melon_slice",
+    "minecraft:sweet_berries",
+    {
+      "id": "alexsmobs:banana",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:banana_peel",
+      "required": false
+    },
+    {
+      "id": "aoa3:heart_fruit",
+      "required": false
+    },
+    {
+      "id": "aoa3:magic_marang",
+      "required": false
+    },
+    {
+      "id": "aoa3:nature_melon_slice",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:mana_berry",
+      "required": false
+    },
+    {
+      "id": "atmospheric:passionfruit",
+      "required": false
+    },
+    {
+      "id": "atmospheric:yucca_fruit",
+      "required": false
+    },
+    {
+      "id": "atum:date",
+      "required": false
+    },
+    {
+      "id": "autumnity:foul_berries",
+      "required": false
+    },
+    {
+      "id": "bayou_blues:gooseberries",
+      "required": false
+    },
+    {
+      "id": "betterendforge:blossom_berry",
+      "required": false
+    },
+    {
+      "id": "betterendforge:shadow_berry_raw",
+      "required": false
+    },
+    {
+      "id": "betterendforge:umbrella_cluster_juice",
+      "required": false
+    },
+    {
+      "id": "bloom_and_gloom:kabloom_fruit",
+      "required": false
+    },
+    {
+      "id": "blue_skies:black_brewberry",
+      "required": false
+    },
+    {
+      "id": "blue_skies:brewberry",
+      "required": false
+    },
+    {
+      "id": "blue_skies:cherry",
+      "required": false
+    },
+    {
+      "id": "blue_skies:crescent_fruit",
+      "required": false
+    },
+    {
+      "id": "blue_skies:pine_fruit",
+      "required": false
+    },
+    {
+      "id": "blue_skies:pink_brewberry",
+      "required": false
+    },
+    {
+      "id": "blue_skies:scalefruit",
+      "required": false
+    },
+    {
+      "id": "blueberry:blueberry",
+      "required": false
+    },
+    {
+      "id": "blueberry:blueberry_muffin",
+      "required": false
+    },
+    {
+      "id": "byg:baobab_fruit",
+      "required": false
+    },
+    {
+      "id": "byg:blueberries",
+      "required": false
+    },
+    {
+      "id": "byg:crimson_berries",
+      "required": false
+    },
+    {
+      "id": "byg:green_apple",
+      "required": false
+    },
+    {
+      "id": "byg:holly_berries",
+      "required": false
+    },
+    {
+      "id": "byg:joshua_fruit",
+      "required": false
+    },
+    {
+      "id": "byg:nightshade_berries",
+      "required": false
+    },
+    {
+      "id": "caves_and_cliffs_mod:glow_berry",
+      "required": false
+    },
+    {
+      "id": "cavesandcliffs:glow_berries",
+      "required": false
+    },
+    {
+      "id": "charcoal_pit:banana",
+      "required": false
+    },
+    {
+      "id": "charcoal_pit:cherry",
+      "required": false
+    },
+    {
+      "id": "charcoal_pit:coconut",
+      "required": false
+    },
+    {
+      "id": "charcoal_pit:dragon_fruit",
+      "required": false
+    },
+    {
+      "id": "create:chocolate_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create:honeyed_apple",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:black_chocolate_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:caramel_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:ruby_chocolate_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:white_chocolate_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "crockpot:fruit_medley",
+      "required": false
+    },
+    {
+      "id": "crockpot:jammy_preserves",
+      "required": false
+    },
+    {
+      "id": "crockpot:watermelon_icle",
+      "required": false
+    },
+    {
+      "id": "croptopia:apple_pie",
+      "required": false
+    },
+    {
+      "id": "croptopia:apricot",
+      "required": false
+    },
+    {
+      "id": "croptopia:avocado",
+      "required": false
+    },
+    {
+      "id": "croptopia:banana",
+      "required": false
+    },
+    {
+      "id": "croptopia:blackberry",
+      "required": false
+    },
+    {
+      "id": "croptopia:blueberry",
+      "required": false
+    },
+    {
+      "id": "croptopia:cantaloupe",
+      "required": false
+    },
+    {
+      "id": "croptopia:cherry",
+      "required": false
+    },
+    {
+      "id": "croptopia:cherry_pie",
+      "required": false
+    },
+    {
+      "id": "croptopia:coconut",
+      "required": false
+    },
+    {
+      "id": "croptopia:cranberry",
+      "required": false
+    },
+    {
+      "id": "croptopia:currant",
+      "required": false
+    },
+    {
+      "id": "croptopia:date",
+      "required": false
+    },
+    {
+      "id": "croptopia:dragonfruit",
+      "required": false
+    },
+    {
+      "id": "croptopia:eggplant",
+      "required": false
+    },
+    {
+      "id": "croptopia:elderberry",
+      "required": false
+    },
+    {
+      "id": "croptopia:eton_mess",
+      "required": false
+    },
+    {
+      "id": "croptopia:fig",
+      "required": false
+    },
+    {
+      "id": "croptopia:figgy_pudding",
+      "required": false
+    },
+    {
+      "id": "croptopia:grape",
+      "required": false
+    },
+    {
+      "id": "croptopia:grapefruit",
+      "required": false
+    },
+    {
+      "id": "croptopia:honeydew",
+      "required": false
+    },
+    {
+      "id": "croptopia:kiwi",
+      "required": false
+    },
+    {
+      "id": "croptopia:kumquat",
+      "required": false
+    },
+    {
+      "id": "croptopia:lemon",
+      "required": false
+    },
+    {
+      "id": "croptopia:lime",
+      "required": false
+    },
+    {
+      "id": "croptopia:mango",
+      "required": false
+    },
+    {
+      "id": "croptopia:nectarine",
+      "required": false
+    },
+    {
+      "id": "croptopia:nutmeg",
+      "required": false
+    },
+    {
+      "id": "croptopia:olive",
+      "required": false
+    },
+    {
+      "id": "croptopia:orange",
+      "required": false
+    },
+    {
+      "id": "croptopia:peach",
+      "required": false
+    },
+    {
+      "id": "croptopia:pear",
+      "required": false
+    },
+    {
+      "id": "croptopia:persimmon",
+      "required": false
+    },
+    {
+      "id": "croptopia:pineapple",
+      "required": false
+    },
+    {
+      "id": "croptopia:plum",
+      "required": false
+    },
+    {
+      "id": "croptopia:raspberry",
+      "required": false
+    },
+    {
+      "id": "croptopia:saguaro",
+      "required": false
+    },
+    {
+      "id": "croptopia:scones",
+      "required": false
+    },
+    {
+      "id": "croptopia:squash",
+      "required": false
+    },
+    {
+      "id": "croptopia:starfruit",
+      "required": false
+    },
+    {
+      "id": "croptopia:strawberry",
+      "required": false
+    },
+    {
+      "id": "culturaldelights:avocado",
+      "required": false
+    },
+    {
+      "id": "cyclic:apple_diamond",
+      "required": false
+    },
+    {
+      "id": "cyclic:apple_emerald",
+      "required": false
+    },
+    {
+      "id": "delightful:cantaloupe",
+      "required": false
+    },
+    {
+      "id": "delightful:salmonberries",
+      "required": false
+    },
+    {
+      "id": "druidcraft:blueberries",
+      "required": false
+    },
+    {
+      "id": "druidcraft:blueberry_muffin",
+      "required": false
+    },
+    {
+      "id": "druidcraft:elderberries",
+      "required": false
+    },
+    {
+      "id": "ecologics:coconut_slice",
+      "required": false
+    },
+    {
+      "id": "ecologics:prickly_pear",
+      "required": false
+    },
+    {
+      "id": "endergetic:bolloom_fruit",
+      "required": false
+    },
+    {
+      "id": "environmental:cherries",
+      "required": false
+    },
+    {
+      "id": "extrafood:dried_fruit",
+      "required": false
+    },
+    {
+      "id": "extrafood:pancake",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:honey_glazed_ham",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:stuffed_pumpkin",
+      "required": false
+    },
+    {
+      "id": "fluffy_farmer:juicy_berries",
+      "required": false
+    },
+    {
+      "id": "fluffy_farmer:pickled_watermelon",
+      "required": false
+    },
+    {
+      "id": "fluffy_farmer:rotten_apple",
+      "required": false
+    },
+    {
+      "id": "forbidden_arcanus:cherry_peach",
+      "required": false
+    },
+    {
+      "id": "fruittrees:cherry",
+      "required": false
+    },
+    {
+      "id": "fruittrees:citron",
+      "required": false
+    },
+    {
+      "id": "fruittrees:empowered_citron",
+      "required": false
+    },
+    {
+      "id": "fruittrees:grapefruit",
+      "required": false
+    },
+    {
+      "id": "fruittrees:lemon",
+      "required": false
+    },
+    {
+      "id": "fruittrees:lime",
+      "required": false
+    },
+    {
+      "id": "fruittrees:mandarin",
+      "required": false
+    },
+    {
+      "id": "fruittrees:orange",
+      "required": false
+    },
+    {
+      "id": "fruittrees:pomelo",
+      "required": false
+    },
+    {
+      "id": "fruittrees:redlove",
+      "required": false
+    },
+    {
+      "id": "gildedingot:shroom_fruit",
+      "required": false
+    },
+    {
+      "id": "good_nights_sleep:rainbow_berries",
+      "required": false
+    },
+    {
+      "id": "integrateddynamics:menril_berries",
+      "required": false
+    },
+    {
+      "id": "neapolitan:banana",
+      "required": false
+    },
+    {
+      "id": "neapolitan:banana_cake",
+      "required": false
+    },
+    {
+      "id": "neapolitan:strawberries",
+      "required": false
+    },
+    {
+      "id": "neapolitan:strawberry_cake",
+      "required": false
+    },
+    {
+      "id": "neapolitan:white_strawberries",
+      "required": false
+    },
+    {
+      "id": "nefdecomod:banana",
+      "required": false
+    },
+    {
+      "id": "nefdecomod:cantaloupe_slice",
+      "required": false
+    },
+    {
+      "id": "nefdecomod:meal_04",
+      "required": false
+    },
+    {
+      "id": "nourished_end:chorus_bulb_slice",
+      "required": false
+    },
+    {
+      "id": "outer_end:azure_berries",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:blackberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:blueberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:cactusfruititem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:candleberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:cantaloupeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:cranberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:elderberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:grapeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:greengrapeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:huckleberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:juniperberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:kiwiitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:mulberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:pineappleitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:raspberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2crops:strawberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodcore:trailmixitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:holidaycakeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:pavlovaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:peachesandcreamoatmealitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:pineappleupsidedowncakeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:raspberrytrifleitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2foodextended:spicebunitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:apricotitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:avocadoitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:bananaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:breadfruititem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:cherryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:coconutitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:dateitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:dragonfruititem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:durianitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:figitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:gooseberryitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:grapefruititem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:guavaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:jackfruititem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:lemonitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:limeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:lycheeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:mangoitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:oliveitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:orangeitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:papayaitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:passionfruititem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:pawpawitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:peachitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:pearitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:persimmonitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:plumitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:pomegranateitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:rambutanitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:soursopitem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:starfruititem",
+      "required": false
+    },
+    {
+      "id": "pamhc2trees:tamarinditem",
+      "required": false
+    },
+    {
+      "id": "peculiars:passionfruit_cake",
+      "required": false
+    },
+    {
+      "id": "peculiars:yucca_cake",
+      "required": false
+    },
+    {
+      "id": "projectvibrantjourneys:cracked_coconut",
+      "required": false
+    },
+    {
+      "id": "projectvibrantjourneys:juniper_berries",
+      "required": false
+    },
+    {
+      "id": "rankine:banana_yucca",
+      "required": false
+    },
+    {
+      "id": "rankine:blackberries",
+      "required": false
+    },
+    {
+      "id": "rankine:blueberries",
+      "required": false
+    },
+    {
+      "id": "rankine:coconut",
+      "required": false
+    },
+    {
+      "id": "rankine:cranberries",
+      "required": false
+    },
+    {
+      "id": "rankine:elderberries",
+      "required": false
+    },
+    {
+      "id": "rankine:juniper_berries",
+      "required": false
+    },
+    {
+      "id": "rankine:pineapple",
+      "required": false
+    },
+    {
+      "id": "rankine:raspberries",
+      "required": false
+    },
+    {
+      "id": "rankine:snowberries",
+      "required": false
+    },
+    {
+      "id": "rankine:strawberries",
+      "required": false
+    },
+    {
+      "id": "rootsclassic:blackcurrant",
+      "required": false
+    },
+    {
+      "id": "rootsclassic:elderberry",
+      "required": false
+    },
+    {
+      "id": "rootsclassic:nightshade",
+      "required": false
+    },
+    {
+      "id": "rootsclassic:redcurrant",
+      "required": false
+    },
+    {
+      "id": "rootsclassic:whitecurrant",
+      "required": false
+    },
+    {
+      "id": "roses:rose_hips",
+      "required": false
+    },
+    {
+      "id": "seasonals:sweet_berry_cake",
+      "required": false
+    },
+    {
+      "id": "silentgear:nether_banana",
+      "required": false
+    },
+    {
+      "id": "simpledelights:creamcicle",
+      "required": false
+    },
+    {
+      "id": "simpledelights:fruit_tart",
+      "required": false
+    },
+    {
+      "id": "simpledelights:plum_pudding",
+      "required": false
+    },
+    {
+      "id": "simpledelights:strawberry_shortcake",
+      "required": false
+    },
+    {
+      "id": "simplefarming:apricot",
+      "required": false
+    },
+    {
+      "id": "simplefarming:banana",
+      "required": false
+    },
+    {
+      "id": "simplefarming:blackberries",
+      "required": false
+    },
+    {
+      "id": "simplefarming:blueberries",
+      "required": false
+    },
+    {
+      "id": "simplefarming:cactus_fruit",
+      "required": false
+    },
+    {
+      "id": "simplefarming:cantaloupe",
+      "required": false
+    },
+    {
+      "id": "simplefarming:cherries",
+      "required": false
+    },
+    {
+      "id": "simplefarming:grapes",
+      "required": false
+    },
+    {
+      "id": "simplefarming:honeydew",
+      "required": false
+    },
+    {
+      "id": "simplefarming:jaffa_cake",
+      "required": false
+    },
+    {
+      "id": "simplefarming:mango",
+      "required": false
+    },
+    {
+      "id": "simplefarming:olives",
+      "required": false
+    },
+    {
+      "id": "simplefarming:orange",
+      "required": false
+    },
+    {
+      "id": "simplefarming:pear",
+      "required": false
+    },
+    {
+      "id": "simplefarming:plum",
+      "required": false
+    },
+    {
+      "id": "simplefarming:raspberries",
+      "required": false
+    },
+    {
+      "id": "simplefarming:strawberries",
+      "required": false
+    },
+    {
+      "id": "terraincognita:sour_berries",
+      "required": false
+    },
+    {
+      "id": "thermal:frost_melon_slice",
+      "required": false
+    },
+    {
+      "id": "thermal:strawberry",
+      "required": false
+    },
+    {
+      "id": "undergarden:blisterberry",
+      "required": false
+    },
+    {
+      "id": "undergarden:droopvine_item",
+      "required": false
+    },
+    {
+      "id": "uniquecrops:large_plum",
+      "required": false
+    },
+    {
+      "id": "upgrade_aquatic:boiled_blue_pickerelweed",
+      "required": false
+    },
+    {
+      "id": "upgrade_aquatic:boiled_purple_pickerelweed",
+      "required": false
+    },
+    {
+      "id": "upgrade_aquatic:mulberry",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:berry_brownie",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:berry_cake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:chorus_cake",
+      "required": false
+    },
+    {
+      "id": "vanillacookbook:netherite_apple",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:apple_bread",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:apple_muffin",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:juice_apple",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:juice_berries",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:juice_melon",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:juice_raftugli",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:raftugli_fruit",
+      "required": false
+    },
+    {
+      "id": "vanillafoodpantry:uglifruit_muffin",
+      "required": false
+    },
+    {
+      "id": "watersource:coconut_piece",
+      "required": false
+    },
+    {
+      "id": "xercamod:item_apple_pie",
+      "required": false
+    },
+    {
+      "id": "xercamod:sweet_berry_pie",
+      "required": false
+    }
+  ]
+}

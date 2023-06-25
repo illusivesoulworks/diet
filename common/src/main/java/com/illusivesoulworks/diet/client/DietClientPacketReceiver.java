@@ -20,9 +20,9 @@ package com.illusivesoulworks.diet.client;
 
 import com.illusivesoulworks.diet.api.type.IDietTracker;
 import com.illusivesoulworks.diet.client.screen.DietScreen;
-import com.illusivesoulworks.diet.common.impl.effect.DietEffectsInfo;
-import com.illusivesoulworks.diet.common.impl.group.DietGroups;
-import com.illusivesoulworks.diet.common.impl.suite.DietSuites;
+import com.illusivesoulworks.diet.common.data.effect.DietEffectsInfo;
+import com.illusivesoulworks.diet.common.data.group.DietGroups;
+import com.illusivesoulworks.diet.common.data.suite.DietSuites;
 import com.illusivesoulworks.diet.common.network.server.SPacketActivate;
 import com.illusivesoulworks.diet.common.network.server.SPacketDiet;
 import com.illusivesoulworks.diet.common.network.server.SPacketEaten;

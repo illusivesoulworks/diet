@@ -1,6 +1,6 @@
 package com.illusivesoulworks.diet.platform.services;
 
-import com.illusivesoulworks.diet.common.impl.effect.DietEffectsInfo;
+import com.illusivesoulworks.diet.common.data.effect.DietEffectsInfo;
 import java.util.Map;
 import java.util.Set;
 import net.minecraft.nbt.CompoundTag;

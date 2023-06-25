@@ -15,12 +15,26 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.examplemod.ExampleMod"
+      "com.illusivesoulworks.diet.DietFabricMod"
+    ],
+    "client": [
+      "com.illusivesoulworks.diet.client.DietFabricClientMod"
+    ],
+    "spectrelib": [
+      "com.illusivesoulworks.diet.DietConfigInitializer"
+    ],
+    "cardinal-components-entity": [
+      "com.illusivesoulworks.diet.common.component.DietComponents"
+    ]
+  },
+  "custom": {
+    "cardinal-components": [
+      "diet:diet_tracker"
     ]
   },
   "mixins": [
-    "examplemod.mixins.json",
-    "examplemod.fabric.mixins.json"
+    "diet.mixins.json",
+    "diet.fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14",

@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.illusivesoulworks.diet.DietConstants;
 import com.illusivesoulworks.diet.api.type.IDietGroup;
 import com.illusivesoulworks.diet.common.config.DietConfig;
-import com.illusivesoulworks.diet.common.impl.group.DietGroups;
+import com.illusivesoulworks.diet.common.data.group.DietGroups;
 import com.illusivesoulworks.diet.platform.Services;
 import java.util.ArrayList;
 import java.util.Arrays;

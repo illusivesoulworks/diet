@@ -1,6 +1,6 @@
 package com.illusivesoulworks.diet.api.type;
 
-import com.illusivesoulworks.diet.common.impl.effect.DietEffect;
+import com.illusivesoulworks.diet.common.data.effect.DietEffect;
 import java.util.Map;
 import net.minecraft.world.entity.player.Player;
 

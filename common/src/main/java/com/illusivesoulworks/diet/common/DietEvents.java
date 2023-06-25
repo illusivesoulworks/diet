@@ -1,7 +1,7 @@
 package com.illusivesoulworks.diet.common;
 
-import com.illusivesoulworks.diet.common.impl.group.DietGroups;
-import com.illusivesoulworks.diet.common.impl.suite.DietSuites;
+import com.illusivesoulworks.diet.common.data.group.DietGroups;
+import com.illusivesoulworks.diet.common.data.suite.DietSuites;
 import com.illusivesoulworks.diet.common.util.DietValueGenerator;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;

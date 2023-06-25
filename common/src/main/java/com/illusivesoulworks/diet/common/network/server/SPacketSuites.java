@@ -1,11 +1,6 @@
 package com.illusivesoulworks.diet.common.network.server;
 
-import com.illusivesoulworks.diet.api.type.IDietTracker;
 import com.illusivesoulworks.diet.client.DietClientPacketReceiver;
-import com.illusivesoulworks.diet.common.impl.group.DietGroups;
-import com.illusivesoulworks.diet.common.impl.suite.DietSuites;
-import com.illusivesoulworks.diet.platform.Services;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 

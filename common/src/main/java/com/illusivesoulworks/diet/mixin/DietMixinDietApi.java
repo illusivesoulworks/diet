@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.illusivesoulworks.diet.api.DietApi;
-import com.illusivesoulworks.diet.common.impl.DietApiImpl;
+import com.illusivesoulworks.diet.common.DietApiImpl;
 
 @SuppressWarnings("unused")
 @Mixin(DietApi.class)

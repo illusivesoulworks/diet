@@ -20,8 +20,7 @@ package com.illusivesoulworks.diet.common.command;
 
 import com.illusivesoulworks.diet.DietConstants;
 import com.illusivesoulworks.diet.api.type.IDietGroup;
-import com.illusivesoulworks.diet.common.impl.group.DietGroups;
-import com.illusivesoulworks.diet.common.impl.suite.DietSuites;
+import com.illusivesoulworks.diet.common.data.suite.DietSuites;
 import com.illusivesoulworks.diet.platform.Services;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;

@@ -19,8 +19,7 @@
 package com.illusivesoulworks.diet.common.network.server;
 
 import com.illusivesoulworks.diet.client.DietClientPacketReceiver;
-import com.illusivesoulworks.diet.client.screen.DietScreen;
-import com.illusivesoulworks.diet.common.impl.effect.DietEffectsInfo;
+import com.illusivesoulworks.diet.common.data.effect.DietEffectsInfo;
 import java.util.Objects;
 import net.minecraft.network.FriendlyByteBuf;
 
