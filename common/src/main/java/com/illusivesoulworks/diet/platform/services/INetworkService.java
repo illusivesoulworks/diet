@@ -1,6 +1,5 @@
 package com.illusivesoulworks.diet.platform.services;
 
-import com.illusivesoulworks.diet.api.type.IDietGroup;
 import com.illusivesoulworks.diet.common.impl.effect.DietEffectsInfo;
 import java.util.Map;
 import java.util.Set;

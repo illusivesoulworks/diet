@@ -23,7 +23,10 @@ public final class DietSuite implements IDietSuite {
 
   private DietSuite(String name, Set<IDietGroup> groups, List<IDietEffect> effects) {
     this.name = name;
-    this.groups = ImmutableSet.copyOf(groups);
+    TreeSet<IDietGroup> sorted = new TreeSet<>(
+        Comparator.comparing(IDietGroup::getOrder).thenComparing(IDietGroup::getName));
+    sorted.addAll(groups);
+    this.groups = ImmutableSet.copyOf(sorted);
     this.effects = ImmutableList.copyOf(effects);
   }
 

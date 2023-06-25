@@ -1,6 +1,5 @@
 package com.illusivesoulworks.diet.platform.services;
 
-import com.illusivesoulworks.diet.api.type.IDietGroup;
 import com.illusivesoulworks.diet.common.impl.effect.DietEffectsInfo;
 import com.illusivesoulworks.diet.common.network.DietForgeNetwork;
 import com.illusivesoulworks.diet.common.network.server.SPacketActivate;

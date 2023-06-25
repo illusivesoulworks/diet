@@ -37,6 +37,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -61,8 +62,7 @@ public class DietScreen extends Screen {
       new ResourceLocation(DietConstants.MOD_ID, "textures/gui/icons.png");
 
   public static DietEffectsInfo tooltip = new DietEffectsInfo();
-  private final Set<IDietGroup> groups =
-      new TreeSet<>(Comparator.comparing(IDietGroup::getOrder).thenComparing(IDietGroup::getName));
+  private final Set<IDietGroup> groups = new HashSet<>();
 
   private final int xSize;
   private int ySize;

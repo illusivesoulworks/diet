@@ -1,6 +1,5 @@
 package com.illusivesoulworks.diet.common.network.server;
 
-import com.illusivesoulworks.diet.api.type.IDietGroup;
 import com.illusivesoulworks.diet.common.impl.group.DietGroups;
 import com.illusivesoulworks.diet.common.util.DietValueGenerator;
 import com.illusivesoulworks.diet.platform.Services;
