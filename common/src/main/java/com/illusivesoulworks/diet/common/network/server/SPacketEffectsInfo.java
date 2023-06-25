@@ -18,6 +18,7 @@
 
 package com.illusivesoulworks.diet.common.network.server;
 
+import com.illusivesoulworks.diet.client.DietClientPacketReceiver;
 import com.illusivesoulworks.diet.client.screen.DietScreen;
 import com.illusivesoulworks.diet.common.impl.effect.DietEffectsInfo;
 import java.util.Objects;
@@ -41,6 +42,6 @@ public class SPacketEffectsInfo {
   }
 
   public static void handle(SPacketEffectsInfo msg) {
-    DietScreen.tooltip = msg.info;
+    DietClientPacketReceiver.handleEffectsInfo(msg.info);
   }
 }

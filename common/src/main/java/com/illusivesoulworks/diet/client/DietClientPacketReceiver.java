@@ -18,12 +18,20 @@
 
 package com.illusivesoulworks.diet.client;
 
+import com.illusivesoulworks.diet.api.type.IDietTracker;
+import com.illusivesoulworks.diet.client.screen.DietScreen;
+import com.illusivesoulworks.diet.common.impl.effect.DietEffectsInfo;
+import com.illusivesoulworks.diet.common.impl.group.DietGroups;
+import com.illusivesoulworks.diet.common.impl.suite.DietSuites;
 import com.illusivesoulworks.diet.common.network.server.SPacketActivate;
 import com.illusivesoulworks.diet.common.network.server.SPacketDiet;
 import com.illusivesoulworks.diet.common.network.server.SPacketEaten;
+import com.illusivesoulworks.diet.common.util.DietValueGenerator;
 import com.illusivesoulworks.diet.platform.Services;
 import java.util.Map;
+import java.util.Set;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 
@@ -62,5 +70,19 @@ public class DietClientPacketReceiver {
         }
       });
     }
+  }
+
+  public static void handleEffectsInfo(DietEffectsInfo info) {
+    DietScreen.tooltip = info;
+  }
+
+  public static void handleGroups(CompoundTag groups, Map<Item, Set<String>> generated) {
+    DietGroups.CLIENT.load(groups);
+    DietValueGenerator.load(generated);
+  }
+
+  public static void handleSuites(CompoundTag suites) {
+    DietSuites.CLIENT.load(suites);
+    Services.CAPABILITY.get(Minecraft.getInstance().player).ifPresent(IDietTracker::initSuite);
   }
 }

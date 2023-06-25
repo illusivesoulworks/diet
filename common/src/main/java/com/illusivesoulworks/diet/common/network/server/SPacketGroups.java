@@ -1,5 +1,6 @@
 package com.illusivesoulworks.diet.common.network.server;
 
+import com.illusivesoulworks.diet.client.DietClientPacketReceiver;
 import com.illusivesoulworks.diet.common.impl.group.DietGroups;
 import com.illusivesoulworks.diet.common.util.DietValueGenerator;
 import com.illusivesoulworks.diet.platform.Services;
@@ -59,7 +60,6 @@ public record SPacketGroups(CompoundTag groups, Map<Item, Set<String>> generated
   }
 
   public static void handle(SPacketGroups msg) {
-    DietGroups.CLIENT.load(msg.groups());
-    DietValueGenerator.load(msg.generated());
+    DietClientPacketReceiver.handleGroups(msg.groups(), msg.generated());
   }
 }

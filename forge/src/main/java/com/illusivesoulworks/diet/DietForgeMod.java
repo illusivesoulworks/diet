@@ -38,6 +38,7 @@ import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -49,6 +50,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -70,7 +72,6 @@ public class DietForgeMod {
   public DietForgeMod() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     eventBus.addListener(this::setup);
-    eventBus.addListener(this::clientSetup);
     eventBus.addListener(this::process);
     eventBus.addListener(this::gatherData);
     eventBus.addListener(this::registerCaps);
@@ -93,10 +94,6 @@ public class DietForgeMod {
   private void addReloaders(final AddReloadListenerEvent evt) {
     evt.addListener(DietGroups.SERVER);
     evt.addListener(DietSuites.SERVER);
-  }
-
-  private void clientSetup(final RegisterKeyMappingsEvent evt) {
-    evt.register(DietKeys.get());
   }
 
   private void process(final InterModProcessEvent evt) {
@@ -138,5 +135,14 @@ public class DietForgeMod {
 
   private void setupCommands(final RegisterCommandsEvent evt) {
     DietCommand.register(evt.getDispatcher());
+  }
+
+  @Mod.EventBusSubscriber(modid = DietConstants.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+  public static class ClientModEvents {
+
+    @SubscribeEvent
+    public static void registerKeys(final RegisterKeyMappingsEvent evt) {
+      evt.register(DietKeys.get());
+    }
   }
 }
