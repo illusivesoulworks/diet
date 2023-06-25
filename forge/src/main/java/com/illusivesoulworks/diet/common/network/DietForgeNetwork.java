@@ -23,7 +23,6 @@ import com.illusivesoulworks.diet.common.network.server.SPacketActivate;
 import com.illusivesoulworks.diet.common.network.server.SPacketDiet;
 import com.illusivesoulworks.diet.common.network.server.SPacketEaten;
 import com.illusivesoulworks.diet.common.network.server.SPacketEffectsInfo;
-import com.illusivesoulworks.diet.common.network.server.SPacketGeneratedValues;
 import com.illusivesoulworks.diet.common.network.server.SPacketGroups;
 import com.illusivesoulworks.diet.common.network.server.SPacketSuites;
 import java.util.function.BiConsumer;
@@ -57,8 +56,6 @@ public class DietForgeNetwork {
         SPacketEffectsInfo::handle);
     register(SPacketActivate.class, SPacketActivate::encode, SPacketActivate::decode,
         SPacketActivate::handle);
-    register(SPacketGeneratedValues.class, SPacketGeneratedValues::encode,
-        SPacketGeneratedValues::decode, SPacketGeneratedValues::handle);
     register(SPacketEaten.class, SPacketEaten::encode, SPacketEaten::decode, SPacketEaten::handle);
     register(SPacketGroups.class, SPacketGroups::encode, SPacketGroups::decode,
         SPacketGroups::handle);

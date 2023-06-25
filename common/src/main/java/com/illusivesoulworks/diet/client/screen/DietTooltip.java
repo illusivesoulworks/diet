@@ -66,8 +66,7 @@ public class DietTooltip {
       } else {
         addAttributeTooltip(tooltips, info.added, AttributeModifier.Operation.ADDITION, key);
         addAttributeTooltip(tooltips, info.baseMultiplier,
-            AttributeModifier.Operation.MULTIPLY_BASE,
-            key);
+            AttributeModifier.Operation.MULTIPLY_BASE, key);
         addAttributeTooltip(tooltips, info.totalMultiplier - 1.0f,
             AttributeModifier.Operation.MULTIPLY_TOTAL, key);
       }

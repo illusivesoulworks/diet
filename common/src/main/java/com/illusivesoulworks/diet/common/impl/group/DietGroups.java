@@ -28,8 +28,10 @@ import com.google.gson.JsonParseException;
 import com.illusivesoulworks.diet.DietConstants;
 import com.illusivesoulworks.diet.api.type.IDietGroup;
 import com.illusivesoulworks.diet.api.util.DietColor;
+import com.illusivesoulworks.diet.common.util.DietValueGenerator;
 import com.illusivesoulworks.diet.platform.Services;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,6 +44,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 
 public class DietGroups extends SimpleJsonResourceReloadListener {
@@ -94,7 +97,17 @@ public class DietGroups extends SimpleJsonResourceReloadListener {
   }
 
   public void sync(ServerPlayer player) {
-    Services.NETWORK.sendDietGroupsS2C(player, this.save());
+    Map<Item, Set<String>> items = new HashMap<>();
+
+    for (Map.Entry<Item, Set<IDietGroup>> entry : DietValueGenerator.getAll().entrySet()) {
+      Set<String> groups = new HashSet<>();
+
+      for (IDietGroup group : entry.getValue()) {
+        groups.add(group.getName());
+      }
+      items.put(entry.getKey(), groups);
+    }
+    Services.NETWORK.sendDietGroupsS2C(player, this.save(), items);
   }
 
   @Override

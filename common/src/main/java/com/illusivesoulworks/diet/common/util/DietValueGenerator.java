@@ -1,11 +1,11 @@
 package com.illusivesoulworks.diet.common.util;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.ImmutableMap;
 import com.illusivesoulworks.diet.DietConstants;
 import com.illusivesoulworks.diet.api.type.IDietGroup;
 import com.illusivesoulworks.diet.common.config.DietConfig;
 import com.illusivesoulworks.diet.common.impl.group.DietGroups;
-import com.illusivesoulworks.diet.common.network.server.SPacketGeneratedValues;
 import com.illusivesoulworks.diet.platform.Services;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.Set;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -52,10 +51,6 @@ public class DietValueGenerator {
       processItems(groups);
       stopwatch.stop();
       DietConstants.LOG.info("Generating diet values took {}", stopwatch);
-    }
-
-    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-      Services.NETWORK.sendGeneratedValuesS2C(player, GENERATED);
     }
   }
 
@@ -115,7 +110,7 @@ public class DietValueGenerator {
                 keys.add(item);
               }
 
-              if (Services.REGISTRY.isIngredient(stack)) {
+              if (!Services.REGISTRY.isIngredient(stack)) {
                 Set<IDietGroup> fallback = GENERATED.get(item);
                 boolean addTrail = false;
 
@@ -220,13 +215,22 @@ public class DietValueGenerator {
     DietConstants.LOG.info("Found {} ungrouped food items", UNGROUPED.size());
   }
 
-  public static void sync(ServerPlayer player) {
-    Services.NETWORK.sendGeneratedValuesS2C(player, GENERATED);
+  public static Map<Item, Set<IDietGroup>> getAll() {
+    return ImmutableMap.copyOf(GENERATED);
   }
 
-  public static void sync(SPacketGeneratedValues packet) {
+  public static void load(Map<Item, Set<String>> generated) {
     GENERATED.clear();
-    GENERATED.putAll(packet.generated());
+
+    for (Map.Entry<Item, Set<String>> entry : generated.entrySet()) {
+      Item item = entry.getKey();
+      Set<IDietGroup> groups = new HashSet<>();
+
+      for (String s : entry.getValue()) {
+        DietGroups.CLIENT.getGroup(s).ifPresent(groups::add);
+      }
+      GENERATED.put(item, groups);
+    }
   }
 
   public static Optional<Set<IDietGroup>> get(Item item) {

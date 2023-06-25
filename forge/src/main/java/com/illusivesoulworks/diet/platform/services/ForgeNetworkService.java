@@ -7,7 +7,6 @@ import com.illusivesoulworks.diet.common.network.server.SPacketActivate;
 import com.illusivesoulworks.diet.common.network.server.SPacketDiet;
 import com.illusivesoulworks.diet.common.network.server.SPacketEaten;
 import com.illusivesoulworks.diet.common.network.server.SPacketEffectsInfo;
-import com.illusivesoulworks.diet.common.network.server.SPacketGeneratedValues;
 import com.illusivesoulworks.diet.common.network.server.SPacketGroups;
 import com.illusivesoulworks.diet.common.network.server.SPacketSuites;
 import java.util.Map;
@@ -38,21 +37,16 @@ public class ForgeNetworkService implements INetworkService {
   }
 
   @Override
-  public void sendGeneratedValuesS2C(ServerPlayer player, Map<Item, Set<IDietGroup>> generated) {
-    DietForgeNetwork.instance.send(PacketDistributor.PLAYER.with(() -> player),
-        new SPacketGeneratedValues(generated));
-  }
-
-  @Override
   public void sendEatenS2C(ServerPlayer player, Set<Item> items) {
     DietForgeNetwork.instance.send(PacketDistributor.PLAYER.with(() -> player),
         new SPacketEaten(items));
   }
 
   @Override
-  public void sendDietGroupsS2C(ServerPlayer player, CompoundTag groups) {
+  public void sendDietGroupsS2C(ServerPlayer player, CompoundTag groups,
+                                Map<Item, Set<String>> generated) {
     DietForgeNetwork.instance.send(PacketDistributor.PLAYER.with(() -> player),
-        new SPacketGroups(groups));
+        new SPacketGroups(groups, generated));
   }
 
   @Override

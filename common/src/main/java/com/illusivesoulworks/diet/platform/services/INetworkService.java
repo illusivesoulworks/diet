@@ -16,11 +16,10 @@ public interface INetworkService {
 
   void sendActivationS2C(ServerPlayer player, boolean flag);
 
-  void sendGeneratedValuesS2C(ServerPlayer player, Map<Item, Set<IDietGroup>> generated);
-
   void sendEatenS2C(ServerPlayer player, Set<Item> items);
 
-  void sendDietGroupsS2C(ServerPlayer player, CompoundTag groups);
+  void sendDietGroupsS2C(ServerPlayer player, CompoundTag groups,
+                         Map<Item, Set<String>> generated);
 
   void sendDietSuitesS2C(ServerPlayer player, CompoundTag suites);
 }
