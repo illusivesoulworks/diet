@@ -9,6 +9,17 @@ body:
     attributes:
       value: |
         Hello, and thanks for filling out this bug report. Please respond to the following questions to the best of your ability.
+  - type: dropdown
+    id: mc-version
+    attributes:
+      label: Minecraft Version
+      description: What version of Minecraft are you running? (Unlisted versions are unsupported)
+      options:
+        - 1.19.2
+        - 1.18.2
+        - 1.16.5
+    validations:
+      required: true
   - type: textarea
     id: what-happened
     attributes:
@@ -30,39 +41,50 @@ body:
         ...
     validations:
       required: true
-  - type: input
-    id: forge-version
+  - type: dropdown
+    id: loader
     attributes:
-      label: Forge Version
-      description: Which version of Forge are you using?
-      placeholder: |
-        Example: Forge - 36.2.4
+      label: Loader
+      description: Are you using Fabric, Forge, or Quilt?
+      options:
+        - Fabric
+        - Forge
+        - Quilt
     validations:
       required: true
+  - type: input
+    id: loader-version
+    attributes:
+      label: Loader Version
+      description: Which version of the above loader are you using?
+      placeholder: |
+        Example: Forge - 37.0.65 or Fabric - 0.7.4
+    validations:
+      required: true
+  - type: input
+    id: modloader-api-version
+    attributes:
+      label: API Version
+      description: Which API version of the above loader are you using? (Fabric API on Fabric, QSL/QFAPI on Quilt, N/A on Forge)
+      placeholder: |
+        Example: Fabric API 0.40.1
   - type: input
     id: mod-version
     attributes:
       label: Mod Version
       description: What version of the mod are you using?
       placeholder: |
-        Example: Diet 1.16.5-0.40
+        Example: Diet 2.0.0-beta+1.19.2
     validations:
       required: true
-  - type: textarea
-    id: dependencies-versions
-    attributes:
-      label: Other Relevant Mod Versions
-      description: If other mods are needed to reproduce the issue, which mods are involved and what are their version numbers?
-      placeholder: |
-        Example: SomeOtherMod 1.16.5-1.2.3
   - type: textarea
     id: logs
     attributes:
       label: Relevant Log Outputs
       description: |
-        Please share any relevant log outputs using a paste site (set to never expire):
-        » [GitHub Gist](https://gist.github.com/)
-        » [Paste.gg](https://paste.gg/)
-        » [Paste.ee](https://paste.ee/)
-        » [Pastebin.com](https://pastebin.com/)
-        » [Hastebin.com](https://hastebin.com/)
+        Please share any relevant log outputs using a paste site:
+        » GitHub Gist
+        » Paste.gg
+        » Paste.ee
+        » Pastebin.com
+        » Hastebin.com
