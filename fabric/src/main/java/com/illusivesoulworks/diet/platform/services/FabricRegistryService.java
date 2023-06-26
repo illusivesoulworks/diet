@@ -18,6 +18,8 @@
 package com.illusivesoulworks.diet.platform.services;
 
 import com.illusivesoulworks.diet.DietCommonMod;
+import com.illusivesoulworks.diet.common.ModIdArgument;
+import com.mojang.brigadier.arguments.ArgumentType;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -119,5 +121,10 @@ public class FabricRegistryService implements IRegistryService {
           player, result));
     }
     return state.getBlock().getCloneItemStack(world, pos, state);
+  }
+
+  @Override
+  public ArgumentType<String> getModIdArgument() {
+    return ModIdArgument.modIdArgument();
   }
 }

@@ -24,6 +24,7 @@ import com.illusivesoulworks.diet.platform.Services;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -98,11 +99,10 @@ public class DietCommand {
         Commands.argument("group", DietGroupArgument.group()).executes(
             ctx -> export(ctx.getSource(), DietGroupArgument.getGroup(ctx, "group")))));
 
-    //todo: Re-implement this somehow
-//    exportArg.then(Commands.literal("mod_id").then(
-//        Commands.argument("mod_id", ModIdArgument.modIdArgument())
-//            .executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.MOD_ID,
-//                StringArgumentType.getString(ctx, "mod_id")))));
+    exportArg.then(Commands.literal("mod_id").then(
+        Commands.argument("mod_id", Services.REGISTRY.getModIdArgument())
+            .executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.MOD_ID,
+                StringArgumentType.getString(ctx, "mod_id")))));
 
     exportArg.then(Commands.literal("uncategorized")
         .executes(ctx -> export(ctx.getSource(), DietCsv.ExportMode.UNCATEGORIZED)));

@@ -19,6 +19,7 @@ package com.illusivesoulworks.diet.platform.services;
 
 import com.illusivesoulworks.diet.DietCommonMod;
 import com.illusivesoulworks.diet.common.util.DietOverride;
+import com.mojang.brigadier.arguments.ArgumentType;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -39,6 +40,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
+import net.minecraftforge.server.command.ModIdArgument;
 import org.apache.commons.lang3.tuple.Triple;
 
 public class ForgeRegistryService implements IRegistryService {
@@ -114,5 +116,10 @@ public class ForgeRegistryService implements IRegistryService {
   public ItemStack getPickStack(BlockState state, BlockHitResult result, Level world, BlockPos pos,
                                 ServerPlayer player) {
     return state.getCloneItemStack(result, world, pos, player);
+  }
+
+  @Override
+  public ArgumentType<String> getModIdArgument() {
+    return ModIdArgument.modIdArgument();
   }
 }
