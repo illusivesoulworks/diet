@@ -19,6 +19,7 @@ package com.illusivesoulworks.diet;
 
 import com.illusivesoulworks.diet.api.DietApi;
 import com.illusivesoulworks.diet.common.DietEvents;
+import com.illusivesoulworks.diet.common.ModIdArgument;
 import com.illusivesoulworks.diet.common.command.DietCommand;
 import com.illusivesoulworks.diet.common.command.DietGroupArgument;
 import com.illusivesoulworks.diet.common.component.DietComponents;
@@ -47,6 +48,8 @@ public class DietFabricMod implements ModInitializer {
         (IdentifiableResourceReloadListener) DietGroups.SERVER);
     resourceManagerHelper.registerReloadListener(
         (IdentifiableResourceReloadListener) DietSuites.SERVER);
+    ArgumentTypeRegistry.registerArgumentType(DietCommonMod.resource("modid"), ModIdArgument.class,
+        SingletonArgumentInfo.contextFree(ModIdArgument::new));
     ArgumentTypeRegistry.registerArgumentType(DietCommonMod.resource("groups"),
         DietGroupArgument.class, SingletonArgumentInfo.contextFree(DietGroupArgument::group));
     CommandRegistrationCallback.EVENT.register(

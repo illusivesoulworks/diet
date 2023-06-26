@@ -19,6 +19,7 @@ package com.illusivesoulworks.diet;
 
 import com.illusivesoulworks.diet.api.DietApi;
 import com.illusivesoulworks.diet.common.DietEvents;
+import com.illusivesoulworks.diet.common.ModIdArgument;
 import com.illusivesoulworks.diet.common.command.DietCommand;
 import com.illusivesoulworks.diet.common.command.DietGroupArgument;
 import com.illusivesoulworks.diet.common.component.DietComponents;
@@ -26,6 +27,7 @@ import com.illusivesoulworks.diet.common.data.group.DietGroups;
 import com.illusivesoulworks.diet.common.data.suite.DietSuites;
 import com.illusivesoulworks.diet.common.util.DietValueGenerator;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Registry;
@@ -50,6 +52,9 @@ public class DietQuiltMod implements ModInitializer {
     resourceManagerHelper.registerReloader((IdentifiableResourceReloader) DietSuites.SERVER);
     resourceManagerHelper.addReloaderOrdering(DietCommonMod.resource("groups"),
         DietCommonMod.resource("suites"));
+    ServerArgumentType.register(DietCommonMod.resource("modid"), ModIdArgument.class,
+        SingletonArgumentInfo.contextFree(ModIdArgument::new),
+        originalArg -> StringArgumentType.word());
     ServerArgumentType.register(DietCommonMod.resource("groups"), DietGroupArgument.class,
         SingletonArgumentInfo.contextFree(DietGroupArgument::group),
         originalArg -> StringArgumentType.word());
