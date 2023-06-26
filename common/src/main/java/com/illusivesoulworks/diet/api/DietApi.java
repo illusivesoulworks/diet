@@ -102,8 +102,8 @@ public abstract class DietApi {
   /**
    * Retrieves the attribute that controls player natural regeneration from high food and saturation
    * levels.
-   * Values >= 1 allows natural regeneration to work as normal as per the gamerule
-   * Values < 1 disables natural regeneration
+   * Values greater than or equal to 1 allows natural regeneration to work as per the gamerule
+   * Values less than 1 disables natural regeneration
    *
    * @return The registered attribute
    */
