@@ -7,9 +7,9 @@ import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.minecraft.resources.ResourceLocation;
+import org.quiltmc.qsl.entity_events.api.EntityWorldChangeEvents;
+import org.quiltmc.qsl.entity_events.api.ServerPlayerEntityCopyCallback;
 
 public class DietComponents implements EntityComponentInitializer {
 
@@ -18,13 +18,13 @@ public class DietComponents implements EntityComponentInitializer {
           DietComponent.class);
 
   public static void setup() {
-    ServerPlayerEvents.COPY_FROM.register(
+    ServerPlayerEntityCopyCallback.EVENT.register(
         (oldPlayer, newPlayer, alive) -> DietComponents.DIET_TRACKER.maybeGet(newPlayer)
-            .ifPresent(tracker -> tracker.copy(oldPlayer, !alive)));
-    ServerPlayerEvents.AFTER_RESPAWN.register(
-        (oldPlayer, newPlayer, alive) -> DietComponents.DIET_TRACKER.maybeGet(newPlayer)
-            .ifPresent(IDietTracker::sync));
-    ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(
+            .ifPresent(tracker -> {
+              tracker.copy(oldPlayer, !alive);
+              tracker.sync();
+            }));
+    EntityWorldChangeEvents.AFTER_PLAYER_WORLD_CHANGE.register(
         (player, origin, destination) -> DietComponents.DIET_TRACKER.maybeGet(player)
             .ifPresent(IDietTracker::sync));
   }

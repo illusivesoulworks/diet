@@ -7,6 +7,7 @@ subprojects {
     java.withJavadocJar()
         
     jar {
+        archiveClassifier.set("slim")
         from(rootProject.file("LICENSE"))
         from(rootProject.file("COPYING"))
         from(rootProject.file("COPYING.LESSER"))
@@ -75,5 +76,9 @@ subprojects {
     // other mod developers.
     tasks.withType(GenerateModuleMetadata) {
         enabled = false
+    }
+
+    tasks.withType(Jar).all {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }

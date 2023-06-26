@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "com.illusivesoulworks.${mod_id}",
+    "id": "${mod_id}",
+    "version": "${version}",
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": [
+        "com.illusivesoulworks.diet.DietQuiltMod"
+      ],
+      "client_init": [
+        "com.illusivesoulworks.diet.client.DietQuiltClientMod"
+      ],
+      "spectrelib": [
+        "com.illusivesoulworks.diet.DietConfigInitializer"
+      ],
+      "cardinal-components-entity": [
+        "com.illusivesoulworks.diet.common.component.DietComponents"
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "version": "*"
+      },
+      {
+        "id": "quilt_base",
+        "version": "*"
+      },
+      {
+        "id": "minecraft",
+        "version": "${quilt_mc_version_range}"
+      },
+      {
+        "id": "java",
+        "version": ">=17"
+      },
+      {
+        "id": "spectrelib",
+        "version": ">=0.12.1"
+      },
+      {
+        "id": "cardinal-components-base",
+        "version": "*"
+      },
+      {
+        "id": "cardinal-components-entity",
+        "version": "*"
+      },
+      {
+        "id": "quilted_fabric_api",
+        "version": "*"
+      }
+    ],
+    "metadata": {
+      "name": "${mod_name}",
+      "description": "${mod_description}",
+      "contributors": {
+        "${mod_author}": "Owner"
+      },
+      "contact": {
+        "issues": "${issue_tracker}"
+      },
+      "license": "${license}",
+      "icon": "${mod_id}_icon.png"
+    }
+  },
+  "cardinal-components": [
+    "diet:diet_tracker"
+  ],
+  "mixin": [
+    "diet.mixins.json",
+    "diet.quilt.mixins.json"
+  ],
+  "minecraft": {
+    "environment": "*"
+  }
+}

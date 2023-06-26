@@ -2,7 +2,7 @@
   "required": true,
   "package": "com.illusivesoulworks.diet.mixin",
   "compatibilityLevel": "JAVA_16",
-  "refmap": "diet.refmap.json",
+  "refmap": "${refmap_target}refmap.json",
   "mixins": [
     "DietMixinDietApi",
     "DietMixinFoodData",

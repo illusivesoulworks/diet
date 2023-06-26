@@ -1,11 +1,31 @@
 plugins {
-    id 'fabric-loom' version '0.12-SNAPSHOT'
+    id 'org.quiltmc.loom' version '1.0-SNAPSHOT'
     id 'maven-publish'
     id 'idea'
-	id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'com.modrinth.minotaur' version '2.+'
 }
 
-archivesBaseName = "${mod_id}-fabric"
+archivesBaseName = "${mod_id}-quilt"
+
+repositories {
+    maven {
+        name 'Ladysnake Libs'
+        url 'https://ladysnake.jfrog.io/artifactory/mods'
+    }
+    maven {
+        name 'Quilt (Release)'
+        url 'https://maven.quiltmc.org/repository/release/'
+    }
+    maven {
+        name 'Quilt (Snapshot)'
+        url 'https://maven.quiltmc.org/repository/snapshot/'
+        content {
+            includeGroup 'org.quiltmc.fabric_api_qsl'
+            includeGroupByRegex 'org\\.quiltmc\\.qsl(?:\\.[a-z_]+)?'
+        }
+    }
+}
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
@@ -13,32 +33,39 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${parchment_mc_version}:${parchment_version}@zip")
     })
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    modImplementation "org.quiltmc:quilt-loader:${quilt_loader_version}"
+    modImplementation("org.quiltmc:qsl:${quilt_stdlib_version}") {
+        exclude group: "net.fabricmc"
+    }
+    modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}"
+
+    implementation group: 'com.electronwill.night-config', name: 'core', version: '3.6.5'
+    implementation group: 'com.electronwill.night-config', name: 'toml', version: '3.6.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":common")
 
     modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
     modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
-    modImplementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-fabric', version: "${spectrelib_range}"
+    modImplementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-quilt', version: "${spectrelib_range}"
 
+    // Embedded
     // Embedded
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
-    include group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-fabric', version: "${spectrelib_version}"
+    include group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-quilt', version: "${spectrelib_version}"
 }
 
 loom {
     runs {
         client {
             client()
-            setConfigName("Fabric Client")
+            setConfigName("Quilt Client")
             ideConfigGenerated(true)
             runDir("run")
         }
         server {
             server()
-            setConfigName("Fabric Server")
+            setConfigName("Quilt Server")
             ideConfigGenerated(true)
             runDir("run")
         }
@@ -53,13 +80,12 @@ sourceSets {
     }
 }
 
-
 processResources {
     from project(":common").sourceSets.main.resources
     inputs.property "version", project.version
 
-    filesMatching("fabric.mod.json") {
-        expand 'version': project.version, 'fabric_mc_version_range': project.fabric_mc_version_range, 'license': project.license,
+    filesMatching("quilt.mod.json") {
+        expand 'version': project.version, 'quilt_mc_version_range': project.quilt_mc_version_range, 'license': project.license,
                 'mod_id': project.mod_id, 'mod_author': project.mod_author, 'mod_description': project.mod_description,
                 'mod_name': project.mod_name, 'issue_tracker': project.issue_tracker
     }
@@ -76,6 +102,7 @@ processResources {
 tasks.withType(JavaCompile) {
     source(project(":common").sourceSets.main.allSource)
 }
+
 
 publishing {
     publications {
@@ -102,7 +129,7 @@ curseforge {
         changelogType = 'markdown'
         changelog = file("../CHANGELOG_LATEST.md")
         addGameVersion "Java 17"
-        addGameVersion "Fabric"
+        addGameVersion "Quilt"
         "${release_versions}".split(',').each {
             addGameVersion "${it}"
         }
@@ -110,7 +137,7 @@ curseforge {
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
 
         relations {
-            requiredDependency 'fabric-api'
+            requiredDependency 'qsl'
         }
 
         afterEvaluate {
@@ -119,5 +146,20 @@ curseforge {
     }
     options {
         forgeGradleIntegration = false
+    }
+}
+
+modrinth {
+    token = findProperty('modrinthKey') ?: 0
+    projectId = "${modrinth_id}"
+    versionName = getArchivesBaseName() + "-" + getVersion()
+    versionType = "${release_type}"
+    changelog = file('../CHANGELOG_LATEST.md').text
+    uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
+    additionalFiles = [sourcesJar]
+    gameVersions = "${release_versions}".split(",") as List<String>
+    loaders = ["quilt"]
+    dependencies {
+        required.project "qsl"
     }
 }
