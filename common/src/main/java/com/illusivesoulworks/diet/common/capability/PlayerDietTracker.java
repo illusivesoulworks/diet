@@ -86,7 +86,7 @@ public class PlayerDietTracker implements IDietTracker {
   public void initSuite() {
     Map<String, Float> oldValues = new HashMap<>(this.values);
     this.values.clear();
-    DietSuites.getSuite(this.player.getLevel(), this.suite).ifPresent(suite -> {
+    DietSuites.getSuite(this.player.level(), this.suite).ifPresent(suite -> {
 
       for (IDietGroup group : suite.getGroups()) {
         String name = group.getName();
@@ -105,7 +105,7 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void tick() {
 
-    if (!this.player.getLevel().isClientSide()) {
+    if (!this.player.level().isClientSide()) {
 
       if (!this.player.isCreative() && this.active) {
         int currentFood = this.player.getFoodData().getFoodLevel();
@@ -248,7 +248,7 @@ public class PlayerDietTracker implements IDietTracker {
       return;
     }
     DietEffectsInfo info = new DietEffectsInfo();
-    DietSuites.getSuite(this.player.getLevel(), this.suite).ifPresent(suite -> {
+    DietSuites.getSuite(this.player.level(), this.suite).ifPresent(suite -> {
 
       for (IDietEffect effect : suite.getEffects()) {
         boolean match = true;
@@ -311,7 +311,7 @@ public class PlayerDietTracker implements IDietTracker {
     float scale = ((float) foodDiff) / size;
     scale *= Math.pow(1.0f - DietConfig.SERVER.decayPenaltyPerGroup.get() / 100f, size - 1);
     float finalScale = scale;
-    DietSuites.getSuite(this.player.getLevel(), this.suite).ifPresent(suite -> {
+    DietSuites.getSuite(this.player.level(), this.suite).ifPresent(suite -> {
 
       for (IDietGroup group : suite.getGroups()) {
         String name = group.getName();
@@ -453,7 +453,7 @@ public class PlayerDietTracker implements IDietTracker {
   public void load(CompoundTag tag) {
     Map<String, Float> groups = new HashMap<>();
 
-    DietSuites.getSuite(this.player.getLevel(), this.suite).ifPresent(suite -> {
+    DietSuites.getSuite(this.player.level(), this.suite).ifPresent(suite -> {
 
       for (IDietGroup group : suite.getGroups()) {
         String name = group.getName();
@@ -498,7 +498,7 @@ public class PlayerDietTracker implements IDietTracker {
     Services.CAPABILITY.get(this.player)
         .ifPresent(diet -> Services.CAPABILITY.get(oldPlayer).ifPresent(originalDiet -> {
           Map<String, Float> originalValues = originalDiet.getValues();
-          DietSuites.getSuite(this.player.getLevel(), this.suite).ifPresent(suite -> {
+          DietSuites.getSuite(this.player.level(), this.suite).ifPresent(suite -> {
 
             for (IDietGroup group : suite.getGroups()) {
               String id = group.getName();

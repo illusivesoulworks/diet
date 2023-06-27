@@ -27,10 +27,10 @@ import com.illusivesoulworks.diet.common.data.group.DietGroups;
 import com.illusivesoulworks.diet.common.data.suite.DietSuites;
 import com.illusivesoulworks.diet.common.util.DietValueGenerator;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.packs.PackType;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
@@ -44,7 +44,7 @@ public class DietQuiltMod implements ModInitializer {
 
   @Override
   public void onInitialize(ModContainer modContainer) {
-    Registry.register(Registry.ATTRIBUTE, DietCommonMod.resource("natural_regeneration"),
+    Registry.register(BuiltInRegistries.ATTRIBUTE, DietCommonMod.resource("natural_regeneration"),
         DietApi.getInstance().getNaturalRegeneration());
     DietComponents.setup();
     ResourceLoader resourceManagerHelper = ResourceLoader.get(PackType.SERVER_DATA);
@@ -62,13 +62,12 @@ public class DietQuiltMod implements ModInitializer {
         (dispatcher, registryAccess, environment) -> DietCommand.register(dispatcher));
     org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents.READY.register(
         DietValueGenerator::reload);
-    ResourceLoaderEvents.END_DATA_PACK_RELOAD.register(
-        (server, resourceManager, success) -> {
+    ResourceLoaderEvents.END_DATA_PACK_RELOAD.register(context -> {
 
-          if (server != null) {
-            DietEvents.syncDatapack(server);
-          }
-        });
+      if (context.server() != null) {
+        DietEvents.syncDatapack(context.server());
+      }
+    });
     ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(
         (player, joined) -> DietEvents.syncDatapack(player));
   }

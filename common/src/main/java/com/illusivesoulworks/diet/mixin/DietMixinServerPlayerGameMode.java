@@ -47,7 +47,7 @@ public class DietMixinServerPlayerGameMode {
                                      CallbackInfoReturnable<InteractionResult> cir) {
     Services.CAPABILITY.get(player).ifPresent(tracker -> {
       BlockPos pos = result.getBlockPos();
-      BlockState state = player.level.getBlockState(pos);
+      BlockState state = player.level().getBlockState(pos);
       ItemStack blockStack;
       try {
         blockStack = Services.REGISTRY.getPickStack(state, result, world, pos, player);

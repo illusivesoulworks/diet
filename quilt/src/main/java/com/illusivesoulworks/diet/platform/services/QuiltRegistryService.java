@@ -30,6 +30,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -46,38 +48,38 @@ import org.apache.commons.lang3.tuple.Triple;
 
 public class QuiltRegistryService implements IRegistryService {
   private static final TagKey<Item> INGREDIENTS =
-      TagKey.create(Registry.ITEM_REGISTRY, DietCommonMod.resource("ingredients"));
+      TagKey.create(Registries.ITEM, DietCommonMod.resource("ingredients"));
   private static final TagKey<Item> SPECIAL_FOOD =
-      TagKey.create(Registry.ITEM_REGISTRY, DietCommonMod.resource("special_food"));
+      TagKey.create(Registries.ITEM, DietCommonMod.resource("special_food"));
 
   @Override
   public Optional<Item> getItem(ResourceLocation resourceLocation) {
-    return Optional.of(Registry.ITEM.get(resourceLocation));
+    return Optional.of(BuiltInRegistries.ITEM.get(resourceLocation));
   }
 
   @Override
   public ResourceLocation getItemKey(Item item) {
-    return Registry.ITEM.getKey(item);
+    return BuiltInRegistries.ITEM.getKey(item);
   }
 
   @Override
   public Optional<Attribute> getAttribute(ResourceLocation resourceLocation) {
-    return Optional.ofNullable(Registry.ATTRIBUTE.get(resourceLocation));
+    return Optional.ofNullable(BuiltInRegistries.ATTRIBUTE.get(resourceLocation));
   }
 
   @Override
   public ResourceLocation getAttributeKey(Attribute attribute) {
-    return Registry.ATTRIBUTE.getKey(attribute);
+    return BuiltInRegistries.ATTRIBUTE.getKey(attribute);
   }
 
   @Override
   public Optional<MobEffect> getStatusEffect(ResourceLocation resourceLocation) {
-    return Optional.ofNullable(Registry.MOB_EFFECT.get(resourceLocation));
+    return Optional.ofNullable(BuiltInRegistries.MOB_EFFECT.get(resourceLocation));
   }
 
   @Override
   public ResourceLocation getStatusEffectKey(MobEffect effect) {
-    return Registry.MOB_EFFECT.getKey(effect);
+    return BuiltInRegistries.MOB_EFFECT.getKey(effect);
   }
 
   @Override
@@ -103,12 +105,12 @@ public class QuiltRegistryService implements IRegistryService {
 
   @Override
   public Collection<Item> getItems() {
-    return Registry.ITEM.stream().toList();
+    return BuiltInRegistries.ITEM.stream().toList();
   }
 
   @Override
   public Collection<Item> getTagItems(TagKey<Item> tagKey) {
-    return Registry.ITEM.getTag(tagKey).stream().flatMap(HolderSet.ListBacked::stream)
+    return BuiltInRegistries.ITEM.getTag(tagKey).stream().flatMap(HolderSet.ListBacked::stream)
         .map(Holder::value).collect(Collectors.toSet());
   }
 

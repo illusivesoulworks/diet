@@ -34,12 +34,11 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -50,6 +49,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix4f;
 
 public class DietScreen extends Screen {
 
@@ -82,8 +82,7 @@ public class DietScreen extends Screen {
     }
     this.ySize = this.groups.size() * 20 + 60;
     this.addRenderableWidget(
-        new Button(this.width / 2 - 50, (this.height + this.ySize) / 2 - 30,
-            100, 20, Component.translatable("gui.diet.close"), (p_213002_1_) -> {
+        Button.builder(Component.translatable("gui.diet.close"), (button) -> {
           if (this.minecraft != null && this.minecraft.player != null) {
 
             if (fromInventory) {
@@ -92,37 +91,35 @@ public class DietScreen extends Screen {
               this.onClose();
             }
           }
-        }));
+        }).size(100, 20).pos(this.width / 2 - 50, (this.height + this.ySize) / 2 - 30).build());
+    ;
   }
 
   @Override
-  public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-    this.renderBackground(matrixStack);
-    this.renderForeground(matrixStack, mouseX, mouseY);
-    this.renderTitle(matrixStack, mouseX, mouseY);
-    super.render(matrixStack, mouseX, mouseY, partialTicks);
+  public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    this.renderBackground(guiGraphics);
+    this.renderForeground(guiGraphics, mouseX, mouseY);
+    this.renderTitle(guiGraphics, mouseX, mouseY);
+    super.render(guiGraphics, mouseX, mouseY, partialTicks);
   }
 
-  public void renderTitle(PoseStack matrixStack, int mouseX, int mouseY) {
+  public void renderTitle(GuiGraphics guiGraphics, int mouseX, int mouseY) {
     int titleWidth = this.font.width(this.title.getString());
-    this.font.draw(matrixStack, this.title, (float) this.width / 2 - (float) titleWidth / 2,
-        (float) this.height / 2 - (float) this.ySize / 2 + 10, getTextColor());
+    guiGraphics.drawString(this.font, this.title, this.width / 2 - titleWidth / 2,
+        this.height / 2 - this.ySize / 2 + 10, getTextColor(), false);
     List<DietEffectsInfo.AttributeModifier> modifiers = DietScreen.tooltip.getModifiers();
     List<DietEffectsInfo.StatusEffect> effects = DietScreen.tooltip.getEffects();
 
     if (this.minecraft != null && (!modifiers.isEmpty() || !effects.isEmpty())) {
-      RenderSystem.setShaderTexture(0, ICONS);
       int lowerX = this.width / 2 + titleWidth / 2 + 5;
       int lowerY = this.height / 2 - this.ySize / 2 + 7;
       int upperX = lowerX + 16;
       int upperY = lowerY + 16;
-      GuiComponent
-          .blit(matrixStack, lowerX, lowerY,
-              16, 16, 0, 37, 16, 16, 256, 256);
+      guiGraphics.blit(ICONS, lowerX, lowerY, 16, 16, 0, 37, 16, 16, 256, 256);
 
       if (mouseX >= lowerX && mouseX <= upperX && mouseY >= lowerY && mouseY <= upperY) {
         List<Component> tooltips = DietTooltip.getEffects();
-        this.renderComponentTooltip(matrixStack, tooltips, mouseX, mouseY);
+        guiGraphics.renderComponentTooltip(this.font, tooltips, mouseX, mouseY);
       }
     }
   }
@@ -136,7 +133,7 @@ public class DietScreen extends Screen {
     return Integer.parseInt(config);
   }
 
-  public void renderForeground(PoseStack matrixStack, int mouseX, int mouseY) {
+  public void renderForeground(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 
     if (this.minecraft != null && this.minecraft.level != null) {
       LocalPlayer player = this.minecraft.player;
@@ -149,10 +146,10 @@ public class DietScreen extends Screen {
               Component tooltip = null;
 
               for (IDietGroup group : suite.getGroups()) {
-                this.itemRenderer.renderGuiItem(new ItemStack(group.getIcon()), x, y - 5);
+                guiGraphics.renderItem(new ItemStack(group.getIcon()), x, y - 5);
                 MutableComponent text = Component.translatable(
                     "groups." + DietConstants.MOD_ID + "." + group.getName() + ".name");
-                this.font.draw(matrixStack, text, x + 20, y, getTextColor());
+                guiGraphics.drawString(this.font, text, x + 20, y, getTextColor(), false);
                 RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
                 RenderSystem.setShaderTexture(0, ICONS);
                 DietColor color = diet.isActive() ? group.getColor() : DietColor.GRAY;
@@ -161,22 +158,21 @@ public class DietScreen extends Screen {
                 int blue = color.blue();
                 int percent = (int) Math.floor(diet.getValue(group.getName()) * 100.0f);
                 String percentText = percent + "%";
-                coloredBlit(matrixStack, x + 90, y + 2, 102, 5, 20, 0, 102, 5, 256, 256, red, green,
-                    blue, 255);
+                coloredBlit(guiGraphics.pose(), x + 90, y + 2, 102, 5, 20, 0, 102, 5, 256, 256, red,
+                    green, blue, 255);
 
                 if (percent > 0) {
                   int texWidth = percent + 1;
-                  coloredBlit(matrixStack, x + 90, y + 2, texWidth, 5, 20, 5, texWidth, 5, 256, 256,
-                      red, green, blue, 255);
+                  coloredBlit(guiGraphics.pose(), x + 90, y + 2, texWidth, 5, 20, 5, texWidth, 5,
+                      256, 256, red, green, blue, 255);
                 }
                 int xPos = x + 200;
                 int yPos = y + 1;
-                this.font.draw(matrixStack, percentText, (float) (xPos + 1), (float) yPos, 0);
-                this.font.draw(matrixStack, percentText, (float) (xPos - 1), (float) yPos, 0);
-                this.font.draw(matrixStack, percentText, (float) xPos, (float) (yPos + 1), 0);
-                this.font.draw(matrixStack, percentText, (float) xPos, (float) (yPos - 1), 0);
-                this.font
-                    .draw(matrixStack, percentText, (float) xPos, (float) yPos, color.getRGB());
+                guiGraphics.drawString(this.font, percentText, (xPos + 1), yPos, 0, false);
+                guiGraphics.drawString(this.font, percentText, (xPos - 1), yPos, 0, false);
+                guiGraphics.drawString(this.font, percentText, xPos, (yPos + 1), 0, false);
+                guiGraphics.drawString(this.font, percentText, xPos, (yPos - 1), 0, false);
+                guiGraphics.drawString(this.font, percentText, xPos, yPos, color.getRGB(), false);
                 int lowerY = y - 5;
                 int upperX = x + 16;
                 int upperY = lowerY + 16;
@@ -194,7 +190,7 @@ public class DietScreen extends Screen {
 
               if (tooltip != null) {
                 List<Component> tooltips = Lists.newArrayList(tooltip);
-                this.renderComponentTooltip(matrixStack, tooltips, mouseX, mouseY);
+                guiGraphics.renderComponentTooltip(this.font, tooltips, mouseX, mouseY);
               }
             }));
       }
@@ -202,18 +198,15 @@ public class DietScreen extends Screen {
   }
 
   @Override
-  public void renderBackground(@Nonnull PoseStack matrixStack) {
-    super.renderBackground(matrixStack);
+  public void renderBackground(@Nonnull GuiGraphics guiGraphics) {
+    super.renderBackground(guiGraphics);
 
     if (this.minecraft != null) {
-      RenderSystem.setShaderTexture(0, BACKGROUND);
       int i = (this.width - this.xSize) / 2;
       int j = (this.height - this.ySize) / 2;
-      GuiComponent.blit(matrixStack, i, j, this.xSize, 4, 0, 0, 248, 4, 256, 256);
-      GuiComponent
-          .blit(matrixStack, i, j + 4, this.xSize, this.ySize - 8, 0, 4, 248, 24, 256, 256);
-      GuiComponent
-          .blit(matrixStack, i, j + this.ySize - 4, this.xSize, 4, 0, 162, 248, 4, 256, 256);
+      guiGraphics.blit(BACKGROUND, i, j, this.xSize, 4, 0, 0, 248, 4, 256, 256);
+      guiGraphics.blit(BACKGROUND, i, j + 4, this.xSize, this.ySize - 8, 0, 4, 248, 24, 256, 256);
+      guiGraphics.blit(BACKGROUND, i, j + this.ySize - 4, this.xSize, 4, 0, 162, 248, 4, 256, 256);
     }
   }
 

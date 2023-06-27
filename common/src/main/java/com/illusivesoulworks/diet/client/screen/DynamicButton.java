@@ -20,9 +20,9 @@ package com.illusivesoulworks.diet.client.screen;
 import com.illusivesoulworks.diet.client.DietClientEvents;
 import com.illusivesoulworks.diet.common.config.DietConfig;
 import com.illusivesoulworks.diet.platform.ClientServices;
-import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.List;
 import javax.annotation.Nonnull;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -41,24 +41,23 @@ public class DynamicButton extends ImageButton {
   }
 
   @Override
-  public void renderButton(@Nonnull PoseStack matrixStack, int mouseX, int mouseY,
+  public void renderWidget(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY,
                            float partialTicks) {
-    this.x =
-        ClientServices.INSTANCE.getGuiLeft(this.containerScreen) + DietConfig.CLIENT.buttonX.get();
-    this.y =
+    this.setX(
+        ClientServices.INSTANCE.getGuiLeft(this.containerScreen) + DietConfig.CLIENT.buttonX.get());
+    this.setY(
         ClientServices.INSTANCE.getGuiTop(this.containerScreen) + DietConfig.CLIENT.buttonY.get() +
-            83;
-    super.renderButton(matrixStack, mouseX, mouseY, partialTicks);
-  }
+            83);
 
-  @Override
-  public void renderToolTip(@Nonnull PoseStack matrixStack, int mouseX, int mouseY) {
-    List<Component> tooltips = DietTooltip.getEffects();
+    if (this.isHoveredOrFocused()) {
+      List<Component> tooltips = DietTooltip.getEffects();
 
-    if (!tooltips.isEmpty()) {
-      DietClientEvents.tooltip = tooltips;
-      DietClientEvents.tooltipX = mouseX;
-      DietClientEvents.tooltipY = mouseY;
+      if (!tooltips.isEmpty()) {
+        DietClientEvents.tooltip = tooltips;
+        DietClientEvents.tooltipX = mouseX;
+        DietClientEvents.tooltipY = mouseY;
+      }
     }
+    super.renderWidget(guiGraphics, mouseX, mouseY, partialTicks);
   }
 }

@@ -32,9 +32,12 @@ import com.illusivesoulworks.diet.common.util.DietOverride;
 import com.illusivesoulworks.diet.common.util.DietValueGenerator;
 import com.illusivesoulworks.diet.data.DietBlockTagsProvider;
 import com.illusivesoulworks.diet.data.DietTagsProvider;
+import java.util.concurrent.CompletableFuture;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.api.distmarker.Dist;
@@ -104,10 +107,14 @@ public class DietForgeMod {
 
     if (evt.includeServer()) {
       ExistingFileHelper existingFileHelper = evt.getExistingFileHelper();
+      CompletableFuture<HolderLookup.Provider> lookupProvider = evt.getLookupProvider();
+      DataGenerator gen = evt.getGenerator();
+      PackOutput packOutput = gen.getPackOutput();
       DietBlockTagsProvider blockTagsProvider =
-          new DietBlockTagsProvider(generator, existingFileHelper);
+          new DietBlockTagsProvider(packOutput, lookupProvider, existingFileHelper);
       generator.addProvider(true,
-          new DietTagsProvider(generator, blockTagsProvider, existingFileHelper));
+          new DietTagsProvider(packOutput, lookupProvider, blockTagsProvider.contentsGetter(),
+              existingFileHelper));
     }
   }
 

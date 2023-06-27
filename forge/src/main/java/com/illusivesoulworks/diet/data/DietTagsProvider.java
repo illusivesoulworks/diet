@@ -22,10 +22,10 @@ import com.illusivesoulworks.diet.DietConstants;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -33,9 +33,11 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
 public class DietTagsProvider extends ItemTagsProvider {
 
@@ -47,9 +49,11 @@ public class DietTagsProvider extends ItemTagsProvider {
   protected TagsProvider.TagAppender<Item> specialFood;
   protected TagsProvider.TagAppender<Item> ingredients;
 
-  public DietTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagProvider,
+  public DietTagsProvider(PackOutput p_275343_,
+                          CompletableFuture<HolderLookup.Provider> p_275729_,
+                          CompletableFuture<TagLookup<Block>> p_275322_,
                           @Nullable ExistingFileHelper existingFileHelper) {
-    super(dataGenerator, blockTagProvider, DietConstants.MOD_ID, existingFileHelper);
+    super(p_275343_, p_275729_, p_275322_, DietConstants.MOD_ID, existingFileHelper);
   }
 
   protected void init() {
@@ -63,7 +67,7 @@ public class DietTagsProvider extends ItemTagsProvider {
   }
 
   @Override
-  protected void addTags() {
+  protected void addTags(HolderLookup.Provider pProvider) {
     this.init();
     List<Item> elements = createList(
         Items.APPLE,
@@ -1792,7 +1796,7 @@ public class DietTagsProvider extends ItemTagsProvider {
   }
 
   protected void add(TagsProvider.TagAppender<Item> builder, Item item) {
-    builder.add(item);
+    builder.add(ForgeRegistries.ITEMS.getResourceKey(item).orElseThrow());
   }
 
   protected void addTag(TagsProvider.TagAppender<Item> builder, TagKey<Item> tag) {

@@ -34,13 +34,14 @@ import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.packs.PackType;
 
 public class DietFabricMod implements ModInitializer {
 
   @Override
   public void onInitialize() {
-    Registry.register(Registry.ATTRIBUTE, DietCommonMod.resource("natural_regeneration"),
+    Registry.register(BuiltInRegistries.ATTRIBUTE, DietCommonMod.resource("natural_regeneration"),
         DietApi.getInstance().getNaturalRegeneration());
     DietComponents.setup();
     ResourceManagerHelper resourceManagerHelper = ResourceManagerHelper.get(PackType.SERVER_DATA);

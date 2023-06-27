@@ -23,6 +23,7 @@ import com.illusivesoulworks.diet.api.util.DietColor;
 import com.illusivesoulworks.diet.platform.Services;
 import java.util.Objects;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -51,7 +52,7 @@ public final class DietGroup implements IDietGroup {
     this.gainMultiplier = builder.gainMultiplier;
     this.decayMultiplier = builder.decayMultiplier;
     this.beneficial = builder.beneficial;
-    this.tag = TagKey.create(Registry.ITEM_REGISTRY, DietCommonMod.resource(this.name));
+    this.tag = TagKey.create(Registries.ITEM, DietCommonMod.resource(this.name));
   }
 
   public static IDietGroup load(CompoundTag tag) {

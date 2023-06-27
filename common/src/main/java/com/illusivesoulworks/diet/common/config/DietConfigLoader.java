@@ -27,7 +27,6 @@ public class DietConfigLoader {
     SpectreConfigLoader.add(SpectreConfig.Type.CLIENT, DietConfig.CLIENT_SPEC, DietConstants.MOD_ID);
     SpectreConfig cfg =
         SpectreConfigLoader.add(SpectreConfig.Type.SERVER, DietConfig.SERVER_SPEC, DietConstants.MOD_ID);
-    cfg.addLoadListener(config -> DietConfig.SERVER.initializedFoodOverrides = false);
-    cfg.addReloadListener(config -> DietConfig.SERVER.initializedFoodOverrides = false);
+    cfg.addLoadListener((config, flag) -> DietConfig.SERVER.initializedFoodOverrides = false);
   }
 }

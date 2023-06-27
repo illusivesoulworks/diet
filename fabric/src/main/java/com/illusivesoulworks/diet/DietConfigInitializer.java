@@ -18,14 +18,9 @@
 package com.illusivesoulworks.diet;
 
 import com.illusivesoulworks.diet.common.config.DietConfigLoader;
-import com.illusivesoulworks.spectrelib.config.SpectreConfigInitializer;
+import com.illusivesoulworks.spectrelib.config.SpectreLibInitializer;
 
-public class DietConfigInitializer implements SpectreConfigInitializer {
-
-  @Override
-  public void onInitialize() {
-    // NO-OP
-  }
+public class DietConfigInitializer implements SpectreLibInitializer {
 
   @Override
   public void onInitializeConfig() {

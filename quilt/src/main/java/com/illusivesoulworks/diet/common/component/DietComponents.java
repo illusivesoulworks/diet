@@ -25,8 +25,8 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import net.minecraft.resources.ResourceLocation;
-import org.quiltmc.qsl.entity_events.api.EntityWorldChangeEvents;
-import org.quiltmc.qsl.entity_events.api.ServerPlayerEntityCopyCallback;
+import org.quiltmc.qsl.entity.event.api.EntityWorldChangeEvents;
+import org.quiltmc.qsl.entity.event.api.ServerPlayerEntityCopyCallback;
 
 public class DietComponents implements EntityComponentInitializer {
 

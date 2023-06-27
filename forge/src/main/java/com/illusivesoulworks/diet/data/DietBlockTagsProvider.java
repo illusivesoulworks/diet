@@ -18,15 +18,24 @@
 package com.illusivesoulworks.diet.data;
 
 import com.illusivesoulworks.diet.DietConstants;
-import javax.annotation.Nullable;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import java.util.concurrent.CompletableFuture;
+import javax.annotation.Nonnull;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.Nullable;
 
 public class DietBlockTagsProvider extends BlockTagsProvider {
 
-  public DietBlockTagsProvider(DataGenerator generatorIn,
+  public DietBlockTagsProvider(PackOutput output,
+                               CompletableFuture<HolderLookup.Provider> lookupProvider,
                                @Nullable ExistingFileHelper existingFileHelper) {
-    super(generatorIn, DietConstants.MOD_ID, existingFileHelper);
+    super(output, lookupProvider, DietConstants.MOD_ID, existingFileHelper);
+  }
+
+  @Override
+  protected void addTags(@Nonnull HolderLookup.Provider pProvider) {
+
   }
 }

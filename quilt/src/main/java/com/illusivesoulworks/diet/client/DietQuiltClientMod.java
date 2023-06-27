@@ -38,9 +38,9 @@ public class DietQuiltClientMod implements ClientModInitializer {
         (stack, player, context, lines) -> DietClientEvents.renderItemTooltip(
             Minecraft.getInstance().player, stack, lines));
     ScreenEvents.AFTER_RENDER.register(
-        (screen, matrices, mouseX, mouseY, tickDelta) -> DietClientEvents.renderTooltip(
-            screen.getClient()));
-    ScreenEvents.AFTER_INIT.register((screen, client, scaledWidth, scaledHeight) -> {
+        (screen, matrices, mouseX, mouseY, tickDelta) -> DietClientEvents.renderEffectsTooltip(
+            screen, matrices));
+    ScreenEvents.AFTER_INIT.register((screen, client, firstInit) -> {
 
       if (screen instanceof InventoryScreen inventoryScreen) {
         inventoryScreen.getButtons().add(DietClientEvents.getButton(inventoryScreen));

@@ -18,10 +18,10 @@
 package com.illusivesoulworks.diet;
 
 import com.illusivesoulworks.diet.common.config.DietConfigLoader;
-import com.illusivesoulworks.spectrelib.config.SpectreConfigInitializer;
+import com.illusivesoulworks.spectrelib.config.SpectreLibInitializer;
 import org.quiltmc.loader.api.ModContainer;
 
-public class DietConfigInitializer implements SpectreConfigInitializer {
+public class DietConfigInitializer implements SpectreLibInitializer {
 
   @Override
   public void onInitializeConfig(ModContainer modContainer) {

@@ -73,10 +73,7 @@ public class DietClientEventsListener {
 
   @SubscribeEvent
   @SuppressWarnings("unused")
-  public static void renderTooltip(TickEvent.RenderTickEvent evt) {
-
-    if (evt.phase == TickEvent.Phase.END) {
-      DietClientEvents.renderTooltip(Minecraft.getInstance());
-    }
+  public static void renderTooltip(ScreenEvent.Render.Post evt) {
+    DietClientEvents.renderEffectsTooltip(evt.getScreen(), evt.getGuiGraphics());
   }
 }

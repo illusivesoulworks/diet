@@ -54,7 +54,7 @@ public class MixinLivingEntity {
       method = "completeUsingItem()V")
   private void diet$completeUsingItem2(CallbackInfo cb) {
 
-    if (!((LivingEntity) (Object) this).level.isClientSide() &&
+    if (!((LivingEntity) (Object) this).level().isClientSide() &&
         ((LivingEntity) (Object) this) instanceof Player) {
       FoodProperties food = diet$copy.getItem().getFoodProperties();
 

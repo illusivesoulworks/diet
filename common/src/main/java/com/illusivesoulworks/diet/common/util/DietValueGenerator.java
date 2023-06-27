@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.food.FoodProperties;
@@ -64,7 +65,7 @@ public class DietValueGenerator {
       Set<IDietGroup> groups = DietGroups.getGroups(server.overworld());
       findUngroupedFoods(groups);
       RecipeManager recipeManager = server.getRecipeManager();
-      findAllRecipesForItems(recipeManager);
+      findAllRecipesForItems(recipeManager, server.overworld().registryAccess());
       processItems(groups);
       stopwatch.stop();
       DietConstants.LOG.info("Generating diet values took {}", stopwatch);
@@ -172,7 +173,8 @@ public class DietValueGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  private static void findAllRecipesForItems(RecipeManager recipeManager) {
+  private static void findAllRecipesForItems(RecipeManager recipeManager,
+                                             RegistryAccess registryAccess) {
     DietConstants.LOG.info("Building item-to-recipes map...");
     RECIPES.clear();
     Map<Item, List<Recipe<?>>> result = new HashMap<>();
@@ -181,7 +183,7 @@ public class DietValueGenerator {
       ItemStack output = ItemStack.EMPTY;
 
       try {
-        output = recipe.getResultItem();
+        output = recipe.getResultItem(registryAccess);
       } catch (Exception e) {
         DietConstants.LOG.error("Diet was unable to process recipe: {}", recipe.getId());
       }

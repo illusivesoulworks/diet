@@ -27,7 +27,6 @@ import com.illusivesoulworks.diet.common.config.DietConfig;
 import com.illusivesoulworks.diet.common.util.DietResult;
 import com.illusivesoulworks.diet.platform.ClientServices;
 import com.illusivesoulworks.diet.platform.Services;
-import com.mojang.blaze3d.vertex.PoseStack;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -38,11 +37,13 @@ import java.util.Optional;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.gui.screens.inventory.tooltip.MenuTooltipPositioner;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -53,7 +54,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class DietClientEvents {
 
-  private static final TagKey<Item> SPECIAL_FOOD = TagKey.create(Registry.ITEM_REGISTRY,
+  private static final TagKey<Item> SPECIAL_FOOD = TagKey.create(Registries.ITEM,
       new ResourceLocation(DietConstants.MOD_ID, "special_food"));
   private static final DecimalFormat DECIMALFORMAT = Util.make(new DecimalFormat("#.#"),
       (num) -> num.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT)));
@@ -85,14 +86,10 @@ public class DietClientEvents {
     return null;
   }
 
-  public static void renderTooltip(Minecraft mc) {
+  public static void renderEffectsTooltip(Screen screen, GuiGraphics guiGraphics) {
 
-    if (tooltip != null) {
-      Screen screen = mc.screen;
-
-      if (screen != null) {
-        screen.renderTooltip(new PoseStack(), tooltip, Optional.empty(), tooltipX, tooltipY);
-      }
+    if (tooltip != null && screen != null) {
+      guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltip, Optional.empty(), tooltipX, tooltipY);
       tooltip = null;
     }
   }

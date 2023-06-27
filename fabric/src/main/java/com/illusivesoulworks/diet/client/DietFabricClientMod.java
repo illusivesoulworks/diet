@@ -39,8 +39,7 @@ public class DietFabricClientMod implements ClientModInitializer {
             Minecraft.getInstance().player, stack, lines));
     ScreenEvents.BEFORE_INIT.register(
         (client, screen, scaledWidth, scaledHeight) -> ScreenEvents.afterRender(screen).register(
-            (screen1, matrices, mouseX, mouseY, tickDelta) -> DietClientEvents.renderTooltip(
-                client)));
+            (screen1, matrices, mouseX, mouseY, tickDelta) -> DietClientEvents.renderEffectsTooltip(screen1, matrices)));
     ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
 
       if (screen instanceof InventoryScreen inventoryScreen) {

@@ -85,7 +85,7 @@ public class DietApiImpl extends DietApi {
     for (ItemStack stack : stacks) {
       Set<IDietGroup> found = new HashSet<>();
 
-      for (IDietGroup group : DietGroups.getGroups(player.getLevel())) {
+      for (IDietGroup group : DietGroups.getGroups(player.level())) {
 
         if (group.contains(stack)) {
           found.add(group);

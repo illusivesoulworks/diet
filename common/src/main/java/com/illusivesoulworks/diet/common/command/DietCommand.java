@@ -119,7 +119,7 @@ public class DietCommand {
     Services.CAPABILITY.get(player).ifPresent(diet -> {
       float amount = diet.getValue(group.getName());
       sender.sendSuccess(
-          Component.translatable("commands." + DietConstants.MOD_ID + ".get.success",
+          () -> Component.translatable("commands." + DietConstants.MOD_ID + ".get.success",
               Component.translatable(
                   "groups." + DietConstants.MOD_ID + "." + group.getName() + ".name"), amount * 100,
               player.getName()), true);
@@ -134,7 +134,7 @@ public class DietCommand {
         diet.setValue(group.getName(), value);
         diet.sync();
         sender.sendSuccess(
-            Component.translatable("commands." + DietConstants.MOD_ID + ".set.success",
+            () -> Component.translatable("commands." + DietConstants.MOD_ID + ".set.success",
                 Component.translatable(
                     "groups." + DietConstants.MOD_ID + "." + group.getName() + ".name"),
                 value * 100, player.getName()), true);
@@ -152,11 +152,10 @@ public class DietCommand {
           diet.setValue(group.getName(), diet.getValue(group.getName()) + amount);
           diet.sync();
           String arg = amount > 0 ? "add" : "remove";
-          sender.sendSuccess(
-              Component.translatable("commands." + DietConstants.MOD_ID + "." + arg + ".success",
-                  Component.translatable(
-                      "groups." + DietConstants.MOD_ID + "." + group.getName() + ".name"),
-                  amount * 100, player.getName()), true);
+          sender.sendSuccess(() -> Component.translatable(
+              "commands." + DietConstants.MOD_ID + "." + arg + ".success", Component.translatable(
+                  "groups." + DietConstants.MOD_ID + "." + group.getName() + ".name"), amount * 100,
+              player.getName()), true);
         }
       });
     }
@@ -165,7 +164,7 @@ public class DietCommand {
 
   private static int reset(CommandSourceStack sender, ServerPlayer player) {
     Services.CAPABILITY.get(player).ifPresent(diet -> {
-      DietSuites.getSuite(player.getLevel(), diet.getSuite()).ifPresent(suite -> {
+      DietSuites.getSuite(player.level(), diet.getSuite()).ifPresent(suite -> {
 
         for (IDietGroup group : suite.getGroups()) {
           diet.setValue(group.getName(), group.getDefaultValue());
@@ -173,7 +172,7 @@ public class DietCommand {
       });
       diet.sync();
       sender.sendSuccess(
-          Component.translatable("commands." + DietConstants.MOD_ID + ".reset.success",
+          () -> Component.translatable("commands." + DietConstants.MOD_ID + ".reset.success",
               player.getName()), true);
     });
     return Command.SINGLE_SUCCESS;
@@ -185,7 +184,7 @@ public class DietCommand {
       diet.sync();
       String arg = flag ? "resume" : "pause";
       sender.sendSuccess(
-          Component.translatable("commands." + DietConstants.MOD_ID + "." + arg + ".success",
+          () -> Component.translatable("commands." + DietConstants.MOD_ID + "." + arg + ".success",
               player.getName()), true);
     });
     return Command.SINGLE_SUCCESS;
@@ -202,8 +201,9 @@ public class DietCommand {
         }
       }
     }
-    sender.sendSuccess(Component.translatable("commands." + DietConstants.MOD_ID + ".clear.success",
-        player.getName()), true);
+    sender.sendSuccess(
+        () -> Component.translatable("commands." + DietConstants.MOD_ID + ".clear.success",
+            player.getName()), true);
     return Command.SINGLE_SUCCESS;
   }
 
@@ -211,10 +211,12 @@ public class DietCommand {
 
     if (sender.getEntity() instanceof Player) {
       sender.sendSuccess(
-          Component.translatable("commands." + DietConstants.MOD_ID + ".export.started"), true);
+          () -> Component.translatable("commands." + DietConstants.MOD_ID + ".export.started"),
+          true);
       DietCsv.writeGroup((Player) sender.getEntity(), group);
       sender.sendSuccess(
-          Component.translatable("commands." + DietConstants.MOD_ID + ".export.finished"), true);
+          () -> Component.translatable("commands." + DietConstants.MOD_ID + ".export.finished"),
+          true);
     }
     return Command.SINGLE_SUCCESS;
   }
@@ -223,7 +225,8 @@ public class DietCommand {
 
     if (sender.getEntity() instanceof Player player) {
       sender.sendSuccess(
-          Component.translatable("commands." + DietConstants.MOD_ID + ".export.started"), true);
+          () -> Component.translatable("commands." + DietConstants.MOD_ID + ".export.started"),
+          true);
 
       if (mode == DietCsv.ExportMode.ALL) {
         DietCsv.write(player, "");
@@ -235,7 +238,8 @@ public class DietCommand {
         DietCsv.writeTrails(player);
       }
       sender.sendSuccess(
-          Component.translatable("commands." + DietConstants.MOD_ID + ".export.finished"), true);
+          () -> Component.translatable("commands." + DietConstants.MOD_ID + ".export.finished"),
+          true);
     }
     return Command.SINGLE_SUCCESS;
   }

@@ -70,7 +70,7 @@ public class DietConfig {
           .translation(CONFIG_PREFIX + "buttonY").defineInRange("buttonY", -22, -10000, 10000);
 
       textColor =
-          builder.comment("The primary text color of the Diet GUI, as an integer or hex code.")
+          builder.comment("The primary text color of the Diet GUI, as an integer or hexadecimal.")
               .translation(CONFIG_PREFIX + "textColor").define("textColor", "4210752");
     }
   }
