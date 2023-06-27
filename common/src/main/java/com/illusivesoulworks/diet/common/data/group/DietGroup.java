@@ -22,7 +22,6 @@ import com.illusivesoulworks.diet.api.type.IDietGroup;
 import com.illusivesoulworks.diet.api.util.DietColor;
 import com.illusivesoulworks.diet.platform.Services;
 import java.util.Objects;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

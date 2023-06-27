@@ -92,7 +92,6 @@ public class DietScreen extends Screen {
             }
           }
         }).size(100, 20).pos(this.width / 2 - 50, (this.height + this.ySize) / 2 - 30).build());
-    ;
   }
 
   @Override

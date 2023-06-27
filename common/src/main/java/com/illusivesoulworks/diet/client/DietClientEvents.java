@@ -41,7 +41,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.gui.screens.inventory.tooltip.MenuTooltipPositioner;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -89,7 +88,8 @@ public class DietClientEvents {
   public static void renderEffectsTooltip(Screen screen, GuiGraphics guiGraphics) {
 
     if (tooltip != null && screen != null) {
-      guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltip, Optional.empty(), tooltipX, tooltipY);
+      guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltip, Optional.empty(), tooltipX,
+          tooltipY);
       tooltip = null;
     }
   }

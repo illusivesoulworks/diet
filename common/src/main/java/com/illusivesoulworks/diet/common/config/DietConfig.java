@@ -19,8 +19,6 @@ package com.illusivesoulworks.diet.common.config;
 
 import com.illusivesoulworks.diet.DietConstants;
 import com.illusivesoulworks.diet.platform.Services;
-import com.illusivesoulworks.spectrelib.config.SpectreConfig;
-import com.illusivesoulworks.spectrelib.config.SpectreConfigLoader;
 import com.illusivesoulworks.spectrelib.config.SpectreConfigSpec;
 import java.util.ArrayList;
 import java.util.HashMap;
