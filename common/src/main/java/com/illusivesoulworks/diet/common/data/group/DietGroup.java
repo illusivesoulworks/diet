@@ -69,6 +69,8 @@ public final class DietGroup implements IDietGroup {
     builder.order(order);
     builder.beneficial(beneficial);
     builder.color(new DietColor(r, g, b));
+    builder.gainMultiplier((float) tag.getDouble("Gain"));
+    builder.decayMultiplier((float) tag.getDouble("Decay"));
     return builder.build();
   }
 
@@ -130,6 +132,8 @@ public final class DietGroup implements IDietGroup {
     tag.putInt("Order", this.order);
     tag.putBoolean("Beneficial", this.beneficial);
     tag.putInt("Color", this.color.getRGB());
+    tag.putDouble("Gain", this.gainMultiplier);
+    tag.putDouble("Decay", this.decayMultiplier);
     return tag;
   }
 

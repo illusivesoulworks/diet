@@ -511,15 +511,16 @@ public class PlayerDietTracker implements IDietTracker {
                     DietConfig.DeathPenaltyMethod.RESET) {
                   newValue = group.getDefaultValue();
                 } else {
+                  float loss = (float) DietConfig.SERVER.deathPenaltyLoss.get() / 100F;
 
                   if (DietConfig.SERVER.deathPenaltyMethod.get() ==
                       DietConfig.DeathPenaltyMethod.AMOUNT) {
-                    newValue -= DietConfig.SERVER.deathPenaltyLoss.get();
+                    newValue -= loss;
                   } else {
-                    newValue *= (1 - DietConfig.SERVER.deathPenaltyLoss.get());
+                    newValue *= (1 - loss);
                   }
                   newValue = Math.min(originalValue,
-                      Math.max(newValue, DietConfig.SERVER.deathPenaltyMin.get()));
+                      Math.max(newValue, (float) DietConfig.SERVER.deathPenaltyMin.get() / 100F));
                 }
               }
               diet.setValue(id, newValue);
