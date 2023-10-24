@@ -4,12 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 Prior to version 2.0.0, this project used MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 
-## [2.1.0+1.19.2] - 2023.07.09
+## [2.1.1+1.20.1] - 2023.10.23
+### Changed
+- Updated to SpectreLib 0.12.6
+- [Fabric] Requires Fabric Loader >=0.14.23
+
+## [2.1.0+1.20.1] - 2023.07.09
 ### Fixed
 - Fixed death penalty configuration options not applying correctly
 - Fixed gain and decay multipliers for food groups not showing correctly on tooltips
 
-## [2.1.0-beta+1.19.2] - 2023.06.26
+## [2.1.0-beta+1.20.1] - 2023.06.26
 ### Added
 - Added in-game configuration GUI
 ### Changed
